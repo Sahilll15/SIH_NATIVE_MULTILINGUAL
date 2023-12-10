@@ -1,7 +1,9 @@
 // screens/LoginScreen.js
 
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar ,Image} from 'react-native';
+ 
+
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = React.useState('');
@@ -14,46 +16,81 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+  <Image 
+  style={styles.imageStyle}
+  source ={require("../assets/logo.png")}/>
       <StatusBar barStyle="light-content" />
       <Text style={styles.title}>Login</Text>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Username"
+          placeholder="Enter Username"
           onChangeText={text => setUsername(text)}
         />
         <TextInput
           style={styles.input}
-          placeholder="Password"
+          placeholder="Enter Password"
           secureTextEntry
           onChangeText={text => setPassword(text)}
         />
-      </View>
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginButtonText}>Login</Text>
       </TouchableOpacity>
+      <View style={styles.dcontainer}>
+      <Text>Don't have an account?</Text>
       <TouchableOpacity
         onPress={() => navigation.navigate('Signup')}
-        style={styles.signupLink}
-      >
-        <Text style={styles.signupText}>Don't have an account? Sign up here</Text>
+        style={styles.signupLink}>
+        <Text style={styles.signupText}>Sign up here</Text>
+      </TouchableOpacity>
+      </View>
+      </View>
+      <View style={styles.dwcontainer}> 
+      <TouchableOpacity
+      onPress={() => navigation.navigate()}
+        style={styles.signupLink}>
+       <Text style={styles.signupText}>Forgot Username</Text>
+      </TouchableOpacity>
+      <Text style={styles.signupLink}>   |   </Text>
+      <TouchableOpacity
+      onPress={() => navigation.navigate()}
+        style={styles.signupLink}>
+       <Text style={styles.signupText}>Forgot Password</Text>
       </TouchableOpacity>
     </View>
+  <View>
+  <TouchableOpacity
+      onPress={() => navigation.navigate()}
+        style={styles.loginButton}>
+       <Text style={styles.loginButtonText}>How can I help you</Text>
+      </TouchableOpacity>
+  </View>
+       </View>
   );
 }
 
 const styles = StyleSheet.create({
+ imageStyle:{
+width:200,
+height:150,
+alignContent:"space-between",
+
+
+ },
+ 
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#3498db', // Blue background color
+    paddingHorizontal: 10,
+    backgroundColor: '#FFFF',
+    marginBottom: 10,
     padding: 20,
   },
   title: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: 'white', // White text color
+    color: 'black',
     marginBottom: 20,
   },
   inputContainer: {
@@ -62,15 +99,15 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'white', // White border color
+    borderColor: '#808080', // A more neutral gray color
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
-    color: 'white', // White text color
+    color: 'black',
   },
   loginButton: {
-    backgroundColor: '#2980b9', // Darker blue background color
+    backgroundColor: 'red',
     padding: 15,
     borderRadius: 5,
   },
@@ -82,10 +119,21 @@ const styles = StyleSheet.create({
   },
   signupLink: {
     marginTop: 20,
+    fontSize: 16,
   },
   signupText: {
-    color: 'white',
+    color: 'blue',
     fontSize: 16,
+  },
+  dcontainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    marginLeft: 50,
+    marginBottom: -25,
+  },
+  dwcontainer: {
+    flexDirection: 'row',
+    marginBottom: 15,
   },
 });
 
