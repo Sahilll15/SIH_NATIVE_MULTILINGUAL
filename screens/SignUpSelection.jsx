@@ -4,7 +4,7 @@ import React from 'react';
 import { View, Text,StyleSheet,TouchableOpacity,Image } from 'react-native';
 import {  } from 'react-native-gesture-handler';
 
-const HomeScreen = () => {
+const SignUpSelection = () => {
   return (
     <View>
       <Text style={styles.headingText}>Welcome! Please select your role</Text>
@@ -64,4 +64,4 @@ width:80,
    },
 });
 
-export default HomeScreen;
+export default SignUpSelection;
