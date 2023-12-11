@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const PrisonerIntro = () => {
+  const backgroundImageUrl = 'https://www.example.com/path/to/your/image.jpg'; // Replace with your image URL
   return (
     <View style={styles.container}>
       <Text style={styles.dashboardText}>Prisoner Dashboard</Text>
@@ -24,12 +26,15 @@ const PrisonerIntro = () => {
       {/* Buttons */}
       <View style={styles.buttonsContainer}>
         <TouchableOpacity style={styles.button}>
+          <FontAwesome5 name="gavel" size={20} color="#fff" style={styles.buttonIcon} />
           <Text style={styles.buttonText}>RIGHTS</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
+          <FontAwesome5 name="balance-scale" size={20} color="#fff" style={styles.buttonIcon} />
           <Text style={styles.buttonText}>LEGAL ASSISTANCE</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}>
+          <FontAwesome5 name="hospital" size={20} color="#fff" style={styles.buttonIcon} />
           <Text style={styles.buttonText}>REHAB</Text>
         </TouchableOpacity>
       </View>
@@ -43,7 +48,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   dashboardText: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     marginTop: '15%',
     marginBottom: '10%',
@@ -77,11 +82,16 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 5,
     alignItems: 'center',
+    flexDirection: 'row',
     marginBottom: 10,
   },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
+    marginLeft: 10,
+  },
+  buttonIcon: {
+    marginRight: 10,
   },
 });
 
