@@ -29,7 +29,7 @@ export default function App() {
     <NavigationContainer>
 
 
-      <Stack.Navigator initialRouteName="CaseDashboard">
+      <Stack.Navigator initialRouteName="SignUpSelection">
 
 
         {/* <Stack.Screen name="Home" component={HomeScreen}  /> */}
