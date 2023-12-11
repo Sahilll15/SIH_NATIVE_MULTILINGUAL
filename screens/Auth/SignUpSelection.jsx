@@ -5,9 +5,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 const SignUpSelection = ({ navigation }) => {
   const roles = [
-    { name: 'Lawyer', image: require("../assets/person.png") },
-    { name: 'Jailer', image: require("../assets/police.png") },
-    { name: 'Under trial Prisoner', image: require("../assets/prisoner.png") },
+    { name: 'Lawyer', image: require("../../assets/person.png") },
+    { name: 'Jailer', image: require("../../assets/police.png") },
+    { name: 'Under trial Prisoner', image: require("../../assets/prisoner.png") },
   ];
 
   return (

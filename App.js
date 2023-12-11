@@ -3,16 +3,15 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './screens/Home';
-import LoginScreen from './screens/LoginScreen';
-import SignupScreen from './screens/SignupScreen';
-import SignUpSelection from './screens/SignUpSelection';
+import LoginScreen from './screens/Auth/LoginScreen';
+import SignupScreen from './screens/Auth/SignupScreen';
+import SignUpSelection from './screens/Auth/SignUpSelection';
 
-import LawyerSignupSelection from './screens/LawyerSignupselection';
-import LawyerHomePage from './screens/LawyerHomePage';
-import NewClientRequest from'./screens/NewClientRequest';
-import ClientCaseDetail from'./screens/ClientCaseDetail';
-import PrisonerIntro from './screens/PrisonerIntro';
+import LawyerSignupSelection from './screens/Lawyer/LawyerSignupselection';
+import LawyerHomePage from './screens/Lawyer/LawyerHomePage';
+import NewClientRequest from'./screens/Lawyer/NewClientRequest';
+import ClientCaseDetail from'./screens/Lawyer/ClientCaseDetail';
+import PrisonerIntro from './screens/Prisioner/PrisonerIntro';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +21,7 @@ export default function App() {
 
       <Stack.Navigator initialRouteName="ClientCaseDetail">
 
-        <Stack.Screen name="Home" component={HomeScreen}  />
+        {/* <Stack.Screen name="Home" component={HomeScreen}  /> */}
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }}  />
         <Stack.Screen name="SignUpSelection" component={SignUpSelection} options={{ headerShown: false }} />
