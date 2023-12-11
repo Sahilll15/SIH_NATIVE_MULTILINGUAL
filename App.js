@@ -12,6 +12,8 @@ import LawyerHomePage from './screens/Lawyer/LawyerHomePage';
 import NewClientRequest from'./screens/Lawyer/NewClientRequest';
 import ClientCaseDetail from'./screens/Lawyer/ClientCaseDetail';
 import PrisonerIntro from './screens/Prisioner/PrisonerIntro';
+import CaseDashboard from './screens/Prisioner/CaseDashboard';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +21,7 @@ export default function App() {
   return (
     <NavigationContainer>
 
-      <Stack.Navigator initialRouteName="ClientCaseDetail">
+      <Stack.Navigator initialRouteName="CaseDashboard">
 
         {/* <Stack.Screen name="Home" component={HomeScreen}  /> */}
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
@@ -27,11 +29,10 @@ export default function App() {
         <Stack.Screen name="SignUpSelection" component={SignUpSelection} options={{ headerShown: false }} />
         <Stack.Screen name="LawyerSignupSelection" component={LawyerSignupSelection} options={{ headerShown: false }} />
         <Stack.Screen name="LawyerHomePage" component={LawyerHomePage} options={{ headerShown: false }} />
-
         <Stack.Screen name="NewClientRequest" component={NewClientRequest}/>
         <Stack.Screen name="ClientCaseDetail" component={ClientCaseDetail}options={{ headerShown: false }}/>
         <Stack.Screen name="PrisonerIntro" component={PrisonerIntro}options={{ headerShown: false }}/>         
-
+        <Stack.Screen name="CaseDashboard" component={CaseDashboard}options={{ headerShown: false }}/>
       </Stack.Navigator>
 
     </NavigationContainer>
