@@ -11,12 +11,13 @@ import LawyerSignupSelection from './screens/LawyerSignupselection';
 import LawyerHomePage from './screens/LawyerHomePage';
 import NewClientRequest from'./screens/NewClientRequest';
 import ClientCaseDetail from'./screens/ClientCaseDetail';
+import PrisonerIntro from './screens/PrisonerIntro';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="PrisonerIntro">
         <Stack.Screen name="Home" component={HomeScreen}  />
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }}  />
@@ -24,7 +25,8 @@ export default function App() {
         <Stack.Screen name="LawyerSignupSelection" component={LawyerSignupSelection} options={{ headerShown: false }} />
         <Stack.Screen name="LawyerHomePage" component={LawyerHomePage} options={{ headerShown: false }} />
         <Stack.Screen name="NewClientRequest" component={NewClientRequest}/>
-        <Stack.Screen name="ClientCaseDetail" component={ClientCaseDetail}options={{ headerShown: false }}/>      
+        <Stack.Screen name="ClientCaseDetail" component={ClientCaseDetail}options={{ headerShown: false }}/>
+        <Stack.Screen name="PrisonerIntro" component={PrisonerIntro}options={{ headerShown: false }}/>         
       </Stack.Navigator>
 
     </NavigationContainer>
