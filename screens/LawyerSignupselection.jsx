@@ -1,5 +1,4 @@
 
-//import React from 'react'
 import { View, Text, StyleSheet,TextInput,TouchableOpacity,Image } from 'react-native'
 import {} from 'react-native-gesture-handler';
 import React, { useState } from 'react';
@@ -48,7 +47,7 @@ const LawyerSignupSelection = (navigation) => {
         <Text>Private Firm</Text>
       </TouchableOpacity></View>
       <TouchableOpacity style={styles.SignupButton} onPress={handleLicenseNo}>
-        <Text style={styles.SignupButtonText}>Signup</Text>
+        <Text style={styles.SignupButtonText}>Sign in</Text>
       </TouchableOpacity>
     
     
