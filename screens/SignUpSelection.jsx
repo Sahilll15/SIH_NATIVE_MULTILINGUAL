@@ -1,66 +1,56 @@
 // screens/HomeScreen.js
 
 import React from 'react';
-import { View, Text,StyleSheet,TouchableOpacity,Image } from 'react-native';
-import {  } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
-const SignUpSelection = () => {
+const SignUpSelection = ({ navigation }) => {
+  const roles = [
+    { name: 'Lawyer', image: require("../assets/person.png") },
+    { name: 'Jailer', image: require("../assets/police.png") },
+    { name: 'Under trial Prisoner', image: require("../assets/prisoner.png") },
+  ];
+
   return (
-    <View>
-      <Text style={styles.headingText}>Welcome! Please select your role</Text>
-      <TouchableOpacity style={styles.card}
-        onPress={() => navigation.navigate()}>
-       <View >
-         <Image 
-           style={styles.imageStyle}
-              source ={require("../assets/person.png")}/>
-     
-      <Text style={styles.cardText}>Lawyer</Text> 
-     
+    <View style={styles.container}>
+      <Text style={styles.headingText}>Choose Your Role</Text>
+      <View style={styles.cardContainer}>
+        {roles.map((role, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.card}
+            onPress={() => navigation.navigate(/* Specify the screen name for the role */)}>
+            <View>
+              <Image style={styles.imageStyle} source={role.image} />
+              <Text style={styles.cardText}>{role.name}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
-    </TouchableOpacity>
-
-    <TouchableOpacity style={styles.card}
-        onPress={() => navigation.navigate()}>
-       <View >
-         <Image 
-           style={styles.imageStyle}
-              source ={require("../assets/police.png")}/>
-     
-      <Text style={styles.cardText}>Jailer</Text> 
-     
-    </View>
-    </TouchableOpacity>
-
-    <TouchableOpacity style={styles.card}
-        onPress={() => navigation.navigate()}>
-       <View >
-         <Image 
-           style={styles.imageStyle}
-              source ={require("../assets/prisoner.png")}/>
-     
-      <Text style={styles.cardText}>Undertrial Prisoner</Text> 
-     
-    </View>
-    </TouchableOpacity>
-    </View>
-);
+  );
 };
 
 const styles = StyleSheet.create({
-  headingText:{
-    marginTop:"20%",
-    fontSize:24,
-    fontWeight:'bold',
-    paddingHorizontal:8,
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headingText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  cardContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
   },
   card: {
-    
-    height:"25%",
-    width:"90%",
-    alignContent:'center',
+    flex: 1,
+    height: 200,
     backgroundColor: 'white',
-    borderRadius: 8,
+    borderRadius: 10,
     padding: 16,
     margin: 10,
     shadowColor: '#000',
@@ -71,17 +61,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cardText: {
-    textAlign:'center',
-    fontSize: 16,
+    textAlign: 'center',
+    fontSize: 18,
     color: 'black',
+    marginTop: 10,
   },
-  imageStyle:{
-    alignSelf:'center',
-   // marginLeft:"40%",
-  height:"80%",
-  width:"30%",
-     },
-  });
+  imageStyle: {
+    height: 80,
+    width: 80,
+    resizeMode: 'contain',
+  },
+});
+
 export default SignUpSelection;
