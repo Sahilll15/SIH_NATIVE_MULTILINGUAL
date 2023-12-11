@@ -1,9 +1,15 @@
 // screens/LoginScreen.js
 
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar ,Image} from 'react-native';
- 
-
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  StatusBar,
+  Image,
+} from 'react-native';
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = React.useState('');
@@ -16,105 +22,132 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-  <Image 
-  style={styles.imageStyle}
-  source ={require("../assets/logo.png")}/>
+      <Image
+        style={styles.imageStyle}
+        source={require('../assets/logo.png')}
+      />
       <StatusBar barStyle="light-content" />
-      <Text style={styles.title}>Login</Text>
       <View style={styles.inputContainer}>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Username</Text>
+        </View>
         <TextInput
           style={styles.input}
           placeholder="Enter Username"
-          onChangeText={text => setUsername(text)}
+          onChangeText={(text) => setUsername(text)}
         />
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Password</Text>
+        </View>
         <TextInput
           style={styles.input}
           placeholder="Enter Password"
           secureTextEntry
-          onChangeText={text => setPassword(text)}
+          onChangeText={(text) => setPassword(text)}
         />
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-        <Text style={styles.loginButtonText}>Login</Text>
-      </TouchableOpacity>
-      <View style={styles.dcontainer}>
-      <Text>Don't have an account?</Text>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Signup')}
-        style={styles.signupLink}>
-        <Text style={styles.signupText}>Sign up here</Text>
-      </TouchableOpacity>
+          <Text style={styles.loginButtonText}>Login</Text>
+        </TouchableOpacity>
+
+
+        <View style={styles.dwcontainer}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate()}
+          style={styles.helpLink}>
+          <Text style={styles.helpText}>Forgot Username</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.helpLink}> | </Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate()}
+          style={styles.helpLink}>
+          <Text style={styles.helpText}>Forgot Password</Text>
+        </TouchableOpacity>
       </View>
+
+
+        <View style={styles.dcontainer}>
+          <Text>Don't have an account?</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Signup')}
+            style={styles.signupLink}>
+            <Text style={styles.signupText}>Sign up here </Text>
+          </TouchableOpacity>
+      
+          
+
+        </View>
+
       </View>
-      <View style={styles.dwcontainer}> 
-      <TouchableOpacity
-      onPress={() => navigation.navigate()}
-        style={styles.signupLink}>
-       <Text style={styles.signupText}>Forgot Username</Text>
-      </TouchableOpacity>
-      <Text style={styles.signupLink}>   |   </Text>
-      <TouchableOpacity
-      onPress={() => navigation.navigate()}
-        style={styles.signupLink}>
-       <Text style={styles.signupText}>Forgot Password</Text>
-      </TouchableOpacity>
+
+      
+
+      <View>
+      <TouchableOpacity style={styles.ChatBody} onPress={handleLogin}>
+          <Text style={styles.ChatText}>CHAT WITH AI BOT</Text>
+        </TouchableOpacity>
+      </View>
     </View>
-  <View>
-  <TouchableOpacity
-      onPress={() => navigation.navigate()}
-        style={styles.loginButton}>
-       <Text style={styles.loginButtonText}>How can I help you</Text>
-      </TouchableOpacity>
-  </View>
-       </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
- imageStyle:{
-width:200,
-height:150,
-alignContent:"space-between",
+  imageStyle: {
+    width: '50%',
+    height: 50,
+    position: 'absolute',
+    top: 10,
+    left: 10,
+  },
 
-
- },
- 
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 10,
     backgroundColor: '#FFFF',
-    marginBottom: 10,
-    padding: 20,
+    // marginBottom: 30,
+    // padding: 20,
+    position: 'relative',
   },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'black',
-    marginBottom: 20,
-  },
+
+
   inputContainer: {
     width: '100%',
-    marginBottom: 20,
+    marginBottom: 10,
+  },
+  labelContainer: {
+    marginBottom: 5,
+  },
+  label: {
+    fontSize: 16,
+    color: 'black',
   },
   input: {
     height: 40,
-    borderColor: '#808080', // A more neutral gray color
     borderWidth: 1,
+    borderColor: '#808080',
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
     color: 'black',
+    borderRightWidth: 0,
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
   },
   loginButton: {
     backgroundColor: 'red',
-    padding: 15,
+    width: "50%",
+    padding: 10,
+    marginTop:"5%",
+    marginBottom:"5%",
     borderRadius: 5,
+    alignSelf:'center',
   },
   loginButtonText: {
     color: 'white',
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: 'bold',
   },
   signupLink: {
@@ -124,16 +157,33 @@ alignContent:"space-between",
   signupText: {
     color: 'blue',
     fontSize: 16,
+    marginTop:7,
   },
   dcontainer: {
     flexDirection: 'row',
     alignItems: 'baseline',
     marginLeft: 50,
-    marginBottom: -25,
+    // marginTop: 10, 
   },
   dwcontainer: {
     flexDirection: 'row',
-    marginBottom: 15,
+    marginTop:5, 
+    alignSelf: 'center',
+  },
+  helpLink: {
+    // backgroundColor:'blue',
+    marginTop:-12,
+  },
+  ChatBody: {
+    width: '70%',
+    alignSelf: 'center', 
+  },
+
+  ChatText: {
+    color: 'white',
+    backgroundColor: 'blue',
+    padding: 10,
+    fontSize: 12,
   },
 });
 
