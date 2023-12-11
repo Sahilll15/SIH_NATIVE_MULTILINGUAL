@@ -24,7 +24,7 @@ const SignupScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Image
         style={styles.imageStyle}
-        source={require('../assets/logo.png')}
+        source={require('../../assets/logo.png')}
       />
       <StatusBar barStyle="light-content" />
       <View style={styles.inputContainer}>
