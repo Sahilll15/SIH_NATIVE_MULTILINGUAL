@@ -24,7 +24,7 @@ const LawyerSignupSelection = (navigation) => {
       <Text style={styles.lcontainertext}>CONTAINER TO UPLOAD CERTIFICATE</Text>
       <Image 
   style={styles.imageStyle}
-  source ={require("../assets/license.png")}/>
+  source ={require("../../assets/license.png")}/>
     </View>
     </TouchableOpacity>    
     <View>
