@@ -21,8 +21,8 @@ import AddDoc from './screens/Prisioner/AddDoc';
 import LawyerListPage from './screens/Prisioner/LawyerListPage';
 import LawyerSelect from './screens/Prisioner/LawyerSelect';
 import LandingPage from './screens/LandingPage';
-// import GuardHomePage from './screens/Guard/GuardHomePage';
-// import PrisonerList from './screens/Guard/PrisonerList';
+import GuardHomePage from './screens/Guard/GuardHomePage';
+import PrisonerListPage from './screens/Guard/PrisonerListPage';
 import CaseDetail from './screens/Prisioner/CaseDetail';
 import { AuthProvider } from './Context/AuthContext'
 import ExisitngClient from './screens/Lawyer/ExisitngClient';
@@ -52,8 +52,8 @@ export default function App() {
           <Stack.Screen name="LawyerSelect" component={LawyerSelect} options={{ headerShown: false }} />
           <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />
           <Stack.Screen name="ExisitngClient" component={ExisitngClient} options={{ headerShown: false }} />
-          {/* <Stack.Screen name="GuardHomePage" component={GuardHomePage} options={{headerShown:false}}/>
-          <Stack.Screen name="PrisonerList" component={PrisonerList} options={{headerShown:false}}/> */}
+          <Stack.Screen name="GuardHomePage" component={GuardHomePage} options={{headerShown:false}}/>
+          <Stack.Screen name="PrisonerListPage" component={PrisonerListPage} />
         </Stack.Navigator>
         <Toast ref={(ref) => Toast.setRef(ref)} />
       </NavigationContainer>

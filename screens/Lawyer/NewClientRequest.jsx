@@ -34,7 +34,7 @@ const NewClientRequest = ({navigation}) => {
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <View style={styles.header}>
-          <Text style={styles.dashboardText}>Lawyer Dashboard</Text>
+          <Text style={styles.dashboardText}>New Client Requests</Text>
         </View>
       </View>
       <View style={styles.bottomContainer}>
