@@ -1,5 +1,3 @@
-// screens/LoginScreen.js
-
 import React from 'react';
 import {
   View,
@@ -9,16 +7,48 @@ import {
   StyleSheet,
   StatusBar,
   Image,
+  Alert,
 } from 'react-native';
+import axios from 'axios';
+import baseUrl from '../../config';
+import { useAuth } from '../../Context/AuthContext';
 
 const SignupScreen = ({ navigation }) => {
   const [username, setUsername] = React.useState('');
+  const [mobileNo, setMobileNo] = React.useState('');
+  const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  const handleLogin = () => {
-    // Implement your login logic here
-    console.log('Logging in with:', username, password);
+  console.log(baseUrl);
+  // console.log(useAuth())
+
+  const { setUserDetailsFunctions } = useAuth();
+
+  const signUpForm = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}/priosioner/signup/`, {
+        email: email,
+        name: username,
+        phoneNumber: mobileNo,
+        password: password
+      });
+
+      if (response.status === 200) {
+        Alert.alert(response.data.message);
+        setUserDetailsFunctions(response.data.user);
+        navigation.navigate('SignUpSelection');
+      } else {
+        Alert.alert(`Server returned status: ${response.status}`);
+      }
+
+    } catch (error) {
+      console.error('Error signing up:', error.message);
+      Alert.alert(error.response.data.message)
+    }
   };
+
+
+
 
   return (
     <View style={styles.container}>
@@ -42,7 +72,7 @@ const SignupScreen = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter Phone Number"
-          onChangeText={(text) => setUsername(text)}
+          onChangeText={(text) => setMobileNo(text)}
         />
         <View style={styles.labelContainer}>
           <Text style={styles.label}>Email</Text>
@@ -50,7 +80,7 @@ const SignupScreen = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter Email"
-          onChangeText={(text) => setUsername(text)}
+          onChangeText={(text) => setEmail(text)}
         />
         <View style={styles.labelContainer}>
           <Text style={styles.label}>Password</Text>
@@ -61,31 +91,21 @@ const SignupScreen = ({ navigation }) => {
           secureTextEntry
           onChangeText={(text) => setPassword(text)}
         />
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <TouchableOpacity
+          style={styles.loginButton}
+          onPress={signUpForm}>
           <Text style={styles.loginButtonText}>Sign up</Text>
         </TouchableOpacity>
-
-
-        
-
 
         <View style={styles.dcontainer}>
           <Text>Already have an account ?</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate('Signup')}
             style={styles.signupLink}>
-            <Text style={styles.signupText}> Log in  </Text>
+            <Text style={styles.signupText}> Log in </Text>
           </TouchableOpacity>
-      
-          
-
         </View>
-
       </View>
-
-      
-
-      
     </View>
   );
 };
@@ -98,24 +118,19 @@ const styles = StyleSheet.create({
     top: 10,
     left: 10,
   },
-
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 10,
     backgroundColor: '#FFFF',
-    // marginBottom: 30,
-    // padding: 20,
     position: 'relative',
   },
-
-
   inputContainer: {
     width: '100%',
     marginBottom: 10,
     marginTop: 1,
-    padding:2,
+    padding: 2,
   },
   labelContainer: {
     marginBottom: 1,
@@ -135,16 +150,16 @@ const styles = StyleSheet.create({
     borderRightWidth: 0,
     borderTopWidth: 0,
     borderLeftWidth: 0,
-    marginTop:10,
+    marginTop: 10,
   },
   loginButton: {
     backgroundColor: 'red',
-    width: "50%",
+    width: '50%',
     padding: 10,
-    marginTop:"5%",
-    marginBottom:"5%",
+    marginTop: '5%',
+    marginBottom: '5%',
     borderRadius: 5,
-    alignSelf:'center',
+    alignSelf: 'center',
   },
   loginButtonText: {
     color: 'white',
@@ -159,33 +174,12 @@ const styles = StyleSheet.create({
   signupText: {
     color: 'blue',
     fontSize: 16,
-    marginTop:7,
+    marginTop: 7,
   },
   dcontainer: {
     flexDirection: 'row',
     alignItems: 'baseline',
     marginLeft: 50,
-    // marginTop: 10, 
-  },
-  dwcontainer: {
-    flexDirection: 'row',
-    marginTop:5, 
-    alignSelf: 'center',
-  },
-  helpLink: {
-    // backgroundColor:'blue',
-    marginTop:-12,
-  },
-  ChatBody: {
-    width: '70%',
-    alignSelf: 'center', 
-  },
-
-  ChatText: {
-    color: 'white',
-    backgroundColor: 'blue',
-    padding: 10,
-    fontSize: 12,
   },
 });
 

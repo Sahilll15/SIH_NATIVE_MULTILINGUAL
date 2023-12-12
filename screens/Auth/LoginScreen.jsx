@@ -9,15 +9,40 @@ import {
   StyleSheet,
   StatusBar,
   Image,
+  Alert,
 } from 'react-native';
+import baseUrl from '../../config';
+import { useAuth } from '../../Context/AuthContext';
+import axios from 'axios'
 
 const LoginScreen = ({ navigation }) => {
-  const [username, setUsername] = React.useState('');
+  const [email, setemail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const { setUserDetailsFunctions, setTokenFunction } = useAuth();
 
-  const handleLogin = () => {
-    // Implement your login logic here
-    console.log('Logging in with:', username, password);
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(`${baseUrl}/priosioner/login/`, {
+        email,
+        password,
+      });
+
+      if (response.status === 200) {
+        setUserDetailsFunctions(
+          response.data.user,
+          // response.data.token
+        )
+        setTokenFunction(response.data.token)
+        console.log(response.data.user)
+        console.log(response.data.token)
+        Alert.alert('logged')
+        navigation.navigate('Home')
+      }
+    } catch (error) {
+      console.log(error.message)
+      Alert.alert(error.response.data.message)
+    }
   };
 
   return (
@@ -29,12 +54,12 @@ const LoginScreen = ({ navigation }) => {
       <StatusBar barStyle="light-content" />
       <View style={styles.inputContainer}>
         <View style={styles.labelContainer}>
-          <Text style={styles.label}>Username</Text>
+          <Text style={styles.label}>email</Text>
         </View>
         <TextInput
           style={styles.input}
-          placeholder="Enter Username"
-          onChangeText={(text) => setUsername(text)}
+          placeholder="Enter email"
+          onChangeText={(text) => setemail(text)}
         />
         <View style={styles.labelContainer}>
           <Text style={styles.label}>Password</Text>
@@ -51,19 +76,19 @@ const LoginScreen = ({ navigation }) => {
 
 
         <View style={styles.dwcontainer}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate()}
-          style={styles.helpLink}>
-          <Text style={styles.helpText}>Forgot Username</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate()}
+            style={styles.helpLink}>
+            <Text style={styles.helpText}>Forgot email</Text>
+          </TouchableOpacity>
 
-        <Text style={styles.helpLink}> | </Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate()}
-          style={styles.helpLink}>
-          <Text style={styles.helpText}>Forgot Password</Text>
-        </TouchableOpacity>
-      </View>
+          <Text style={styles.helpLink}> | </Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate()}
+            style={styles.helpLink}>
+            <Text style={styles.helpText}>Forgot Password</Text>
+          </TouchableOpacity>
+        </View>
 
 
         <View style={styles.dcontainer}>
@@ -73,17 +98,17 @@ const LoginScreen = ({ navigation }) => {
             style={styles.signupLink}>
             <Text style={styles.signupText}>Sign up here </Text>
           </TouchableOpacity>
-      
-          
+
+
 
         </View>
 
       </View>
 
-      
+
 
       <View>
-      <TouchableOpacity style={styles.ChatBody} onPress={handleLogin}>
+        <TouchableOpacity style={styles.ChatBody} onPress={handleLogin}>
           <Text style={styles.ChatText}>CHAT WITH AI BOT</Text>
         </TouchableOpacity>
       </View>
@@ -139,10 +164,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     width: "50%",
     padding: 10,
-    marginTop:"5%",
-    marginBottom:"5%",
+    marginTop: "5%",
+    marginBottom: "5%",
     borderRadius: 5,
-    alignSelf:'center',
+    alignSelf: 'center',
   },
   loginButtonText: {
     color: 'white',
@@ -157,7 +182,7 @@ const styles = StyleSheet.create({
   signupText: {
     color: 'blue',
     fontSize: 16,
-    marginTop:7,
+    marginTop: 7,
   },
   dcontainer: {
     flexDirection: 'row',
@@ -167,16 +192,16 @@ const styles = StyleSheet.create({
   },
   dwcontainer: {
     flexDirection: 'row',
-    marginTop:5, 
+    marginTop: 5,
     alignSelf: 'center',
   },
   helpLink: {
     // backgroundColor:'blue',
-    marginTop:-12,
+    marginTop: -12,
   },
   ChatBody: {
     width: '70%',
-    alignSelf: 'center', 
+    alignSelf: 'center',
   },
 
   ChatText: {
