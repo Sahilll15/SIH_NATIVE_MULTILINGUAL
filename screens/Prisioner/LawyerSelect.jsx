@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import Toast from 'react-native-toast-message';
 
 const LawyerDetailsPage = () => {
+
+
+
+
   // Dummy data for lawyer details
   const lawyerDetails = {
     id: '1',
@@ -15,11 +20,15 @@ const LawyerDetailsPage = () => {
 
   // Dummy data for case dropdown
   const [selectedCase, setSelectedCase] = useState('Criminal Case');
-  const caseOptions = ['Criminal Case', 'Civil Case', 'Family Law', 'Personal Injury'];
+  const caseOptions = [' Case 1', ' Case 2', ' Law 3', 'Case 4'];
 
   const handleContactLawyer = () => {
     // Implement logic to contact the lawyer
-    console.log('Contacting lawyer...');
+    Toast.show({
+      type: 'success', // Can be 'success', 'error', 'info', or 'any custom type'
+      text1: 'Booked',
+      text2: 'Your Request Has Been Successfully Sent!',
+    });
   };
 
   return (
