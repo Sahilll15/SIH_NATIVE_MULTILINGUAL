@@ -1,106 +1,91 @@
-
-import { View, Text, StyleSheet,TextInput,TouchableOpacity,Image } from 'react-native'
-import {} from 'react-native-gesture-handler';
 import React, { useState } from 'react';
- 
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Modal } from 'react-native';
 
-const LawyerSignupSelection = (navigation) => {
-  const [licenseno, setLicense] = React.useState('');
-  const handleLicenseNo = () => {
-    // Implement your signup logic here
-    console.log('Submitting License no:',licenseno, );
-  };
-
+const LawyerSignupSelection = ({ navigation }) => {
+  const [licenseno, setLicense] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
+  const handleLicenseNo = () => {
+    // Implement your signup logic here
+    console.log('Submitting License no:', licenseno);
+  };
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   const handleOptionSelect = (option) => {
-    setSelectedOption(option);};
+    setSelectedOption(option);
+    toggleModal();
+  };
+
   return (
-    <View>
-      <Text style={styles.headingText}>Please Fill the details!</Text>
-    <TouchableOpacity style={styles.card}
-    onPress={() => navigation.navigate()}>
-    <View style={styles.licensecontainer}>
-      <Text style={styles.lcontainertext}>CONTAINER TO UPLOAD CERTIFICATE</Text>
-      <Image 
-  style={styles.imageStyle}
-  source ={require("../../assets/license.png")}/>
-    </View>
-    </TouchableOpacity>    
-    <View>
-    <TextInput
-          style={styles.input}
-          placeholder="Enter License Number"
-          secureTextEntry
-          onChangeText={text => setLicense(text)}
-        /></View>
+    <View style={styles.mainn}>
+      <Text style={styles.headingText}>Please Fill the Details!</Text>
 
-
-      <View>
-        <TouchableOpacity  style={[styles.radioButton,styles.rdb1, selectedOption === 'option1' && styles.selected]}
-        onPress={() => handleOptionSelect('option1')}>
-        <Text>Government Lawyer</Text>
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => navigation.navigate('UploadCertificate')}
+      >
+        <View style={styles.licenseContainer}>
+          <Text style={styles.lcontainerText}>CLICK HERE TO UPLOAD CERTIFICATE</Text>
+          <Image style={styles.imageStyle} source={require("../../assets/license.png")} />
+        </View>
       </TouchableOpacity>
 
-      <TouchableOpacity  style={[styles.radioButton, selectedOption === 'option2' && styles.selected]}
-        onPress={() => handleOptionSelect('option2')}>
-        <Text>Private Firm</Text>
-      </TouchableOpacity></View>
-      <TouchableOpacity style={styles.SignupButton} onPress={handleLicenseNo}>
-        <Text style={styles.SignupButtonText}>Sign in</Text>
-      </TouchableOpacity>
-    
-    
+      <TextInput
+        style={styles.input}
+        placeholder="Enter License Number"
+        onChangeText={(text) => setLicense(text)}
+      />
 
+      <TouchableOpacity style={styles.dropdownButton} onPress={toggleModal}>
+        <Text style={styles.dropdownButtonText}>{selectedOption || 'Select Lawyer Type'}</Text>
+      </TouchableOpacity>
+
+      <Modal visible={isModalVisible} transparent animationType="slide">
+        <View style={styles.modal}>
+         
+          <TouchableOpacity style={styles.modalOption} onPress={() => handleOptionSelect('Government Lawyer')}>
+            <Text>Government Lawyer</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.modalOption} onPress={() => handleOptionSelect('Private Firm')}>
+            <Text>Private Firm</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.modalClose} onPress={toggleModal}>
+            <Text>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+
+      <TouchableOpacity style={styles.signupButton} onPress={handleLicenseNo}>
+        <Text style={styles.signupButtonText}>Submit</Text>
+      </TouchableOpacity>
     </View>
-  )
-}
+  );
+};
+
 const styles = StyleSheet.create({
-  headingText:{
-    marginTop:"20%",
-    fontSize:24,
-    fontWeight:'bold',
-    paddingHorizontal:8,
-    textAlign:"center",
+  mainn: {
+    backgroundColor: 'white',
+    flex: 1,
+    padding: 20,
   },
-  imageStyle:{
-    marginTop:"10%",
-    width:"50%",
-    height:"150%",
-   
-     },
-  licensecontainer:{
- height:"35%",
- width:"100%",
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop:"20%"
-  },
-  lcontainertext:{
-    color:'black',
-    marginTop:20,
-    textAlign:'center'
-  },
-  input: {
-    margin:20,
-    height: 40,
-    borderColor: 'black', // black border color
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    color: 'black', // black text color
+  headingText: {
+    marginTop: '20%',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   card: {
-    
-    height:"45%",
-    width:"90%",
-    alignContent:'center',
+    height: '45%',
+    width: '90%',
+    alignContent: 'center',
     backgroundColor: 'white',
     borderRadius: 8,
     padding: 16,
-    margin:20,
-    
+    margin: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -110,35 +95,77 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  container: {
-    flexDirection: 'row',
+  licenseContainer: {
+    height: '35%',
+    width: '100%',
+    justifyContent: 'center',
     alignItems: 'center',
+    marginTop: '20%',
   },
-  radioButton: {
-    marginLeft:10,
-    borderWidth: 1,
+  lcontainerText: {
+    color: 'black',
+    marginTop: 20,
+    textAlign: 'center',
+  },
+  imageStyle: {
+    marginTop: '10%',
+    width: '50%',
+    height: '150%',
+  },
+  input: {
+    marginVertical: 20,
+    height: 40,
     borderColor: 'black',
+    borderWidth: 1,
     borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    color: 'black',
+  },
+  dropdownButton: {
+    height: 40,
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 5,
+    justifyContent: 'center',
+    paddingLeft: 10,
+    marginBottom: 10,
+  },
+  dropdownButtonText: {
+    color: 'black',
+  },
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+
+  },
+  modalClose: {
+    backgroundColor: 'lightgray',
     padding: 10,
-    marginRight: 10,
+    marginTop: 10,
   },
-rdb1:{
-  marginBottom:10,
-},
-  selected: {
-    backgroundColor: 'blue',
+  modalOption: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgray',
+    width: '100%',
+    alignItems: 'center',
+    backgroundColor:'white',
   },
-  SignupButton: {
-    backgroundColor:'red',
-    margin:15,
+  signupButton: {
+    backgroundColor: 'red',
+    marginVertical: 15,
     padding: 15,
     borderRadius: 5,
   },
-  SignupButtonText: {
+  signupButtonText: {
     color: 'white',
     textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
   },
 });
-export default LawyerSignupSelection
+
+export default LawyerSignupSelection;
