@@ -34,6 +34,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="CaseDetail">
 
 
+
         {/* <Stack.Screen name="Home" component={HomeScreen}  /> */}
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }}  />
