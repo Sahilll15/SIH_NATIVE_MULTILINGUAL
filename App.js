@@ -18,6 +18,8 @@ import AddDoc from './screens/Prisioner/AddDoc';
 import LawyerListPage from './screens/Prisioner/LawyerListPage';
 import LawyerSelect from './screens/Prisioner/LawyerSelect';
 import LandingPage from './screens/LandingPage';
+import CaseDetail from './screens/Prisioner/CaseDetail';
+
 
 
 
@@ -29,7 +31,8 @@ export default function App() {
     <NavigationContainer>
 
 
-      <Stack.Navigator initialRouteName="SignUpSelection">
+      <Stack.Navigator initialRouteName="CaseDetail">
+
 
 
         {/* <Stack.Screen name="Home" component={HomeScreen}  /> */}
@@ -40,7 +43,7 @@ export default function App() {
         <Stack.Screen name="LawyerHomePage" component={LawyerHomePage} options={{ headerShown: false }} />
         <Stack.Screen name="NewClientRequest" component={NewClientRequest}/>
         <Stack.Screen name="ClientCaseDetail" component={ClientCaseDetail}options={{ headerShown: false }}/>
-      
+        <Stack.Screen name="CaseDetail" component={CaseDetail}options={{ headerShown: false }}/>
         <Stack.Screen name="CaseDashboard" component={CaseDashboard}options={{ headerShown: false }}/>
 
         <Stack.Screen name="PrisonerIntro" component={PrisonerIntro} options={{ headerShown: false }}/>  
