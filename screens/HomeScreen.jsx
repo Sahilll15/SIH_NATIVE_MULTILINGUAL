@@ -23,6 +23,11 @@ const HomeScreen = ({ navigation }) => {
         title="Continue in as Guard"
         onPress={() => navigation.navigate('GuardHomePage')}
       />
+
+        <Button
+        title="Text with bot"
+        onPress={() => navigation.navigate('ChatBot')}
+      />
     </View>
   );
 }
