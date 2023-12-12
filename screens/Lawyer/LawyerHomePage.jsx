@@ -20,8 +20,9 @@ const LawyerHomePage = ({ navigation }) => {
     
   ];
 
+
   const renderClientCard = (client) => (
-    <TouchableOpacity key={client.id} style={styles.clientCard}>
+    <TouchableOpacity key={client.id} style={styles.clientCard} onPress={() => navigation.navigate('ExisitngClient')}> 
       <View style={styles.clientInfoContainer}>
         <View style={styles.profileImageContainer}>
           {/* Replace 'your_image_url' with the actual image URL */}
@@ -34,6 +35,11 @@ const LawyerHomePage = ({ navigation }) => {
       </View>
     </TouchableOpacity>
   );
+
+  const handleNewClient = () => {
+    
+    navigation.navigate('NewClientRequest');
+  };
 
   return (
    
@@ -51,7 +57,8 @@ const LawyerHomePage = ({ navigation }) => {
         {clients.map((client) => renderClientCard(client))}
       </ScrollView>
 
-      <TouchableOpacity style={styles.newRequestButton}>
+      <TouchableOpacity style={styles.newRequestButton} onPress={handleNewClient}>
+        
         <Icon name="plus" size={24} color="white" />
       </TouchableOpacity>
 
