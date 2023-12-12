@@ -20,8 +20,8 @@ const HomeScreen = ({ navigation }) => {
 
      
       <Button
-        title="Guard under bug will update as soon as updated"
-        onPress={() => navigation.navigate('JailerLogin')}
+        title="Continue in as Guard"
+        onPress={() => navigation.navigate('GuardHomePage')}
       />
     </View>
   );
