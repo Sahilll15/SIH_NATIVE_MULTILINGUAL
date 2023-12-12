@@ -2,19 +2,22 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-const LawyerListPage = () => {
+const LawyerListPage = ({ navigation }) => {
   // Dummy data for the list of lawyers
   const [lawyers, setLawyers] = useState([
     { id: '1', name: 'John Doe', type: 'Pro Bono', profilePic: 'https://cdn3.vectorstock.com/i/1000x1000/50/27/lawyer-icon-male-user-person-profile-avatar-vector-20905027.jpg' },
     { id: '2', name: 'Jane Smith', type: 'Private', profilePic: 'https://cdn3.vectorstock.com/i/1000x1000/50/27/lawyer-icon-male-user-person-profile-avatar-vector-20905027.jpg' },
     // Add more lawyer data as needed
   ]);
-
+  const LawyerProfile = () => {
+    // Navigate to the Rehab screen
+    navigation.navigate('LawyerSelect');
+  };
   // State to track the current filter (Pro Bono, Private, or All)
   const [currentFilter, setCurrentFilter] = useState('All');
 
   const renderLawyerItem = ({ item }) => (
-    <TouchableOpacity style={styles.lawyerItem} onPress={() => console.log(`Navigate to lawyer profile: ${item.name}`)}>
+    <TouchableOpacity style={styles.lawyerItem} onPress={ LawyerProfile }>
       <Image source={{ uri: item.profilePic }} style={styles.profilePic} />
       <View style={styles.lawyerInfo}>
         <Text style={styles.lawyerName}>{item.name}</Text>
@@ -22,6 +25,8 @@ const LawyerListPage = () => {
       </View>
     </TouchableOpacity>
   );
+
+ 
 
   // Function to filter lawyers based on the current filter
   const filterLawyers = () => {

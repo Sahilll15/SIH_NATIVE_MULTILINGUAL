@@ -1,25 +1,43 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Toast from 'react-native-toast-message';
+const LegalAssistance = ({ navigation }) => {
 
-const LegalAssistance = () => {
+  const navigateToChat = () => {
+    // Navigate to the Rehab screen
+    Toast.show({
+      type: 'error', // Can be 'success', 'error', 'info', or 'any custom type'
+      text1: 'Hello',
+      text2: 'This is UNDER DEVELOPMENT',
+    });
+  };
+  
+  const navigateToDoc = () => {
+    // Navigate to the Rehab screen
+    navigation.navigate('AddDoc');
+  };
+  const SelectLayer = () => {
+    // Navigate to the Rehab screen
+    navigation.navigate('LawyerListPage');
+  };
   return (
     <View
       style={styles.container}
     >
       <Text style={styles.title}>How can we assist you today!</Text>
 
-      <TouchableOpacity style={styles.option} onPress={() => console.log('Navigate to Chatbot')}>
+      <TouchableOpacity style={styles.option} onPress={navigateToChat}>
         <FontAwesome5 name="comments" size={30} color="#fff" style={styles.optionIcon} />
         <Text style={styles.optionText}>Chatbot</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.option} onPress={() => console.log('Navigate to Add Documents')}>
+      <TouchableOpacity style={styles.option} onPress={navigateToDoc}>
         <FontAwesome5 name="file-alt" size={30} color="#fff" style={styles.optionIcon} />
         <Text style={styles.optionText}>Add Your Documents</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.option} onPress={() => console.log('Navigate to Contact Lawyer')}>
+      <TouchableOpacity style={styles.option} onPress={SelectLayer}>
         <FontAwesome5 name="phone" size={30} color="#fff" style={styles.optionIcon} />
         <Text style={styles.optionText}>Contact Lawyer</Text>
       </TouchableOpacity>

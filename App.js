@@ -3,6 +3,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import Toast from 'react-native-toast-message';
 import LoginScreen from './screens/Auth/LoginScreen';
 import SignupScreen from './screens/Auth/SignupScreen';
 import SignUpSelection from './screens/Auth/SignUpSelection';
@@ -53,6 +55,7 @@ export default function App() {
           {/* <Stack.Screen name="GuardHomePage" component={GuardHomePage} options={{headerShown:false}}/>
           <Stack.Screen name="PrisonerList" component={PrisonerList} options={{headerShown:false}}/> */}
         </Stack.Navigator>
+        <Toast ref={(ref) => Toast.setRef(ref)} />
       </NavigationContainer>
     </AuthProvider>
   );
