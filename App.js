@@ -19,11 +19,12 @@ import AddDoc from './screens/Prisioner/AddDoc';
 import LawyerListPage from './screens/Prisioner/LawyerListPage';
 import LawyerSelect from './screens/Prisioner/LawyerSelect';
 import LandingPage from './screens/LandingPage';
-
 // import GuardHomePage from './screens/Guard/GuardHomePage';
 // import PrisonerList from './screens/Guard/PrisonerList';
 import CaseDetail from './screens/Prisioner/CaseDetail';
 import { AuthProvider } from './Context/AuthContext'
+import ExisitngClient from './screens/Lawyer/ExisitngClient';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -31,14 +32,14 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="LawyerSignupSelection">
+        <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
           <Stack.Screen name="SignUpSelection" component={SignUpSelection} options={{ headerShown: false }} />
           <Stack.Screen name="LawyerSignupSelection" component={LawyerSignupSelection} options={{ headerShown: false }} />
           <Stack.Screen name="LawyerHomePage" component={LawyerHomePage} options={{ headerShown: false }} />
-          <Stack.Screen name="NewClientRequest" component={NewClientRequest} />
+          <Stack.Screen name="NewClientRequest" component={NewClientRequest} options={{ headerShown: false }} />
           <Stack.Screen name="ClientCaseDetail" component={ClientCaseDetail} options={{ headerShown: false }} />
           <Stack.Screen name="CaseDetail" component={CaseDetail} options={{ headerShown: false }} />
           <Stack.Screen name="CaseDashboard" component={CaseDashboard} options={{ headerShown: false }} />
@@ -48,6 +49,7 @@ export default function App() {
           <Stack.Screen name="LawyerListPage" component={LawyerListPage} options={{ headerShown: false }} />
           <Stack.Screen name="LawyerSelect" component={LawyerSelect} options={{ headerShown: false }} />
           <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />
+          <Stack.Screen name="ExisitngClient" component={ExisitngClient} options={{ headerShown: false }} />
           {/* <Stack.Screen name="GuardHomePage" component={GuardHomePage} options={{headerShown:false}}/>
           <Stack.Screen name="PrisonerList" component={PrisonerList} options={{headerShown:false}}/> */}
         </Stack.Navigator>
