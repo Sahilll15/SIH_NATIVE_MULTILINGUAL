@@ -53,7 +53,7 @@ const NewClientRequest = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#d1d5db',
+    backgroundColor: 'white',
   },
   topContainer: {
     backgroundColor: '#7e22ce', // Cyan shade
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     marginTop: '5%',
   },
   clientCard: {
-    backgroundColor: 'white',
+    backgroundColor: '#d1d5db',
     borderRadius: 10,
     padding: 20,
     marginVertical: 10,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   bottomContainer : {
-    backgroundColor:'#d1d5db',
+    backgroundColor:'white',
   }
 });
 

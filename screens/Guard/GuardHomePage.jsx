@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: 'white',
   },
   upperHalf: {
     flex: 1,
@@ -118,8 +119,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "black",
+    // borderBottomWidth: 1,
     padding: 20,
     marginTop: "-90%",
   },
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   courtOrder: {
-    backgroundColor: "white", // Light Goldenrod Yellow
+    backgroundColor: "#f3f4f6", // Light Goldenrod Yellow
     borderRadius: 10,
     padding: 16,
     margin: 5,
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     height: 200,
-    backgroundColor: "white",
+    backgroundColor: "#f3f4f6",
     borderRadius: 10,
     padding: 16,
     margin: 10,

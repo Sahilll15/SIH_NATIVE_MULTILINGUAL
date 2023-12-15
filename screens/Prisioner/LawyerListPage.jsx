@@ -75,7 +75,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     marginTop: '0%',
-    backgroundColor: '#e5e7eb',
+    // backgroundColor: '#e5e7eb',
+    backgroundColor: 'white',
   },
   buttonContainer: {
     marginTop: '15%',
@@ -92,6 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
+    backgroundColor: '#e5e7eb',
   },
   activeSortButton: {
     backgroundColor: '#3498db',

@@ -68,6 +68,7 @@ const ExisitngClient = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   header: {
     backgroundColor: '#2563eb', // Blue color
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   box: {
-    backgroundColor: 'white',
+    backgroundColor: '#e5e7eb',
     borderRadius: 5,
     padding: 16,
     marginBottom: 16,

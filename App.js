@@ -27,6 +27,7 @@ import CaseDetail from './screens/Prisioner/CaseDetail';
 import { AuthProvider } from './Context/AuthContext'
 import ExisitngClient from './screens/Lawyer/ExisitngClient';
 import ChatBot from './screens/ChatBot/ChatBot';
+import Bottom from './screens/Navigation/Bottom';
 
 
 const Stack = createNativeStackNavigator();
@@ -34,6 +35,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <AuthProvider>
+      
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} />
@@ -56,7 +58,9 @@ export default function App() {
           <Stack.Screen name="GuardHomePage" component={GuardHomePage} options={{headerShown:false}}/>
           <Stack.Screen name="PrisonerListPage" component={PrisonerListPage} />
           <Stack.Screen name="ChatBot" component={ChatBot} />
+      
         </Stack.Navigator>
+        <Bottom />
         <Toast ref={(ref) => Toast.setRef(ref)} />
       </NavigationContainer>
     </AuthProvider>
