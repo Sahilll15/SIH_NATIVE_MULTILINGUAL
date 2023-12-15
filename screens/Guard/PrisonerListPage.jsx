@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     alignItems: 'center',
+    backgroundColor: 'white',
   },
   headerImage: {
     width: '100%',
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   prisonerCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#f3f4f6',
     borderRadius: 10,
     padding: 12,
     marginVertical: 10,
