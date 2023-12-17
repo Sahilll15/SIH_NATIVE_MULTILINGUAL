@@ -25,6 +25,10 @@ const HomeScreen = ({ navigation }) => {
       />
 
         <Button
+        title="Police Login"
+        onPress={() => navigation.navigate('PoliceLand')}
+      />
+       <Button
         title="Text with bot"
         onPress={() => navigation.navigate('ChatBot')}
       />

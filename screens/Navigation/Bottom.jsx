@@ -14,7 +14,7 @@ const Bottom = ({ navigation }) => {
   return (
     <View style={styles.bottomContainer}>
       <TouchableOpacity
-        style={[styles.tab, selectedTab === 'home' && styles.selectedTab]}
+        style={[styles.tab, selectedTab === 'home' && styles.selectedTab && styles.selectedTabText]}
         onPress={() => handleTabPress('home')}
       >
         <Icon name="home" size={24} color={selectedTab === 'home' ? '#3498db' : 'black'} />
@@ -22,7 +22,7 @@ const Bottom = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.tab, selectedTab === 'cogs' && styles.selectedTab]}
+        style={[styles.tab, selectedTab === 'cogs' && styles.selectedTab && styles.selectedTabText]}
         onPress={() => handleTabPress('cogs')}
       >
         <Icon name="cogs" size={24} color={selectedTab === 'cogs' ? '#3498db' : 'black'} />
@@ -30,7 +30,7 @@ const Bottom = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.tab, selectedTab === 'dashboard' && styles.selectedTab]}
+        style={[styles.tab, selectedTab === 'dashboard' && styles.selectedTab && styles.selectedTabText]}
         onPress={() => handleTabPress('dashboard')}
       >
         <Icon name="dashboard" size={24} color={selectedTab === 'dashboard' ? '#3498db' : 'black'} />
@@ -38,10 +38,10 @@ const Bottom = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.tab, selectedTab === 'users' && styles.selectedTab]}
+        style={[styles.tab, selectedTab === 'users' && styles.selectedTab && styles.selectedTabText]}
         onPress={() => handleTabPress('users')}
       >
-        <Icon name="users" size={24} color={selectedTab === 'users' ? '#3498db' : 'black'} />
+        <Icon name="users" size={24} color={selectedTab === 'users' ? '#3498db' : 'black' } />
         <Text style={[styles.tabText, selectedTab === 'users' && styles.selectedTabText]}>Clients</Text>
       </TouchableOpacity>
     </View>
@@ -67,8 +67,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   selectedTab: {
-    borderBottomWidth: 4,
-    borderBottomColor: '#3498db', // Border color for the selected tab
+    // borderBottomWidth: 4,
+    borderBottomColor: '#3498db',
+    paddingBottom: 2, // Adjust the paddingBottom to control the length
+    marginBottom: -2,
+    
   },
   tabText: {
     fontSize: 12,
@@ -77,7 +80,7 @@ const styles = StyleSheet.create({
     marginTop: 5, // Add some space between the icon and text
   },
   selectedTabText: {
-    transform: [{ translateY: -3 }], // Adjust the translateY value as needed
+    transform: [{ translateY: -5  }],
   },
 });
 
