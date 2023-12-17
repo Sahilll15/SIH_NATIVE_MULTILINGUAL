@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0e0e0',
   },
   searchBarInput: {
-    fontSize: 16,
+    fontSize: 14,
   },
   yearInput: {
     height: 40,
