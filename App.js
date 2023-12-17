@@ -8,7 +8,6 @@ import Toast from 'react-native-toast-message';
 import LoginScreen from './screens/Auth/LoginScreen';
 import SignupScreen from './screens/Auth/SignupScreen';
 import SignUpSelection from './screens/Auth/SignUpSelection';
-
 import HomeScreen from './screens/HomeScreen';
 import LawyerSignupSelection from './screens/Lawyer/LawyerSignupselection';
 import LawyerHomePage from './screens/Lawyer/LawyerHomePage';
@@ -24,14 +23,19 @@ import LandingPage from './screens/LandingPage';
 import GuardHomePage from './screens/Guard/GuardHomePage';
 import PrisonerListPage from './screens/Guard/PrisonerListPage';
 import CaseDetail from './screens/Prisioner/CaseDetail';
-import { AuthProvider } from './Context/AuthContext'
+import { AuthProvider } from './Context/AuthContext';
 import ExisitngClient from './screens/Lawyer/ExisitngClient';
 import ChatBot from './screens/ChatBot/ChatBot';
 import Bottom from './screens/Navigation/Bottom';
 import PoliceLand from './screens/Police/PoliceLand';
 import Fir from './screens/Police/Fir';
 import SearchFir from './screens/Police/SearchFir';
-
+import CourtHome from './screens/Court/CourtHome';
+import NewCase from './screens/Court/NewCase';
+import ExistingCase from './screens/Court/ExistingCase';
+import CaseChat from './screens/Court/CaseChat';
+import NewCaseDoc from './screens/Court/NewCaseDoc';
+import PdfViewer from './screens/PdfViewer';
 
 const Stack = createNativeStackNavigator();
 
@@ -62,9 +66,14 @@ export default function App() {
           <Stack.Screen name="PrisonerListPage" component={PrisonerListPage} />
           <Stack.Screen name="PoliceLand" component={PoliceLand} options={{headerShown:false}} />
           <Stack.Screen name="Fir" component={Fir} options={{headerShown:false}} />
+          <Stack.Screen name="CourtHome" component={CourtHome} options={{headerShown:false}} />
           <Stack.Screen name="SearchFir" component={SearchFir}  />
+          <Stack.Screen name="NewCase" component={NewCase}  />
           <Stack.Screen name="ChatBot" component={ChatBot} />
-      
+          <Stack.Screen name="ExistingCase" component={ExistingCase}  />
+          <Stack.Screen name="CaseChat" component={CaseChat} options={{headerShown:false}} />
+          <Stack.Screen name="NewCaseDoc" component={NewCaseDoc} options={{headerShown:false}} />
+          <Stack.Screen name="PdfViewer" component={PdfViewer} options={{headerShown:false}} />
         </Stack.Navigator>
         <Bottom />
         <Toast ref={(ref) => Toast.setRef(ref)} />
