@@ -9,12 +9,14 @@ const PdfViewer = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <WebView
-        source={{ uri: pdfUrl }}
-        style={styles.webview}
-        scalesPageToFit
-        bounces={false}
-      />
+      <View style={styles.webviewContainer}>
+        <WebView
+          source={{ uri: pdfUrl }}
+          style={styles.webview}
+          scalesPageToFit
+          bounces={false}
+        />
+      </View>
       <Button title="Go Back" onPress={() => navigation.goBack()} />
     </View>
   );
@@ -26,9 +28,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  webviewContainer: {
+    marginTop:'10%',
+    flex: 1,
+    width: '95%',
+    paddingHorizontal: 16, // Adjust the padding as needed
+  },
   webview: {
     flex: 1,
-    width: Dimensions.get('window').width,
+    width: '95%',
   },
 });
 
