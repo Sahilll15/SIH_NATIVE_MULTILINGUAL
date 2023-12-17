@@ -48,9 +48,10 @@ const HomeScreen = ({ navigation }) => {
       />
 
 <Button title="View PDF" onPress={handleViewPdf} />
-      {/* You can render PdfViewer directly if needed */}
-      {/* <PdfViewer route={{ params: { pdfUrl: 'https://example.com/path/to/your/pdf.pdf' } }} /> */}
-
+<Button
+        title="Gifted Chat"
+        onPress={() => navigation.navigate('ChatScreen')}
+      />
     </View>
   );
 }

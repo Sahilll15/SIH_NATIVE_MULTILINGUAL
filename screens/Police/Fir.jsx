@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import baseUrl from '../../config'
 
 const Fir = () => {
   const [formData, setFormData] = useState({
@@ -33,8 +34,7 @@ const Fir = () => {
     setFormData({ ...formData, policeOfficerName: value });
   };
 
-  const handleSubmit = () => {
-    // Handle form submission logic here
+  const handleSubmit = async () => {
     console.log('Form submitted:', formData);
   };
 

@@ -5,8 +5,8 @@ const PoliceLand = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topHalf}>
-        <Image
-          source={{ uri: 'https://example.com/your-image-url.jpg' }}
+      <Image
+          source={require('../../assets/Pmain.png')} // Update the filename
           style={styles.image}
           resizeMode="cover"
         />
@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
+    marginTop: '10%',
     width: '100%',
     height: '100%',
   },
