@@ -38,6 +38,11 @@ import NewCaseDoc from './screens/Court/NewCaseDoc';
 import PdfViewer from './screens/PdfViewer';
 import ChatScreen from './screens/Chat/ChatScreen';
 import YourCase from './screens/Prisioner/YourCase';
+import Rights from './screens/Prisioner/Rights';
+import Rehab from './screens/Prisioner/Rehab';
+import SkillsScreen from './screens/Prisioner/SkillsScreen';
+import MotivationScreen from './screens/Prisioner/MotivationScreen';
+import YogaScreen from './screens/Prisioner/YogaScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -78,6 +83,13 @@ export default function App() {
           <Stack.Screen name="PdfViewer" component={PdfViewer} options={{ headerShown: false }} />
           <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }} />
           <Stack.Screen name="YourCase" component={YourCase} />
+          <Stack.Screen name="Rights" component={Rights} />
+          <Stack.Screen name="Rehab" component={Rehab} />
+          <Stack.Screen name="SkillsScreen" component={SkillsScreen} />
+          <Stack.Screen name="MotivationScreen" component={MotivationScreen} />
+          <Stack.Screen name="YogaScreen" component={YogaScreen} />
+
+
 
 
         </Stack.Navigator>
