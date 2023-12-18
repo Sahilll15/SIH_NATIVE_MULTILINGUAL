@@ -1,14 +1,28 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, FlatList, Modal } from 'react-native';
 import Toast from 'react-native-toast-message';
+import { useFir } from '../../Context/FirContext';
+import { useEffect } from 'react';
 
 const LawyerDetailsPage = () => {
+  const { fetchfir, FirData } = useFir();
+  const [selectedCase, setSelectedCase] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log('Fetching FIR data...');
+      try {
+        await fetchfir();
+        console.log('FIR data fetched successfully.');
+      } catch (error) {
+        console.error('Error fetching FIR data:', error);
+      }
+    };
 
+    fetchData();
+  }, []);
 
-
-  // Dummy data for lawyer details
   const lawyerDetails = {
     id: '1',
     name: 'John Doe',
@@ -18,17 +32,17 @@ const LawyerDetailsPage = () => {
     profilePic: 'https://cdn-icons-png.flaticon.com/256/1995/1995429.png',
   };
 
-  // Dummy data for case dropdown
-  const [selectedCase, setSelectedCase] = useState('Criminal Case');
-  const caseOptions = [' Case 1', ' Case 2', ' Law 3', 'Case 4'];
-
   const handleContactLawyer = () => {
-    // Implement logic to contact the lawyer
-    Toast.show({
-      type: 'success', // Can be 'success', 'error', 'info', or 'any custom type'
-      text1: 'Booked',
-      text2: 'Your Request Has Been Successfully Sent!',
-    });
+    if (selectedCase) {
+      // Implement logic to contact the lawyer with selectedCase
+      Toast.show({
+        type: 'success',
+        text1: 'Booked',
+        text2: 'Your Request Has Been Successfully Sent!',
+      });
+    } else {
+      Alert.alert('Error', 'Please select a case before contacting the lawyer.');
+    }
   };
 
   return (
@@ -47,18 +61,38 @@ const LawyerDetailsPage = () => {
       {/* Case Dropdown */}
       <View style={styles.dropdownContainer}>
         <Text>Select Case:</Text>
-        <View style={styles.dropdown}>
-          <Picker
-            selectedValue={selectedCase}
-            onValueChange={(itemValue) => setSelectedCase(itemValue)}
-            style={styles.picker}
-          >
-            {caseOptions.map((option) => (
-              <Picker.Item key={option} label={option} value={option} />
-            ))}
-          </Picker>
-        </View>
+        <TouchableOpacity style={styles.dropdown} onPress={() => setModalVisible(true)}>
+          <Text>{selectedCase || 'Select a Case'}</Text>
+        </TouchableOpacity>
       </View>
+
+      {/* Modal for Case Selection */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <FlatList
+              data={FirData.filter((data) => data.FirNumber)}
+              keyExtractor={(item) => item?.FirNumber?.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.modalItem}
+                  onPress={() => {
+                    setSelectedCase('Fir -' + item?.FirNumber);
+                    setModalVisible(false);
+                  }}
+                >
+                  <Text>Fir - {item.FirNumber}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </View>
+      </Modal>
 
       {/* Contact Lawyer Button */}
       <TouchableOpacity style={styles.contactButton} onPress={handleContactLawyer}>
@@ -103,11 +137,25 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 8,
     paddingHorizontal: 10,
-    marginBottom: 10,
-    backgroundColor: '#ecf0f1', // Background color of the dropdown
+    justifyContent: 'center',
+    backgroundColor: '#ecf0f1',
   },
-  picker: {
-    color: '#3498db', // Color of the selected item
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 8,
+    width: '80%',
+  },
+  modalItem: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ecf0f1',
   },
   contactButton: {
     backgroundColor: '#3498db',
