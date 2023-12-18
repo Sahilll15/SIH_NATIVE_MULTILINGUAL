@@ -19,7 +19,9 @@ const SearchFir = () => {
         Alert.alert("fir not found")
       }
     } catch (error) {
-      Alert.alert(error.response.data.message)
+      console.log(error)
+      console.log(error.message)
+      // Alert.alert(error.response.data.message)
     }
   }
 
