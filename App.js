@@ -79,6 +79,7 @@ export default function App() {
           <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }} />
           <Stack.Screen name="YourCase" component={YourCase} />
 
+
         </Stack.Navigator>
         <Bottom />
         <Toast ref={(ref) => Toast.setRef(ref)} />
