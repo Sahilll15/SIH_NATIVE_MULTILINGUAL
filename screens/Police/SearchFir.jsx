@@ -1,16 +1,35 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Image, TextInput, TouchableOpacity, Text } from 'react-native'; // Add 'Text' import
+import { StyleSheet, View, Image, TextInput, TouchableOpacity, Text, Alert } from 'react-native'; // Add 'Text' import
 import { SearchBar, Button } from 'react-native-elements';
+import axios from 'axios'
+import baseUrl from '../../config';
 const SearchFir = () => {
   const [searchText, setSearchText] = useState('');
   const [firNumber, setFirNumber] = useState('');
 
 
+  const fetchFir = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/fir/getFirByNumber/${firNumber}`)
 
-  const handleFormSubmit = () => {
+      if (response.status === 200) {
+        Alert.alert("fir fetched")
+        console.log(response.data)
+      } else {
+        Alert.alert("fir not found")
+      }
+    } catch (error) {
+      Alert.alert(error.response.data.message)
+    }
+  }
+
+
+
+  const handleFormSubmit = async () => {
     // Add your form submission logic here
     console.log('Submitting FIR Details...');
     console.log('FIR Number:', firNumber);
+    await fetchFir();
   };
 
   return (
@@ -27,7 +46,7 @@ const SearchFir = () => {
 
       {/* Bottom Half: Search Bar, Year Input, and Search Button */}
       <View style={styles.bottomHalf}>
-        
+
 
         {/* FIR Details Form */}
         <View style={styles.formContainer}>
@@ -37,7 +56,7 @@ const SearchFir = () => {
             onChangeText={(text) => setFirNumber(text)}
             value={firNumber}
           />
-          
+
           <TouchableOpacity
             style={styles.submitButton}
             onPress={handleFormSubmit}

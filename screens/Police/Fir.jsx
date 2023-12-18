@@ -1,42 +1,110 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import baseUrl from '../../config'
 
+import axios from 'axios'
+
 const Fir = () => {
-  const [formData, setFormData] = useState({
-    suspect: {
-      name: '',
-      age: '',
-      ipcSections: '',
-      address: '',
-      contactNumber: '',
-      gender: '',
-      placeOfOccurrence: '',
-      aadhar: '',
-    },
-    policeOfficerName: '',
-    description: '',
-    informer: {
-      name: '',
-      address: '',
-      contactNumber: '',
-    },
-  });
+  const [accusedName, setAccusedName] = useState("");
+  const [accusedAge, setAccusedAge] = useState("");
+  const [sections, setSections] = useState([]);
+  const [accusedAddress, setAccusedAddress] = useState("");
+  const [accusedContactNumber, setAccusedContactNumber] = useState("");
+  const [accusedAddharCard, setAccusedAddharCard] = useState("");
+  const [accusedGender, setAccusedGender] = useState("");
+  const [firPlace, setFirPlace] = useState("");
+  const [policeName, setPoliceName] = useState("");
+  const [firDescription, setFirDescription] = useState("");
+  const [informerName, setInformerName] = useState("");
+  const [informerAddress, setInformerAddress] = useState("");
+  const [informerContactNumber, setInformerContactNumber] = useState(0);
 
-  const handleChange = (field, subfield, value) => {
-    setFormData({
-      ...formData,
-      [field]: { ...formData[field], [subfield]: value },
-    });
+
+  const handleChange = (field, value) => {
+    switch (field) {
+      case 'accusedName':
+        setAccusedName(value);
+        break;
+      case 'accusedAge':
+        setAccusedAge(value);
+        break;
+      case 'sections':
+        setSections(value.split(", "));
+        break;
+      case 'accusedAddress':
+        setAccusedAddress(value);
+        break;
+      case 'accusedContactNumber':
+        setAccusedContactNumber(value);
+        break;
+      case 'accusedAddharCard':
+        setAccusedAddharCard(value);
+        break;
+      case 'accusedGender':
+        setAccusedGender(value);
+        break;
+      case 'firPlace':
+        setFirPlace(value);
+        break;
+      case 'policeName':
+        setPoliceName(value);
+        break;
+      case 'firDescription':
+        setFirDescription(value);
+        break;
+      case 'informerName':
+        setInformerName(value);
+        break;
+      case 'informerAddress':
+        setInformerAddress(value);
+        break;
+      case 'informerContactNumber':
+        setInformerContactNumber(value);
+        break;
+      default:
+        break;
+    }
   };
 
-  const handlePoliceOfficerChange = (value) => {
-    setFormData({ ...formData, policeOfficerName: value });
-  };
+  const submitFir = async () => {
+    const formData = {
+      accusedName,
+      accusedAge,
+      sections,
+      accusedAddress,
+      accusedContactNumber,
+      accusedAddharCard,
+      accusedGender,
+      firPlace,
+      policeName,
+      firDescription,
+      informer: {
+        name: informerName,
+        address: informerAddress,
+        contactNumber: informerContactNumber
+      }
+    };
+
+    try {
+      const response = await axios.post(`${baseUrl}/fir/createFir`, formData)
+
+      if (response.status === 200) {
+        Alert.alert('FIR created')
+      } else {
+        Alert.alert('FIR not created')
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleSubmit = async () => {
-    console.log('Form submitted:', formData);
+
+    console.log('Form submitted');
+    await submitFir();
+
   };
 
   return (
@@ -48,31 +116,43 @@ const Fir = () => {
         <TextInput
           style={styles.input}
           placeholder="Name"
-          onChangeText={(text) => handleChange('suspect', 'name', text)}
+          value={accusedName}
+          onChangeText={(text) => handleChange('accusedName', text)}
           required
         />
         <TextInput
           style={styles.input}
           placeholder="Age"
-          onChangeText={(text) => handleChange('suspect', 'age', text)}
+          value={accusedAge}
+          onChangeText={(text) => handleChange('accusedAge', text)}
           required
         />
         <TextInput
           style={styles.input}
           placeholder="IPC Sections"
-          onChangeText={(text) => handleChange('suspect', 'ipcSections', text)}
+          value={sections.join(", ")}
+          onChangeText={(text) => handleChange('sections', text)}
           required
         />
         <TextInput
           style={styles.input}
           placeholder="Address"
-          onChangeText={(text) => handleChange('suspect', 'address', text)}
+          value={accusedAddress}
+          onChangeText={(text) => handleChange('accusedAddress', text)}
           required
         />
         <TextInput
           style={styles.input}
           placeholder="Contact Number"
-          onChangeText={(text) => handleChange('suspect', 'contactNumber', text)}
+          value={accusedContactNumber}
+          onChangeText={(text) => handleChange('accusedContactNumber', text)}
+          required
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="AadharCard"
+          value={accusedAddharCard}
+          onChangeText={(text) => handleChange('accusedAddharCard', text)}
           required
         />
         <TextInput
@@ -84,21 +164,23 @@ const Fir = () => {
         <TextInput
           style={styles.input}
           placeholder="Gender"
-          onChangeText={(text) => handleChange('suspect', 'gender', text)}
+          value={accusedGender}
+          onChangeText={(text) => handleChange('accusedGender', text)}
           required
         />
         <TextInput
           style={styles.input}
           placeholder="Place of Occurrence"
-          onChangeText={(text) => handleChange('suspect', 'placeOfOccurrence', text)}
+          value={firPlace}
+          onChangeText={(text) => handleChange('firPlace', text)}
           required
         />
 
         {/* Police Officer Section */}
         <Text style={styles.sectionTitle}>Police Officer Details</Text>
         <Picker
-          selectedValue={formData.policeOfficerName}
-          onValueChange={(value) => handlePoliceOfficerChange(value)}
+          selectedValue={policeName}
+          onValueChange={(value) => handleChange('policeName', value)}
           style={styles.input}
         >
           <Picker.Item label="Select Police Officer" value="" />
@@ -113,7 +195,8 @@ const Fir = () => {
           style={[styles.input, { height: 100 }]}
           placeholder="Description"
           multiline
-          onChangeText={(text) => handleChange('description', '', text)}
+          value={firDescription}
+          onChangeText={(text) => handleChange('firDescription', text)}
           required
         />
 
@@ -122,17 +205,20 @@ const Fir = () => {
         <TextInput
           style={styles.input}
           placeholder="Name"
-          onChangeText={(text) => handleChange('informer', 'name', text)}
+          value={informerName}
+          onChangeText={(text) => handleChange('informerName', text)}
         />
         <TextInput
           style={styles.input}
           placeholder="Address"
-          onChangeText={(text) => handleChange('informer', 'address', text)}
+          value={informerAddress}
+          onChangeText={(text) => handleChange('informerAddress', text)}
         />
         <TextInput
           style={styles.input}
           placeholder="Contact Number"
-          onChangeText={(text) => handleChange('informer', 'contactNumber', text)}
+          value={informerContactNumber}
+          onChangeText={(text) => handleChange('informerContactNumber', text)}
         />
 
         {/* Submit Button */}
@@ -146,12 +232,12 @@ const Fir = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop:'10%',
-    marginBottom:'10%',
+    marginTop: '10%',
+    marginBottom: '10%',
     flexGrow: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor:'white',
+    backgroundColor: 'white',
   },
   title: {
     fontSize: 24,

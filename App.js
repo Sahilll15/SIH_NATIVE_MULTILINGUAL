@@ -44,7 +44,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <AuthProvider>
-      
+
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} />
@@ -64,20 +64,21 @@ export default function App() {
           <Stack.Screen name="LawyerSelect" component={LawyerSelect} options={{ headerShown: false }} />
           <Stack.Screen name="LandingPage" component={LandingPage} options={{ headerShown: false }} />
           <Stack.Screen name="ExisitngClient" component={ExisitngClient} options={{ headerShown: false }} />
-          <Stack.Screen name="GuardHomePage" component={GuardHomePage} options={{headerShown:false}}/>
+          <Stack.Screen name="GuardHomePage" component={GuardHomePage} options={{ headerShown: false }} />
           <Stack.Screen name="PrisonerListPage" component={PrisonerListPage} />
-          <Stack.Screen name="PoliceLand" component={PoliceLand} options={{headerShown:false}} />
-          <Stack.Screen name="Fir" component={Fir} options={{headerShown:false}} />
-          <Stack.Screen name="CourtHome" component={CourtHome} options={{headerShown:false}} />
-          <Stack.Screen name="SearchFir" component={SearchFir}  />
-          <Stack.Screen name="NewCase" component={NewCase}  />
+          <Stack.Screen name="PoliceLand" component={PoliceLand} options={{ headerShown: false }} />
+          <Stack.Screen name="Fir" component={Fir} options={{ headerShown: false }} />
+          <Stack.Screen name="CourtHome" component={CourtHome} options={{ headerShown: false }} />
+          <Stack.Screen name="SearchFir" component={SearchFir} />
+          <Stack.Screen name="NewCase" component={NewCase} />
           <Stack.Screen name="ChatBot" component={ChatBot} />
-          <Stack.Screen name="ExistingCase" component={ExistingCase}  />
-          <Stack.Screen name="CaseChat" component={CaseChat} options={{headerShown:false}} />
-          <Stack.Screen name="NewCaseDoc" component={NewCaseDoc} options={{headerShown:false}} />
-          <Stack.Screen name="PdfViewer" component={PdfViewer} options={{headerShown:false}} />
-          <Stack.Screen name="ChatScreen" component={ChatScreen} options={{headerShown:false}} />
-          <Stack.Screen name="YourCase" component={YourCase}  />
+          <Stack.Screen name="ExistingCase" component={ExistingCase} />
+          <Stack.Screen name="CaseChat" component={CaseChat} options={{ headerShown: false }} />
+          <Stack.Screen name="NewCaseDoc" component={NewCaseDoc} options={{ headerShown: false }} />
+          <Stack.Screen name="PdfViewer" component={PdfViewer} options={{ headerShown: false }} />
+          <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="YourCase" component={YourCase} />
+
 
         </Stack.Navigator>
         <Bottom />
