@@ -23,26 +23,26 @@ const AddDoc = () => {
   };
 
   const pickDocument = async () => {
-    try {
-      const result = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-      });
+  //   try {
+  //     const result = await DocumentPicker.pick({
+  //       type: [DocumentPicker.types.allFiles],
+  //     });
 
-      console.log(
-        result.uri,
-        result.type, // mime type
-        result.name,
-        result.size
-      );
+  //     console.log(
+  //       result.uri,
+  //       result.type, // mime type
+  //       result.name,
+  //       result.size
+  //     );
 
-      setSelectedFile(result);
-    } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-        // User cancelled the document picker
-      } else {
-        console.log(err);
-      }
-    }
+  //     setSelectedFile(result);
+  //   } catch (err) {
+  //     if (DocumentPicker.isCancel(err)) {
+  //       // User cancelled the document picker
+  //     } else {
+  //       console.log(err);
+  //     }
+  //   }
   };
 
   const renderDocumentItem = ({ item }) => (
