@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import baseUrl from '../../config'
+
 import axios from 'axios'
 
 const Fir = () => {
@@ -18,6 +19,7 @@ const Fir = () => {
   const [informerName, setInformerName] = useState("");
   const [informerAddress, setInformerAddress] = useState("");
   const [informerContactNumber, setInformerContactNumber] = useState(0);
+
 
   const handleChange = (field, value) => {
     switch (field) {
@@ -99,8 +101,10 @@ const Fir = () => {
   }
 
   const handleSubmit = async () => {
+
     console.log('Form submitted');
     await submitFir();
+
   };
 
   return (
@@ -149,6 +153,12 @@ const Fir = () => {
           placeholder="AadharCard"
           value={accusedAddharCard}
           onChangeText={(text) => handleChange('accusedAddharCard', text)}
+          required
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="AadharCard"
+          onChangeText={(text) => handleChange('suspect', 'aadhar', text)}
           required
         />
         <TextInput
