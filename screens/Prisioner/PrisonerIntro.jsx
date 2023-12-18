@@ -7,11 +7,8 @@ const PrisonerIntro = ({ navigation }) => {
   const backgroundImageUrl = 'https://www.example.com/path/to/your/image.jpg'; // Replace with your image URL
 
   const navigateToRights = () => {
-    Toast.show({
-      type: 'error',
-      text1: 'Hello',
-      text2: 'This is UNDER DEVELOPMENT',
-    });
+    navigation.navigate('Rights');
+
   };
 
   const navigateToLegalAssistance = () => {
@@ -20,14 +17,19 @@ const PrisonerIntro = ({ navigation }) => {
   };
 
   const navigateToRehab = () => {
-    Toast.show({
-      type: 'error',
-      text1: 'Hello',
-      text2: 'This is UNDER DEVELOPMENT',
-    });
+    navigation.navigate('Rehab');
   };
 
 
+  // const navigateToRehab = () => {
+  //   Toast.show({
+  //     type: 'error',
+  //     text1: 'Hello',
+  //     text2: 'This is UNDER DEVELOPMENT',
+  //   });
+  // };
+
+  
 
   return (
     <View style={styles.container}>

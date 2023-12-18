@@ -37,6 +37,8 @@ import NewCaseDoc from './screens/Court/NewCaseDoc';
 import PdfViewer from './screens/PdfViewer';
 import ChatScreen from './screens/Chat/ChatScreen';
 import YourCase from './screens/Prisioner/YourCase';
+import YourCaseDescription from './screens/Prisioner/YourCaseDescription';
+import Rehab from './screens/Prisioner/Rehab';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,7 +48,7 @@ export default function App() {
       <FirProvider>
 
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator initialRouteName="Rehab">
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Signup" component={SignupScreen} />
@@ -78,6 +80,8 @@ export default function App() {
             <Stack.Screen name="PdfViewer" component={PdfViewer} />
             <Stack.Screen name="ChatScreen" component={ChatScreen} />
             <Stack.Screen name="YourCase" component={YourCase} />
+            <Stack.Screen name="YourCaseDescription" component={YourCaseDescription}/>
+            <Stack.Screen name="Rehab" component={Rehab}/>
 
           </Stack.Navigator>
           <Bottom />
