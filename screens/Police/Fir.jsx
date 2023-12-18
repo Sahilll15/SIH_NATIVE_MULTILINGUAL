@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import baseUrl from '../../config'
 
 const Fir = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const Fir = () => {
       contactNumber: '',
       gender: '',
       placeOfOccurrence: '',
+      aadhar: '',
     },
     policeOfficerName: '',
     description: '',
@@ -33,8 +35,7 @@ const Fir = () => {
     setFormData({ ...formData, policeOfficerName: value });
   };
 
-  const handleSubmit = () => {
-    // Handle form submission logic here
+  const handleSubmit = async () => {
     console.log('Form submitted:', formData);
   };
 
@@ -72,6 +73,12 @@ const Fir = () => {
           style={styles.input}
           placeholder="Contact Number"
           onChangeText={(text) => handleChange('suspect', 'contactNumber', text)}
+          required
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="AadharCard"
+          onChangeText={(text) => handleChange('suspect', 'aadhar', text)}
           required
         />
         <TextInput

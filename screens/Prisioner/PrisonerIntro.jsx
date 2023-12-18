@@ -7,9 +7,8 @@ const PrisonerIntro = ({ navigation }) => {
   const backgroundImageUrl = 'https://www.example.com/path/to/your/image.jpg'; // Replace with your image URL
 
   const navigateToRights = () => {
-    
     Toast.show({
-      type: 'error', // Can be 'success', 'error', 'info', or 'any custom type'
+      type: 'error',
       text1: 'Hello',
       text2: 'This is UNDER DEVELOPMENT',
     });
@@ -21,13 +20,14 @@ const PrisonerIntro = ({ navigation }) => {
   };
 
   const navigateToRehab = () => {
-    // Navigate to the Rehab screen
     Toast.show({
-      type: 'error', // Can be 'success', 'error', 'info', or 'any custom type'
+      type: 'error',
       text1: 'Hello',
       text2: 'This is UNDER DEVELOPMENT',
     });
   };
+
+  
 
   return (
     <View style={styles.container}>
@@ -39,7 +39,7 @@ const PrisonerIntro = ({ navigation }) => {
             source={{
               uri:
                 'https://png.pngtree.com/png-clipart/20210915/ourmid/pngtree-user-avatar-placeholder-png-image_3918418.jpg',
-            }} // Placeholder image URL
+            }}
             style={styles.profileImage}
           />
           {/* Profile Information */}
@@ -47,7 +47,10 @@ const PrisonerIntro = ({ navigation }) => {
             <Text style={styles.profileInfoText}>Name: John Doe</Text>
             <Text style={styles.profileInfoText}>Email: johndoe@example.com</Text>
             <Text style={styles.profileInfoText}>Phone: +1234567890</Text>
-            <Text style={styles.profileInfoText}>Total Cases: 5</Text>
+            {/* Replace "Total Cases" text with a button */}
+            <TouchableOpacity style={styles.redButton} onPress={() => navigation.navigate('YourCase')}>
+              <Text style={styles.buttonText}>Your Cases</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -75,7 +78,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: 'white',
-    
   },
   dashboardText: {
     fontSize: 28,
@@ -113,6 +115,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     flexDirection: 'row',
+    marginBottom: 10,
+  },
+  redButton: {
+    backgroundColor: 'red',
+    padding: 7,
+    width: '50%',
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 10,
   },
   buttonText: {

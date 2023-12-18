@@ -37,6 +37,7 @@ import CaseChat from './screens/Court/CaseChat';
 import NewCaseDoc from './screens/Court/NewCaseDoc';
 import PdfViewer from './screens/PdfViewer';
 import ChatScreen from './screens/Chat/ChatScreen';
+import YourCase from './screens/Prisioner/YourCase';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,7 +46,7 @@ export default function App() {
     <AuthProvider>
       
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="ChatScreen">
+        <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
@@ -76,6 +77,7 @@ export default function App() {
           <Stack.Screen name="NewCaseDoc" component={NewCaseDoc} options={{headerShown:false}} />
           <Stack.Screen name="PdfViewer" component={PdfViewer} options={{headerShown:false}} />
           <Stack.Screen name="ChatScreen" component={ChatScreen} options={{headerShown:false}} />
+          <Stack.Screen name="YourCase" component={YourCase}  />
 
         </Stack.Navigator>
         <Bottom />
