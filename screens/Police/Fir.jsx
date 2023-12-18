@@ -13,6 +13,7 @@ const Fir = () => {
       contactNumber: '',
       gender: '',
       placeOfOccurrence: '',
+      aadhar: '',
     },
     policeOfficerName: '',
     description: '',
@@ -72,6 +73,12 @@ const Fir = () => {
           style={styles.input}
           placeholder="Contact Number"
           onChangeText={(text) => handleChange('suspect', 'contactNumber', text)}
+          required
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="AadharCard"
+          onChangeText={(text) => handleChange('suspect', 'aadhar', text)}
           required
         />
         <TextInput
