@@ -5,7 +5,7 @@ import { View, Text, StyleSheet, FlatList, Alert, TouchableOpacity } from 'react
 import axios from 'axios'
 import { useFir } from '../../Context/FirContext';
 
-const CasesPage = () => {
+const CasesPage = ({ navigation }) => {
   // Dummy data for testin
 
 
@@ -13,7 +13,7 @@ const CasesPage = () => {
 
 
 
-  const { fetchfir, FirData } = useFir()
+  const { fetchfir, FirData, currentFir, setCurrentFirFunction } = useFir()
 
 
   // const fetchfir = async () => {
@@ -55,7 +55,10 @@ const CasesPage = () => {
         data={FirData.filter((casesData) => casesData.FirNumber)}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => Alert.alert(item._id)}>
+          <TouchableOpacity onPress={() => {
+            navigation.navigate('YourCaseDescription')
+            setCurrentFirFunction(item)
+          }} >
             <View style={styles.caseItem} key={item._id}>
               <Text style={styles.caseNumber}>Case Number: {item.FirNumber}</Text>
               <Text style={styles.caseDescription}>{item.firDescription}</Text>

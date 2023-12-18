@@ -39,6 +39,7 @@ import ChatScreen from './screens/Chat/ChatScreen';
 import YourCase from './screens/Prisioner/YourCase';
 import YourCaseDescription from './screens/Prisioner/YourCaseDescription';
 import Rehab from './screens/Prisioner/Rehab';
+import { LawyerProvider } from './Context/LawyerContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,47 +47,49 @@ export default function App() {
   return (
     <AuthProvider>
       <FirProvider>
+        <LawyerProvider>
 
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Rehab">
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Signup" component={SignupScreen} />
-            <Stack.Screen name="SignUpSelection" component={SignUpSelection} />
-            <Stack.Screen name="LawyerSignupSelection" component={LawyerSignupSelection} />
-            <Stack.Screen name="LawyerHomePage" component={LawyerHomePage} />
-            <Stack.Screen name="NewClientRequest" component={NewClientRequest} />
-            <Stack.Screen name="ClientCaseDetail" component={ClientCaseDetail} />
-            <Stack.Screen name="CaseDetail" component={CaseDetail} />
-            <Stack.Screen name="CaseDashboard" component={CaseDashboard} />
-            <Stack.Screen name="PrisonerIntro" component={PrisonerIntro} />
-            <Stack.Screen name="LegalAssistance" component={LegalAssistance} />
-            <Stack.Screen name="AddDoc" component={AddDoc} />
-            <Stack.Screen name="LawyerListPage" component={LawyerListPage} />
-            <Stack.Screen name="LawyerSelect" component={LawyerSelect} />
-            <Stack.Screen name="LandingPage" component={LandingPage} />
-            <Stack.Screen name="ExisitngClient" component={ExisitngClient} />
-            <Stack.Screen name="GuardHomePage" component={GuardHomePage} />
-            <Stack.Screen name="PrisonerListPage" component={PrisonerListPage} />
-            <Stack.Screen name="PoliceLand" component={PoliceLand} />
-            <Stack.Screen name="Fir" component={Fir} />
-            <Stack.Screen name="CourtHome" component={CourtHome} />
-            <Stack.Screen name="SearchFir" component={SearchFir} />
-            <Stack.Screen name="NewCase" component={NewCase} />
-            <Stack.Screen name="ChatBot" component={ChatBot} />
-            <Stack.Screen name="ExistingCase" component={ExistingCase} />
-            <Stack.Screen name="CaseChat" component={CaseChat} />
-            <Stack.Screen name="NewCaseDoc" component={NewCaseDoc} />
-            <Stack.Screen name="PdfViewer" component={PdfViewer} />
-            <Stack.Screen name="ChatScreen" component={ChatScreen} />
-            <Stack.Screen name="YourCase" component={YourCase} />
-            <Stack.Screen name="YourCaseDescription" component={YourCaseDescription}/>
-            <Stack.Screen name="Rehab" component={Rehab}/>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Home">
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Signup" component={SignupScreen} />
+              <Stack.Screen name="SignUpSelection" component={SignUpSelection} />
+              <Stack.Screen name="LawyerSignupSelection" component={LawyerSignupSelection} />
+              <Stack.Screen name="LawyerHomePage" component={LawyerHomePage} />
+              <Stack.Screen name="NewClientRequest" component={NewClientRequest} />
+              <Stack.Screen name="ClientCaseDetail" component={ClientCaseDetail} />
+              <Stack.Screen name="CaseDetail" component={CaseDetail} />
+              <Stack.Screen name="CaseDashboard" component={CaseDashboard} />
+              <Stack.Screen name="PrisonerIntro" component={PrisonerIntro} />
+              <Stack.Screen name="LegalAssistance" component={LegalAssistance} />
+              <Stack.Screen name="AddDoc" component={AddDoc} />
+              <Stack.Screen name="LawyerListPage" component={LawyerListPage} />
+              <Stack.Screen name="LawyerSelect" component={LawyerSelect} />
+              <Stack.Screen name="LandingPage" component={LandingPage} />
+              <Stack.Screen name="ExisitngClient" component={ExisitngClient} />
+              <Stack.Screen name="GuardHomePage" component={GuardHomePage} />
+              <Stack.Screen name="PrisonerListPage" component={PrisonerListPage} />
+              <Stack.Screen name="PoliceLand" component={PoliceLand} />
+              <Stack.Screen name="Fir" component={Fir} />
+              <Stack.Screen name="CourtHome" component={CourtHome} />
+              <Stack.Screen name="SearchFir" component={SearchFir} />
+              <Stack.Screen name="NewCase" component={NewCase} />
+              <Stack.Screen name="ChatBot" component={ChatBot} />
+              <Stack.Screen name="ExistingCase" component={ExistingCase} />
+              <Stack.Screen name="CaseChat" component={CaseChat} />
+              <Stack.Screen name="NewCaseDoc" component={NewCaseDoc} />
+              <Stack.Screen name="PdfViewer" component={PdfViewer} />
+              <Stack.Screen name="ChatScreen" component={ChatScreen} />
+              <Stack.Screen name="YourCase" component={YourCase} />
+              <Stack.Screen name="YourCaseDescription" component={YourCaseDescription} />
+              <Stack.Screen name="Rehab" component={Rehab} />
 
-          </Stack.Navigator>
-          <Bottom />
-          <Toast ref={(ref) => Toast.setRef(ref)} />
-        </NavigationContainer>
+            </Stack.Navigator>
+            <Bottom />
+            <Toast ref={(ref) => Toast.setRef(ref)} />
+          </NavigationContainer>
+        </LawyerProvider>
       </FirProvider>
     </AuthProvider>
   );
