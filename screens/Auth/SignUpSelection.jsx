@@ -16,7 +16,7 @@ import { useAuth } from '../../Context/AuthContext';
 const MyPage = ({ navigation }) => {
   const [userType, setUserType] = useState('');
 
-  const { setUserDetailsFunctions } = useAuth();
+  const { setUserDetailsFunctions, userDetails } = useAuth();
 
   const handleUserTypeSelection = (selectedUserType) => {
     Alert.alert(
@@ -46,7 +46,7 @@ const MyPage = ({ navigation }) => {
   const setUserTypeFunction = async () => {
     try {
 
-      const response = await axios.post(`${baseUrl}/priosioner/setUserType/6578761c215a45ba795e32da`, {
+      const response = await axios.post(`${baseUrl}/priosioner/setUserType/${userDetails._id}`, {
         type: userType
       })
 
