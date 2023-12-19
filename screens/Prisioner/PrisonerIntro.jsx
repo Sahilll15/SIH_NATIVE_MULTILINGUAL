@@ -29,7 +29,7 @@ const PrisonerIntro = ({ navigation }) => {
   //   });
   // };
 
-  
+
 
   return (
     <View style={styles.container}>

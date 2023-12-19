@@ -78,6 +78,9 @@ const LoginScreen = ({ navigation }) => {
     console.log(selectedType)
   }, [selectedType])
 
+  // new@gmail.com
+  //new
+
   return (
     <View style={styles.container}>
       <Image
@@ -87,6 +90,9 @@ const LoginScreen = ({ navigation }) => {
       <StatusBar barStyle="light-content" />
 
       <View style={styles.inputContainer}>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Type</Text>
+        </View>
         <TouchableOpacity style={styles.input} onPress={toggleModal}>
           <Text>{selectedType || 'Select Type'}</Text>
         </TouchableOpacity>
@@ -121,9 +127,7 @@ const LoginScreen = ({ navigation }) => {
           secureTextEntry
           onChangeText={(text) => setPassword(text)}
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Type</Text>
-        </View>
+
 
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Login</Text>
@@ -147,7 +151,7 @@ const LoginScreen = ({ navigation }) => {
         <View style={styles.dcontainer}>
           <Text>Don't have an account?</Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate('Signup')}
+            onPress={() => navigation.navigate('SignUpSelection')}
             style={styles.signupLink}>
             <Text style={styles.signupText}>Sign up here </Text>
           </TouchableOpacity>

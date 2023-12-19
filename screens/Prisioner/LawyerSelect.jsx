@@ -48,7 +48,7 @@ const LawyerDetailsPage = () => {
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdmMmFkMWFmY2Y1ZmNjNjk1NmY4YmUiLCJhZGRoYXJDYXJkIjoiNjA2My0zMjExLTg2OTQiLCJpYXQiOjE3MDI4MzQ1NDZ9.kMAdRnYe3oBB_hUbC5cpv_guOMG4zxBx36vMlccjHfo`,
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTgxODcwMjc1ODc1YTBjY2M5NmRmZGIiLCJhZGRoYXJDYXJkIjoiNjA2My0zMjExLTg2OTQiLCJpYXQiOjE3MDI5OTQ2ODF9.I9YCslN622bSjQbSqwtiuwmIQIQUfAuV1iNZS9p7CXc`,
           },
         }
       );

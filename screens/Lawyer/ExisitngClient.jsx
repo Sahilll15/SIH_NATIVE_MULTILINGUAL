@@ -3,7 +3,6 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ExisitngClient = ({ route, navigation }) => {
-  // Dummy data (replace with actual data)
   const clientInfo = {
     name: 'John Doe',
     caseId: '123456',
@@ -20,8 +19,7 @@ const ExisitngClient = ({ route, navigation }) => {
   };
 
   const handleCallClient = () => {
-    // Implement call functionality (e.g., using Linking)
-    // For simplicity, a placeholder alert is shown here
+
     alert(`Calling ${clientInfo.name} at ${clientInfo.contactNo}`);
   };
 
@@ -74,13 +72,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#2563eb', // Blue color
     padding: 16,
     alignItems: 'center',
-   
+
   },
   headerText: {
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop : '10%',
+    marginTop: '10%',
   },
   content: {
     flex: 1,
@@ -104,7 +102,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     alignSelf: 'center',
     width: '100%',
-    marginTop : '10%',
+    marginTop: '10%',
   },
   button: {
     backgroundColor: '#2563eb', // Blue color
@@ -114,8 +112,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 16,
     alignSelf: 'center',
-    marginTop : '10%',
-    
+    marginTop: '10%',
+
   },
   buttonText: {
     color: 'white',
