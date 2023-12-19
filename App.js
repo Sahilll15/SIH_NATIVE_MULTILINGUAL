@@ -4,19 +4,18 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import Toast from 'react-native-toast-message';
 import LoginScreen from './screens/Auth/LoginScreen';
-import SignupScreen from './screens/Auth/SignupScreen';
-import SignUpSelection from './screens/Auth/SignUpSelection';
+// import SignupScreen from './screens/Auth/PrisionerSignup';
+import PrisionerSignup from './screens/Auth/PrisionerSignup';
 import HomeScreen from './screens/HomeScreen';
-import LawyerSignupSelection from './screens/Lawyer/LawyerSignupselection';
+import LawyerSignupSelection from './screens/Auth/LawyerSignup';
 import LawyerHomePage from './screens/Lawyer/LawyerHomePage';
 import NewClientRequest from './screens/Lawyer/NewClientRequest';
 import ClientCaseDetail from './screens/Lawyer/ClientCaseDetail';
 import PrisonerIntro from './screens/Prisioner/PrisonerIntro';
 import CaseDashboard from './screens/Prisioner/CaseDashboard';
 import LegalAssistance from './screens/Prisioner/LegalAssistance';
-import AddDoc from './screens/Prisioner/AddDoc';
+// import AddDoc from './screens/Prisioner/AddDoc';
 import LawyerListPage from './screens/Prisioner/LawyerListPage';
-import LawyerSelect from './screens/Prisioner/LawyerSelect';
 import LandingPage from './screens/LandingPage';
 import GuardHomePage from './screens/Guard/GuardHomePage';
 import PrisonerListPage from './screens/Guard/PrisonerListPage';
@@ -40,7 +39,9 @@ import YourCase from './screens/Prisioner/YourCase';
 import YourCaseDescription from './screens/Prisioner/YourCaseDescription';
 import Rehab from './screens/Prisioner/Rehab';
 import { LawyerProvider } from './Context/LawyerContext';
-
+import SignUpSelection from './screens/Auth/SignUpSelection';
+import LawyerSignup from './screens/Auth/LawyerSignup';
+import Land from './screens/Land';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -51,10 +52,13 @@ export default function App() {
 
           <NavigationContainer>
             <Stack.Navigator initialRouteName="Home">
+              <Stack.Screen name='Land' component={Land} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Login" component={LoginScreen} />
-              <Stack.Screen name="Signup" component={SignupScreen} />
+              <Stack.Screen name="LawyerSignup" component={LawyerSignup} />
               <Stack.Screen name="SignUpSelection" component={SignUpSelection} />
+              {/* <Stack.Screen name="Signup" component={SignupScreen} /> */}
+              <Stack.Screen name="PrisionerSignup" component={PrisionerSignup} />
               <Stack.Screen name="LawyerSignupSelection" component={LawyerSignupSelection} />
               <Stack.Screen name="LawyerHomePage" component={LawyerHomePage} />
               <Stack.Screen name="NewClientRequest" component={NewClientRequest} />
@@ -63,9 +67,9 @@ export default function App() {
               <Stack.Screen name="CaseDashboard" component={CaseDashboard} />
               <Stack.Screen name="PrisonerIntro" component={PrisonerIntro} />
               <Stack.Screen name="LegalAssistance" component={LegalAssistance} />
-              <Stack.Screen name="AddDoc" component={AddDoc} />
+              {/* <Stack.Screen name="AddDoc" component={AddDoc} /> */}
               <Stack.Screen name="LawyerListPage" component={LawyerListPage} />
-              <Stack.Screen name="LawyerSelect" component={LawyerSelect} />
+              {/* <Stack.Screen name="LawyerSelect" component={LawyerSelect} /> */}
               <Stack.Screen name="LandingPage" component={LandingPage} />
               <Stack.Screen name="ExisitngClient" component={ExisitngClient} />
               <Stack.Screen name="GuardHomePage" component={GuardHomePage} />

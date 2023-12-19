@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Modal } from 'react-native';
 
-const LawyerSignupSelection = ({ navigation }) => {
+const LawyerSignup = ({ navigation }) => {
   const [licenseno, setLicense] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -20,6 +20,8 @@ const LawyerSignupSelection = ({ navigation }) => {
     toggleModal();
   };
 
+  // name,email,phone password,aadhar ,type, license number
+
   return (
     <View style={styles.mainn}>
       <Text style={styles.headingText}>Please Fill the Details!</Text>
@@ -35,8 +37,23 @@ const LawyerSignupSelection = ({ navigation }) => {
       </TouchableOpacity>
 
       <TextInput
-        style={styles.input}
-        placeholder="Enter License Number"
+        style={styles.inputt}
+        placeholder="Enter Name"
+        onChangeText={(text) => setLicense(text)}
+      />
+      <TextInput
+        style={styles.inputt}
+        placeholder="Enter Phone Number"
+        onChangeText={(text) => setLicense(text)}
+      />
+      <TextInput
+        style={styles.inputt}
+        placeholder="Enter Email"
+        onChangeText={(text) => setLicense(text)}
+      />
+      <TextInput
+        style={styles.inputt}
+        placeholder="Enter Aadhar Number"
         onChangeText={(text) => setLicense(text)}
       />
 
@@ -73,13 +90,13 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   headingText: {
-    marginTop: '20%',
+    marginTop: '10%',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   card: {
-    height: '45%',
+    height: '25%',
     width: '90%',
     alignContent: 'center',
     backgroundColor: 'white',
@@ -104,13 +121,13 @@ const styles = StyleSheet.create({
   },
   lcontainerText: {
     color: 'black',
-    marginTop: 20,
+    marginTop: 0,
     textAlign: 'center',
   },
   imageStyle: {
-    marginTop: '10%',
-    width: '50%',
-    height: '150%',
+    marginTop: '5%',
+    width: '20%',
+    height: '100%',
   },
   input: {
     marginVertical: 20,
@@ -122,7 +139,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: 'black',
   },
+  inputt: {
+    marginVertical: 10,
+    height: 40,
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 5,
+    color: 'black',
+  },
   dropdownButton: {
+    marginTop: 10,
     height: 40,
     borderColor: 'black',
     borderWidth: 1,
@@ -168,4 +196,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LawyerSignupSelection;
+export default LawyerSignup;

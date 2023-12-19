@@ -11,6 +11,7 @@ import {
   Alert,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import * as DocumentPicker from 'expo-document-picker';
 import axios from 'axios';
 import * as FileSystem from 'expo-file-system';
@@ -58,6 +59,7 @@ const AddDoc = ({ navigation }) => {
 
   const selectDoc = async ({ navigation }) => {
     try {
+
       const result = await DocumentPicker.getDocumentAsync({});
       console.log('Selected Document:', result);
 
@@ -116,6 +118,7 @@ const AddDoc = ({ navigation }) => {
 
         setLoading(false);
         toggleModal();
+
       } else {
         console.log('No document selected');
         setLoading(false);
@@ -125,6 +128,7 @@ const AddDoc = ({ navigation }) => {
       setLoading(false);
     }
   };
+
 
 
 
