@@ -47,7 +47,6 @@ const NewClientRequest = ({ navigation }) => {
     }}>
       <View style={styles.cardContent}>
         <View style={styles.profileImageContainer}>
-          {/* Replace 'your_image_url' with the actual image URL */}
           <Image
             style={styles.profileImage}
             source={{ uri: profilePic }}
@@ -67,6 +66,14 @@ const NewClientRequest = ({ navigation }) => {
       </View>
     </TouchableOpacity>
   );
+
+  if (clients.length === 0) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ fontSize: 18 }}>No New Client Requests</Text>
+      </View>
+    )
+  }
 
   return (
     <View style={styles.container}>
