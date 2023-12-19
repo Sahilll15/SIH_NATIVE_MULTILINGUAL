@@ -21,6 +21,10 @@ const LegalAssistance = ({ navigation }) => {
     // Navigate to the Rehab screen
     navigation.navigate('LawyerListPage');
   };
+  const YourApplication = () => {
+    // Navigate to the Rehab screen
+    navigation.navigate('YourApplication');
+  };
   return (
     <View
       style={styles.container}
@@ -39,7 +43,13 @@ const LegalAssistance = ({ navigation }) => {
 
       <TouchableOpacity style={styles.option} onPress={SelectLayer}>
         <FontAwesome5 name="phone" size={30} color="#fff" style={styles.optionIcon} />
-        <Text style={styles.optionText}>Contact Lawyer</Text>
+        <Text style={styles.optionText}>Choose Lawyer</Text>
+      </TouchableOpacity>
+
+      
+      <TouchableOpacity style={styles.option} onPress={YourApplication}>
+      <FontAwesome5 name="briefcase" size={30} color="#fff" style={styles.optionIcon} />
+        <Text style={styles.optionText}>Your Application</Text>
       </TouchableOpacity>
     </View>
   );
