@@ -22,7 +22,7 @@ import PrisonerListPage from './screens/Guard/PrisonerListPage';
 import CaseDetail from './screens/Prisioner/CaseDetail';
 import { AuthProvider } from './Context/AuthContext';
 import { FirProvider } from './Context/FirContext';
-import ExisitngClient from './screens/Lawyer/ExisitngClient';
+import ExistingClient from './screens/Lawyer/ExistingClient';
 import ChatBot from './screens/ChatBot/ChatBot';
 import Bottom from './screens/Navigation/Bottom';
 import PoliceLand from './screens/Police/PoliceLand';
@@ -50,6 +50,7 @@ import LawyerDetailsPage from './screens/Prisioner/LawyerSelect';
 import Rights from './screens/Prisioner/Rights';
 import Bot from './screens/Bot';
 import ClientDocument from './screens/Prisioner/ClientDocument';
+import TestClient from './screens/Lawyer/TestClient';
 
 
 // import ChatBot from './screens/ChatBot/ChatBot';
@@ -65,7 +66,7 @@ export default function App() {
 
 
           <NavigationContainer>
-            <Stack.Navigator initialRouteName="Home">
+            <Stack.Navigator initialRouteName="TestClient">
               <Stack.Screen name='Land' component={Land} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Rights" component={Rights} />
@@ -88,7 +89,7 @@ export default function App() {
               <Stack.Screen name="LawyerListPage" component={LawyerListPage} />
               <Stack.Screen name="LawyerSelect" component={LawyerDetailsPage} />
               <Stack.Screen name="LandingPage" component={LandingPage} />
-              <Stack.Screen name="ExisitngClient" component={ExisitngClient} />
+              <Stack.Screen name="ExistingClient" component={ExistingClient} />
               <Stack.Screen name="GuardHomePage" component={GuardHomePage} />
               <Stack.Screen name="PrisonerListPage" component={PrisonerListPage} />
               <Stack.Screen name="PoliceLand" component={PoliceLand} />
@@ -110,6 +111,7 @@ export default function App() {
               <Stack.Screen name="BailList" component={BailList} />
               <Stack.Screen name="BailDetail" component={BailDetail} />
               <Stack.Screen name="ClientDocument" component={ClientDocument} />
+              <Stack.Screen name="TestClient" component={TestClient} />
             </Stack.Navigator>
             <Bottom />
             <Toast ref={(ref) => Toast.setRef(ref)} />

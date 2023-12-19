@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useLawyer } from '../../Context/LawyerContext';
 
-const ExisitngClient = ({ route, navigation }) => {
+const ExistingClient = ({ route, navigation }) => {
   const { setCurrentClientFunction, currentClient } = useLawyer();
 
   let token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTc4NzFmOWZjZmJkNWI1M2MzNzQ3NzMiLCJpYXQiOjE3MDI2NTMyMzh9.htgnfrEThCRoY1gBlkLRDW_bSmK7nosmjtipnC_mdGo`
@@ -160,4 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExisitngClient;
+export default ExistingClient;
