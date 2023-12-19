@@ -44,6 +44,7 @@ import LawyerSignup from './screens/Auth/LawyerSignup';
 import Land from './screens/Land';
 import YourApplication from './screens/Prisioner/YourApplication';
 import LawyerConnect from './screens/Prisioner/LawyerConnect';
+import LawyerDetailsPage from './screens/Prisioner/LawyerSelect';
 
 const Stack = createNativeStackNavigator();
 
@@ -72,10 +73,10 @@ export default function App() {
               <Stack.Screen name="LegalAssistance" component={LegalAssistance} />
               <Stack.Screen name="AddDoc" component={AddDoc} />
               <Stack.Screen name="LawyerListPage" component={LawyerListPage} />
-              {/* <Stack.Screen name="LawyerSelect" component={LawyerSelect} /> */}
+              <Stack.Screen name="LawyerSelect" component={LawyerDetailsPage} />
               <Stack.Screen name="LandingPage" component={LandingPage} />
               <Stack.Screen name="ExisitngClient" component={ExisitngClient} />
-              <Stack.Screen name="GuardHomePage" component={GuardHomePage} options={{ headerShown: false }} />
+              <Stack.Screen name="GuardHomePage" component={GuardHomePage} />
               <Stack.Screen name="PrisonerListPage" component={PrisonerListPage} />
               <Stack.Screen name="PoliceLand" component={PoliceLand} />
               <Stack.Screen name="Fir" component={Fir} />

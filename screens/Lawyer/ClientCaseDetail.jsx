@@ -1,12 +1,89 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, Linking, Alert } from "react-native";
 import { Card, Icon } from "react-native-elements";
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'; // Import the FontAwesome5 icon library
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { useLawyer } from "../../Context/LawyerContext";
+import axios from 'axios'
 
 const ClientCaseDetail = () => {
+  const { setCurrentClientFunction, currentClient } = useLawyer();
+
+  const handleCall = async () => {
+
+    const phoneNumber = currentClient?.accused?.phoneNumber;
+    console.log(phoneNumber)
+
+    if (phoneNumber) {
+      const phoneNumberUrl = `tel:${phoneNumber}`;
+      await Linking.openURL(phoneNumberUrl);
+    } else {
+      console.error('Client phone number is not available');
+    }
+  };
+
+
+  console.log(currentClient)
+  let token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdmMmI1MzlmYmEyNzA5MTFkNWNiYzMiLCJhZGRoYXJDYXJkIjoiNjA2My0zMjExLTg2OTQiLCJpYXQiOjE3MDI5NzU0NTN9.6pZNLLAtNFBk69-7YX3GcPIhwh3wYNkCosJKlMovY1Q`;
+
+  const tokenn = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTgxNTcxZGYwYmZmMWRmNTJmOWYyYzkiLCJpYXQiOjE3MDI5NzUzMzN9.CNcv55GhJu5d5eulb9jOaFQmKcf1nnGpSf0cB_3NIuc`
+  const profilePic = 'https://cdn3.vectorstock.com/i/1000x1000/50/27/lawyer-icon-male-user-person-profile-avatar-vector-20905027.jpg'
+  const fetchCaseFightBylawyer = async () => {
+    try {
+
+      const response = await axios.get('http://localhost:8000/api/v1/caseFight/fetchByLawyer', {
+        headers: {
+          'Authorization': `Bearer ${tokenn}`
+        }
+      })
+
+      if (response.status === 200) {
+        setClients(response.data.cases)
+      }
+
+    } catch (error) {
+      console.log(error)
+
+
+    }
+  }
+
+
+
+  const handleAccept = async () => {
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/v1/caseFight/acceptRequest/${currentClient?._id}`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+
+
+      if (response.status === 200) {
+        Alert.alert(response.data.message);
+        fetchCaseFightBylawyer()
+
+      } else {
+        console.log('error');
+      }
+
+    } catch (error) {
+      console.log('Error:', error.message);
+      console.log('Error Response:', error.response.data);
+    }
+
+  }
+
+
+
+
+
   return (
     <View style={styles.container}>
-      {/* Client Details */}
       <Card containerStyle={styles.card}>
         <Text style={styles.cardText}>CLIENT DETAILS</Text>
         <View style={styles.clientDetails}>
@@ -18,50 +95,50 @@ const ClientCaseDetail = () => {
           />
           <View style={styles.clientText}>
             <Text style={styles.listItemTitle}>Client Name</Text>
-            <Text style={styles.listItemSubtitle}>John Doe</Text>
+            <Text style={styles.listItemSubtitle}>{currentClient?.accused?.name}</Text>
 
-            {/* Additional Details */}
-            <Text style={styles.listItemTitle}>Case Number</Text>
-            <Text style={styles.listItemSubtitle}>123456</Text>
+            <Text style={styles.listItemTitle}>Fir Number</Text>
+            <Text style={styles.listItemSubtitle}>Fir - {currentClient?.FirId?.FirNumber}</Text>
 
             <Text style={styles.listItemTitle}>Case Status</Text>
             <Text style={styles.listItemSubtitle}>In Progress</Text>
 
             <Text style={styles.listItemTitle}>Charges</Text>
-            <Text style={styles.listItemSubtitle}>Theft, Assault</Text>
-            {/* Add more Text components for other details */}
+            <Text style={styles.listItemSubtitle}>{currentClient?.FirId?.sections[0]} {currentClient?.FirId?.sections[1]}</Text>
+
           </View>
         </View>
       </Card>
 
-      {/* Event Description */}
       <Card containerStyle={styles.card}>
         <Text style={styles.cardText}>EVENT DESCRIPTION</Text>
         <Text>
-         I was riding bike and on a cross road a lady ran between road and came before my bike. Since it was higway i was at high speed and was unable to quickly stop . Eventually i hit her and fell down .
-          {/* Add your event description here */}
+          {currentClient?.FirId?.firDescription}
         </Text>
       </Card>
 
-      {/* Contact Client Button */}
-      <TouchableOpacity style={[styles.button, styles.contactClientButton]}>
-        
-        <Text style={styles.buttonText}>Contact Client</Text>
+      <TouchableOpacity style={[styles.button, styles.contactClientButton]} onPress={handleCall}>
+
+        <Text style={styles.buttonText} >Contact Client</Text>
         <FontAwesome5 name="phone" size={20} color="#fff" style={styles.buttonIcon} />
       </TouchableOpacity>
+      {
+        !currentClient.Accepted ? (
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={[styles.button, { backgroundColor: '#3498db' }]} onPress={handleAccept}>
+              <FontAwesome5 name="check" size={20} color="#fff" style={styles.buttonIcon} />
+              <Text style={styles.buttonText}>Accept</Text>
+            </TouchableOpacity>
 
-      {/* Buttons */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.button, { backgroundColor: '#3498db' }]}>
-          <FontAwesome5 name="check" size={20} color="#fff" style={styles.buttonIcon} />
-          <Text style={styles.buttonText}>Accept</Text>
-        </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, { backgroundColor: '#e74c3c' }]}>
+              <FontAwesome5 name="times" size={20} color="#fff" style={styles.buttonIcon} />
+              <Text style={styles.buttonText}>Reject</Text>
+            </TouchableOpacity>
+          </View>
+        ) :
+          null
+      }
 
-        <TouchableOpacity style={[styles.button, { backgroundColor: '#e74c3c' }]}>
-          <FontAwesome5 name="times" size={20} color="#fff" style={styles.buttonIcon} />
-          <Text style={styles.buttonText}>Reject</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
@@ -136,10 +213,10 @@ const styles = StyleSheet.create({
   },
   contactClientButton: {
     backgroundColor: '#2ecc71',
-    maxHeight:50,
-    
+    maxHeight: 50,
+
   },
- 
+
 });
 
 export default ClientCaseDetail;
