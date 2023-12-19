@@ -1,32 +1,55 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import axios from 'axios'
+import { useLawyer } from '../../Context/LawyerContext';
 
 const LawyerListPage = ({ navigation }) => {
-  // Dummy data for the list of lawyers
-  const [lawyers, setLawyers] = useState([
-    { id: '1', name: 'John Doe', type: 'Pro Bono', profilePic: 'https://cdn3.vectorstock.com/i/1000x1000/50/27/lawyer-icon-male-user-person-profile-avatar-vector-20905027.jpg' },
-    { id: '2', name: 'Jane Smith', type: 'Private', profilePic: 'https://cdn3.vectorstock.com/i/1000x1000/50/27/lawyer-icon-male-user-person-profile-avatar-vector-20905027.jpg' },
-    // Add more lawyer data as needed
-  ]);
+  const [lawyers, setLawyers] = useState([]);
+
+  const { currentLawyer, setCurrentLawyerFunction } = useLawyer()
+
+  const profilePic = 'https://cdn3.vectorstock.com/i/1000x1000/50/27/lawyer-icon-male-user-person-profile-avatar-vector-20905027.jpg'
+  const fetchLawyers = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/v1/lawyer/getAllLawyers`);
+
+      if (response.status === 200) {
+        setLawyers(response.data.Lawyer)
+        console.log(response.data.Lawyer)
+      }
+
+    } catch (error) {
+      console.log(error)
+      Alert.alert(error.response.data.message)
+
+    }
+  }
+
+  useEffect(() => {
+    fetchLawyers();
+  }, [])
+
   const LawyerProfile = () => {
-    // Navigate to the Rehab screen
+
     navigation.navigate('LawyerSelect');
   };
-  // State to track the current filter (Pro Bono, Private, or All)
   const [currentFilter, setCurrentFilter] = useState('All');
 
   const renderLawyerItem = ({ item }) => (
-    <TouchableOpacity style={styles.lawyerItem} onPress={ LawyerProfile }>
-      <Image source={{ uri: item.profilePic }} style={styles.profilePic} />
+    <TouchableOpacity style={styles.lawyerItem} onPress={() => {
+      setCurrentLawyerFunction(item)
+      navigation.navigate('LawyerSelect')
+    }}>
+      <Image source={{ uri: profilePic }} style={styles.profilePic} />
       <View style={styles.lawyerInfo}>
         <Text style={styles.lawyerName}>{item.name}</Text>
-        <Text style={styles.lawyerType}>{item.type}</Text>
+        <Text style={styles.lawyerType}>{item.LicenseNumber}</Text>
       </View>
     </TouchableOpacity>
   );
 
- 
+
 
   // Function to filter lawyers based on the current filter
   const filterLawyers = () => {
@@ -41,6 +64,9 @@ const LawyerListPage = ({ navigation }) => {
   const handleSort = (filter) => {
     setCurrentFilter(filter);
   };
+
+
+
 
   return (
     <View style={styles.container}>
@@ -61,9 +87,11 @@ const LawyerListPage = ({ navigation }) => {
 
       {/* Display list of lawyers */}
       <FlatList
+
         data={filterLawyers()}
         keyExtractor={(item) => item.id}
         renderItem={renderLawyerItem}
+
         style={styles.lawyerList}
       />
     </View>

@@ -3,11 +3,18 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, FlatList, Modal
 import Toast from 'react-native-toast-message';
 import { useFir } from '../../Context/FirContext';
 import { useEffect } from 'react';
+import { useLawyer } from '../../Context/LawyerContext';
+import axios from 'axios'
 
 const LawyerDetailsPage = () => {
   const { fetchfir, FirData } = useFir();
   const [selectedCase, setSelectedCase] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+
+
+  const { currentLawyer } = useLawyer();
+  const profilePic = 'https://cdn3.vectorstock.com/i/1000x1000/50/27/lawyer-icon-male-user-person-profile-avatar-vector-20905027.jpg'
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,23 +30,61 @@ const LawyerDetailsPage = () => {
     fetchData();
   }, []);
 
-  const lawyerDetails = {
-    id: '1',
-    name: 'John Doe',
-    contactNo: '+1234567890',
-    licenseNumber: 'ABCD1234',
-    approxCharge: '$200/hour',
-    profilePic: 'https://cdn-icons-png.flaticon.com/256/1995/1995429.png',
+  useEffect(() => {
+    console.log('current lawyer', currentLawyer)
+  }, [currentLawyer])
+
+  const formatedCaseNumber = () => {
+    const caseNumber = selectedCase?.split('-');
+    return caseNumber[1];
+  };
+
+
+  const caseFightSubmit = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/v1/caseFight/createCaseFight/${currentLawyer?._id}`,
+        { FirNumber: formatedCaseNumber() },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdmMmFkMWFmY2Y1ZmNjNjk1NmY4YmUiLCJhZGRoYXJDYXJkIjoiNjA2My0zMjExLTg2OTQiLCJpYXQiOjE3MDI4MzQ1NDZ9.kMAdRnYe3oBB_hUbC5cpv_guOMG4zxBx36vMlccjHfo`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        Alert.alert('case created ');
+        console.log(response.data);
+      } else {
+        Alert.alert('case creation failed ');
+        Alert.alert(error.response.data.message)
+      }
+    } catch (error) {
+      console.log(error);
+      Alert.alert(error.response.data.message)
+      throw new Error(error.response.data.message)
+    }
   };
 
   const handleContactLawyer = () => {
     if (selectedCase) {
-      // Implement logic to contact the lawyer with selectedCase
-      Toast.show({
-        type: 'success',
-        text1: 'Booked',
-        text2: 'Your Request Has Been Successfully Sent!',
-      });
+
+      caseFightSubmit().then(() => {
+        Toast.show({
+          type: 'success',
+          text1: 'Booked',
+          text2: 'Your Request Has Been Successfully Sent!',
+        });
+      }).catch((err) => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: err,
+        });
+      })
+
+
     } else {
       Alert.alert('Error', 'Please select a case before contacting the lawyer.');
     }
@@ -49,12 +94,13 @@ const LawyerDetailsPage = () => {
     <View style={styles.container}>
       {/* Lawyer Details */}
       <View style={styles.lawyerDetails}>
-        <Image source={{ uri: lawyerDetails.profilePic }} style={styles.profilePic} />
+        <Image source={{ uri: profilePic }} style={styles.profilePic} />
         <View style={styles.detailsText}>
-          <Text style={styles.lawyerName}>{lawyerDetails.name}</Text>
-          <Text>Contact: {lawyerDetails.contactNo}</Text>
-          <Text>License Number: {lawyerDetails.licenseNumber}</Text>
-          <Text>Approx. Charge: {lawyerDetails.approxCharge}</Text>
+          <Text style={styles.lawyerName}>{currentLawyer?.name}</Text>
+          <Text>Contact: {currentLawyer.phone}</Text>
+          <Text>License Number: {currentLawyer.LicenseNumber}</Text>
+          {/* <Text>Approx. Charge: {currentLawyer.approxCharge}</Text> */}
+          <Text>Address : {currentLawyer.address}</Text>
         </View>
       </View>
 

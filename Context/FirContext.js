@@ -11,6 +11,13 @@ const FirProvider = ({ children }) => {
     ]
     )
 
+
+    const [currentFir, setCurrentFir] = useState(null);
+
+    const setCurrentFirFunction = (Fir) => {
+        setCurrentFir(Fir)
+    }
+
     const fetchfir = async () => {
         try {
             const response = await axios.get('http://localhost:8000/api/v1/fir/getFirByUser', {
@@ -41,8 +48,12 @@ const FirProvider = ({ children }) => {
     }, [])
 
 
+    useEffect(() => {
+        console.log('currentFir', currentFir)
+    }, [currentFir])
+
     return (
-        <FirContext.Provider value={{ fetchfir, FirData }}>
+        <FirContext.Provider value={{ fetchfir, FirData, currentFir, setCurrentFirFunction }}>
             {children}
         </FirContext.Provider>
     );

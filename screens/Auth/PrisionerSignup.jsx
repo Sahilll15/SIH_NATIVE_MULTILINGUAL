@@ -13,7 +13,7 @@ import axios from 'axios';
 import baseUrl from '../../config';
 import { useAuth } from '../../Context/AuthContext';
 
-const SignupScreen = ({ navigation }) => {
+const PrisionerSignup = ({ navigation }) => {
   const [username, setUsername] = React.useState('');
   const [mobileNo, setMobileNo] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -183,4 +183,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupScreen;
+export default PrisionerSignup;

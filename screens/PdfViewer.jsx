@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   webviewContainer: {
-    marginTop:'10%',
+    marginTop: '10%',
     flex: 1,
     width: '95%',
     paddingHorizontal: 16, // Adjust the padding as needed
