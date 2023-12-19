@@ -14,7 +14,7 @@ import ClientCaseDetail from './screens/Lawyer/ClientCaseDetail';
 import PrisonerIntro from './screens/Prisioner/PrisonerIntro';
 import CaseDashboard from './screens/Prisioner/CaseDashboard';
 import LegalAssistance from './screens/Prisioner/LegalAssistance';
-// import AddDoc from './screens/Prisioner/AddDoc';
+import AddDoc from './screens/Prisioner/AddDoc';
 import LawyerListPage from './screens/Prisioner/LawyerListPage';
 import LandingPage from './screens/LandingPage';
 import GuardHomePage from './screens/Guard/GuardHomePage';
@@ -42,6 +42,9 @@ import { LawyerProvider } from './Context/LawyerContext';
 import SignUpSelection from './screens/Auth/SignUpSelection';
 import LawyerSignup from './screens/Auth/LawyerSignup';
 import Land from './screens/Land';
+import YourApplication from './screens/Prisioner/YourApplication';
+import LawyerConnect from './screens/Prisioner/LawyerConnect';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -67,7 +70,7 @@ export default function App() {
               <Stack.Screen name="CaseDashboard" component={CaseDashboard} />
               <Stack.Screen name="PrisonerIntro" component={PrisonerIntro} />
               <Stack.Screen name="LegalAssistance" component={LegalAssistance} />
-              {/* <Stack.Screen name="AddDoc" component={AddDoc} /> */}
+              <Stack.Screen name="AddDoc" component={AddDoc} />
               <Stack.Screen name="LawyerListPage" component={LawyerListPage} />
               {/* <Stack.Screen name="LawyerSelect" component={LawyerSelect} /> */}
               <Stack.Screen name="LandingPage" component={LandingPage} />
@@ -88,7 +91,8 @@ export default function App() {
               <Stack.Screen name="YourCase" component={YourCase} />
               <Stack.Screen name="YourCaseDescription" component={YourCaseDescription} />
               <Stack.Screen name="Rehab" component={Rehab} />
-
+              <Stack.Screen name="YourApplication" component={YourApplication} />
+              <Stack.Screen name="LawyerConnect" component={LawyerConnect} />
             </Stack.Navigator>
             <Bottom />
             <Toast ref={(ref) => Toast.setRef(ref)} />
