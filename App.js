@@ -51,6 +51,7 @@ import Rights from './screens/Prisioner/Rights';
 import Bot from './screens/Bot';
 import ClientDocument from './screens/Prisioner/ClientDocument';
 
+
 // import ChatBot from './screens/ChatBot/ChatBot';
 const Stack = createNativeStackNavigator();
 // new@gmail.com

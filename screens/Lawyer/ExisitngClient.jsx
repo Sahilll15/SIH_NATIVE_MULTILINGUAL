@@ -28,6 +28,9 @@ const ExisitngClient = ({ route, navigation }) => {
   }
 
 
+  const handleFileCase = () => {
+
+  }
 
 
   const handleViewDocuments = () => {
@@ -75,7 +78,7 @@ const ExisitngClient = ({ route, navigation }) => {
           <Icon name="phone" size={20} color="white" style={styles.icon} />
           <Text style={styles.buttonText}>Call Client</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonde} onPress={handleCallClient}>
+        <TouchableOpacity style={styles.Filecase} onPress={handleFileCase}>
           <Icon name="phone" size={20} color="white" style={styles.icon} />
           <Text style={styles.buttonText}>File Case Client</Text>
         </TouchableOpacity>
