@@ -75,7 +75,7 @@ export default function App() {
               {/* <Stack.Screen name="LawyerSelect" component={LawyerSelect} /> */}
               <Stack.Screen name="LandingPage" component={LandingPage} />
               <Stack.Screen name="ExisitngClient" component={ExisitngClient} />
-              <Stack.Screen name="GuardHomePage" component={GuardHomePage} />
+              <Stack.Screen name="GuardHomePage" component={GuardHomePage} options={{ headerShown: false }} />
               <Stack.Screen name="PrisonerListPage" component={PrisonerListPage} />
               <Stack.Screen name="PoliceLand" component={PoliceLand} />
               <Stack.Screen name="Fir" component={Fir} />
