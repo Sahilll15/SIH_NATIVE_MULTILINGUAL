@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Modal, TextInput } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import DocumentPicker from 'react-native-document-picker';
+import DocumentPickerHandle from 'react-native-document-picker';
 
 const AddDoc = () => {
   const [documents, setDocuments] = useState([]);
@@ -23,27 +23,28 @@ const AddDoc = () => {
   };
 
   const pickDocument = async () => {
-  //   try {
-  //     const result = await DocumentPicker.pick({
-  //       type: [DocumentPicker.types.allFiles],
-  //     });
+    try {
+      const result = await DocumentPickerHandle.pick({
+        type: [DocumentPickerHandle.types.allFiles],
+      });
 
-  //     console.log(
-  //       result.uri,
-  //       result.type, // mime type
-  //       result.name,
-  //       result.size
-  //     );
+      console.log(
+        result.uri,
+        result.type, // mime type
+        result.name,
+        result.size
+      );
 
-  //     setSelectedFile(result);
-  //   } catch (err) {
-  //     if (DocumentPicker.isCancel(err)) {
-  //       // User cancelled the document picker
-  //     } else {
-  //       console.log(err);
-  //     }
-  //   }
+      setSelectedFile(result);
+    } catch (err) {
+      if (DocumentPickerHandle.isCancel(err)) {
+        // User cancelled the document picker
+      } else {
+        console.log(err);
+      }
+    }
   };
+
 
   const renderDocumentItem = ({ item }) => (
     <View style={styles.documentItem}>

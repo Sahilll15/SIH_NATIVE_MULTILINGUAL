@@ -51,7 +51,7 @@ export default function App() {
         <LawyerProvider>
 
           <NavigationContainer>
-            <Stack.Navigator initialRouteName="Land">
+            <Stack.Navigator initialRouteName="Home">
               <Stack.Screen name='Land' component={Land} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Login" component={LoginScreen} />
