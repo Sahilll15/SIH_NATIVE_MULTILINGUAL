@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -44,11 +44,8 @@ import LawyerSignup from './screens/Auth/LawyerSignup';
 import Land from './screens/Land';
 import YourApplication from './screens/Prisioner/YourApplication';
 import LawyerConnect from './screens/Prisioner/LawyerConnect';
-import LawyerDetailsPage from './screens/Prisioner/LawyerSelect';
-import Bot from './screens/Bot';
-import VideoCall from './screens/VideoCall';
+import BailList from './screens/Court/BailList';
 import BailDetail from './screens/Court/BailDetail';
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -58,7 +55,7 @@ export default function App() {
         <LawyerProvider>
 
           <NavigationContainer>
-            <Stack.Navigator initialRouteName="BailDetail">
+            <Stack.Navigator initialRouteName="Home">
               <Stack.Screen name='Land' component={Land} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Login" component={LoginScreen} />
@@ -76,10 +73,10 @@ export default function App() {
               <Stack.Screen name="LegalAssistance" component={LegalAssistance} />
               <Stack.Screen name="AddDoc" component={AddDoc} />
               <Stack.Screen name="LawyerListPage" component={LawyerListPage} />
-              <Stack.Screen name="LawyerSelect" component={LawyerDetailsPage} />
+              {/* <Stack.Screen name="LawyerSelect" component={LawyerSelect} /> */}
               <Stack.Screen name="LandingPage" component={LandingPage} />
               <Stack.Screen name="ExisitngClient" component={ExisitngClient} />
-              <Stack.Screen name="GuardHomePage" component={GuardHomePage} />
+              <Stack.Screen name="GuardHomePage" component={GuardHomePage} options={{headerShown:false}} />
               <Stack.Screen name="PrisonerListPage" component={PrisonerListPage} />
               <Stack.Screen name="PoliceLand" component={PoliceLand} />
               <Stack.Screen name="Fir" component={Fir} />
@@ -97,9 +94,8 @@ export default function App() {
               <Stack.Screen name="Rehab" component={Rehab} />
               <Stack.Screen name="YourApplication" component={YourApplication} />
               <Stack.Screen name="LawyerConnect" component={LawyerConnect} />
-              <Stack.Screen name="Bot" component={Bot} />
-              <Stack.Screen name="VideoCall" component={VideoCall} />
-              <Stack.Screen name="BailDetail" component={BailDetail} />
+              <Stack.Screen name="BailList" component={BailList}/>
+              <Stack.Screen name="BailDetail" component={BailDetail}/>
             </Stack.Navigator>
             <Bottom />
             <Toast ref={(ref) => Toast.setRef(ref)} />
