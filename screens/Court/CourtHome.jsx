@@ -31,6 +31,10 @@ const CourtHome = ({ navigation }) => {
           <Text style={styles.buttonText}>Existing Case</Text>
         </TouchableOpacity>
       </View>
+      <TouchableOpacity style={styles.bail} onPress={() => navigation.navigate('BailList')}>
+        
+          <Text style={styles.bailText}>Bail List</Text>
+        </TouchableOpacity>
     </View>
   );
 };
@@ -54,7 +58,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    padding: 20,
+    padding: 10,
   },
   button: {
     alignItems: 'center',
@@ -68,6 +72,35 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  bail: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '10%',
+    width: '80%',
+    height: 50,
+    backgroundColor: '#2a2a2a', // Dark grey background color
+    borderRadius: 25,
+    borderWidth: 2,
+    borderColor: '#1a1a1a', // Border color
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 3, // Android shadow
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    // You can add more styles based on your design needs
+  },
+  bailText: {
+    color: '#fff', // Text color
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 10,
+  },
+  
 });
 
 export default CourtHome;

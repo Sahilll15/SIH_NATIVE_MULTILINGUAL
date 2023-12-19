@@ -4,13 +4,19 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Toast from 'react-native-toast-message';
 const LegalAssistance = ({ navigation }) => {
 
+  // const navigateToChat = () => {
+  //   // Navigate to the Rehab screen
+  //   Toast.show({
+  //     type: 'error', // Can be 'success', 'error', 'info', or 'any custom type'
+  //     text1: 'Hello',
+  //     text2: 'This is UNDER DEVELOPMENT',
+  //   });
+  // };
+
   const navigateToChat = () => {
     // Navigate to the Rehab screen
-    Toast.show({
-      type: 'error', // Can be 'success', 'error', 'info', or 'any custom type'
-      text1: 'Hello',
-      text2: 'This is UNDER DEVELOPMENT',
-    });
+    navigation.navigate('Bot');
+
   };
   
   const navigateToDoc = () => {
