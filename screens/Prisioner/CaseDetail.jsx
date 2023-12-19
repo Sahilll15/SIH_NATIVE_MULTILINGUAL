@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    marginBottom:"10%",
+    marginBottom: "10%",
   },
   section: {
     marginBottom: 10,

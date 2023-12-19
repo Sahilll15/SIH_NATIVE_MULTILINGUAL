@@ -1,49 +1,133 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Modal, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  Modal,
+  TextInput,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import DocumentPickerHandle from 'react-native-document-picker';
 
-const AddDoc = () => {
-  const [documents, setDocuments] = useState([]);
+import * as DocumentPicker from 'expo-document-picker';
+import axios from 'axios';
+import * as FileSystem from 'expo-file-system';
+
+const pdfUrl = 'https://drive.google.com/file/d/1HatoP0RbhW9pOLLTudZ2omee-Y3WAuyl/view';
+
+const AddDoc = ({ navigation }) => {
+  const [documents, setDocuments] = useState([
+    { id: '1', name: 'Document 1' },
+    { id: '2', name: 'Document 2' },
+    { id: '3', name: 'Document 3' },
+  ]);
+
   const [isModalVisible, setModalVisible] = useState(false);
   const [newDocumentName, setNewDocumentName] = useState('');
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+  const [selectedDocument, setSelectedDocument] = useState(null);
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
+  let token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTc4NzFmOWZjZmJkNWI1M2MzNzQ3NzMiLCJpYXQiOjE3MDI2NTMyMzh9.htgnfrEThCRoY1gBlkLRDW_bSmK7nosmjtipnC_mdGo`
 
-  const handleUpload = async () => {
-    console.log('Uploading document:', newDocumentName);
-    console.log('Selected File:', selectedFile);
 
-    // Perform the actual file upload logic here
-
-    toggleModal();
-  };
-
-  const pickDocument = async () => {
-    try {
-      const result = await DocumentPickerHandle.pick({
-        type: [DocumentPickerHandle.types.allFiles],
-      });
-
-      console.log(
-        result.uri,
-        result.type, // mime type
-        result.name,
-        result.size
-      );
-
-      setSelectedFile(result);
-    } catch (err) {
-      if (DocumentPickerHandle.isCancel(err)) {
-        // User cancelled the document picker
-      } else {
-        console.log(err);
+  const fetchDocs = async () => {
+    console.log('fetching..')
+    const response = await axios.get(`http://localhost:8000/api/v1/document/getDocuments`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       }
+
+    })
+
+    if (response.status === 200) {
+      console.log(response.data)
+      setDocuments(response.data.docs)
+    }
+    else {
+      console.log('error')
+    }
+  }
+
+
+
+  useEffect(() => {
+    fetchDocs()
+  }, [])
+
+  const selectDoc = async ({ navigation }) => {
+    try {
+
+      const result = await DocumentPicker.getDocumentAsync({});
+      console.log('Selected Document:', result);
+
+
+      if (!result.cancelled && result.size > 0) {
+        // Continue with FormData creation
+      } else {
+        console.log('Invalid or empty file selected');
+      }
+
+      if (!result.cancelled) {
+        setSelectedDocument(result);
+        setNewDocumentName(result.name);
+      }
+    } catch (err) {
+      console.log('DocumentPicker Error: ', err);
     }
   };
+
+
+
+  const handleUpload = async () => {
+    try {
+      setLoading(true);
+
+      if (newDocumentName === '') {
+        Alert.alert('name is required')
+      }
+
+      if (selectedDocument) {
+        const fileUri = selectedDocument.uri;
+        const fileType = 'application/pdf';
+
+        const formData = new FormData();
+        formData.append('name', newDocumentName);
+        formData.append('docs', {
+          uri: fileUri,
+          name: `${newDocumentName}.pdf`,
+          type: fileType,
+        });
+
+        const response = await axios.post(
+          'http://localhost:8000/api/v1/document/upload',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTc4NzFmOWZjZmJkNWI1M2MzNzQ3NzMiLCJpYXQiOjE3MDI2NTMyMzh9.htgnfrEThCRoY1gBlkLRDW_bSmK7nosmjtipnC_mdGo`, // Replace with your actual access token
+            },
+          }
+        );
+
+        console.log('Upload response:', response.data);
+
+        setLoading(false);
+        toggleModal();
+
+      } else {
+        console.log('No document selected');
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error('API Error:', error);
+      setLoading(false);
+    }
+  };
+
+
 
 
   const renderDocumentItem = ({ item }) => (
@@ -53,14 +137,27 @@ const AddDoc = () => {
     </View>
   );
 
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+    setNewDocumentName('');
+    setSelectedDocument(null);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Your Documents</Text>
 
       <FlatList
-        data={documents}
+        data={documents.filter((doc) => doc.document && doc.name !== undefined)}
         keyExtractor={(item) => item.id}
-        renderItem={renderDocumentItem}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => navigation.navigate('PdfViewer', { pdfUrl: item.pdfUrl })}>
+            <View style={styles.documentItem}>
+              <FontAwesome5 name="file-alt" size={20} color="#333" style={styles.documentIcon} />
+              <Text style={styles.documentName}>{item.name}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
         style={styles.documentList}
       />
 
@@ -69,33 +166,35 @@ const AddDoc = () => {
         <Text style={styles.uploadButtonText}>Upload New Document</Text>
       </TouchableOpacity>
 
-      {/* Modal for uploading new document */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isModalVisible}
-        onRequestClose={toggleModal}
-      >
+      <Modal visible={isModalVisible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Upload Document</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Document Name"
-              value={newDocumentName}
-              onChangeText={(text) => setNewDocumentName(text)}
-            />
-
-            {/* File input */}
-            <TouchableOpacity style={styles.fileInput} onPress={pickDocument}>
-              <Text style={styles.fileInputText}>Select File</Text>
+          <Text style={styles.modalTitle}>Upload New Document</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Document Name"
+            value={newDocumentName}
+            onChangeText={(text) => setNewDocumentName(text)}
+          />
+          <View style={styles.fileInputContainer}>
+            <FontAwesome5 name="file" size={20} color="#333" style={styles.documentIcon} />
+            <TouchableOpacity style={styles.fileInput} onPress={selectDoc} disabled={isLoading}>
+              {selectedDocument ? (
+                <Text>{selectedDocument.name}</Text>
+              ) : (
+                <Text>Select a file</Text>
+              )}
             </TouchableOpacity>
-
-            <TouchableOpacity style={styles.modalButton} onPress={handleUpload}>
-              <Text style={styles.modalButtonText}>Upload</Text>
+          </View>
+          <View style={styles.uploadButtonContainer}>
+            <TouchableOpacity style={styles.uploadButton} onPress={handleUpload} disabled={isLoading}>
+              {isLoading ? (
+                <ActivityIndicator size="small" color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>Upload</Text>
+              )}
             </TouchableOpacity>
-            <TouchableOpacity style={styles.modalButton} onPress={toggleModal}>
-              <Text style={styles.modalButtonText}>Cancel</Text>
+            <TouchableOpacity style={styles.cancelButton} onPress={toggleModal} disabled={isLoading}>
+              <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -103,6 +202,7 @@ const AddDoc = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -150,54 +250,61 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  // Modal styles
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 8,
-    width: '80%',
-  },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 20,
+    color: '#fff',
   },
   input: {
+    height: 40,
+    borderColor: 'gray',
     borderWidth: 1,
-    borderColor: '#ccc',
+    marginBottom: 20,
     padding: 10,
-    marginBottom: 10,
+    backgroundColor: '#fff',
     borderRadius: 8,
   },
-  // File input styles
+  fileInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
   fileInput: {
+    flex: 1,
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginLeft: 10,
+    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+  },
+  uploadButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  uploadButton: {
     backgroundColor: '#3498db',
     padding: 10,
     borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 10,
+    marginTop: 10,
   },
-  fileInputText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  modalButton: {
-    backgroundColor: '#3498db',
+  cancelButton: {
+    backgroundColor: '#e74c3c',
     padding: 10,
     borderRadius: 8,
-    alignItems: 'center',
-    marginBottom: 10,
+    marginTop: 10,
   },
-  modalButtonText: {
+  buttonText: {
     color: '#fff',
-    fontSize: 16,
+    textAlign: 'center',
     fontWeight: 'bold',
   },
 });
