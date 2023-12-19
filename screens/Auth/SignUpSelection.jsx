@@ -13,7 +13,7 @@ import { useAuth } from '../../Context/AuthContext';
 
 
 // Define your component
-const MyPage = ({ navigation }) => {
+const SignUpSelection = ({ navigation }) => {
   const [userType, setUserType] = useState('');
 
   const { setUserDetailsFunctions, userDetails } = useAuth();
@@ -52,7 +52,7 @@ const MyPage = ({ navigation }) => {
 
       if (response.status === 200) {
         setUserDetailsFunctions(response.data.user)
-        navigation.navigate('Login')
+        navigation.navigate('login')
       }
     } catch (error) {
       Alert.alert(error.response.data.message)
@@ -78,14 +78,14 @@ const MyPage = ({ navigation }) => {
         <View style={styles.row}>
           <TouchableOpacity
             style={styles.box}
-            onPress={() => handleUserTypeSelection('Lawyer')}
+            onPress={() => navigation.navigate('LawyerSignup')}
           >
             <Image source={image1} style={styles.boxImage} />
             <Text style={styles.boxText}>LAWYER</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.box}
-            onPress={() => handleUserTypeSelection('Prisoner')}
+            onPress={() => navigation.navigate('PrisionerSignup')}
           >
             <Image source={image2} style={styles.boxImage} />
             <Text style={styles.boxText}>PRISONER</Text>
@@ -93,7 +93,7 @@ const MyPage = ({ navigation }) => {
         </View>
 
         {/* Second row with one box */}
-        <View style={styles.row}>
+        {/* <View style={styles.row}>
           <TouchableOpacity
             style={styles.box}
             onPress={() => handleUserTypeSelection('Jailer')}
@@ -101,7 +101,7 @@ const MyPage = ({ navigation }) => {
             <Image source={image3} style={styles.boxImage} />
             <Text style={styles.boxText}>JAILER</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     </View>
   );
@@ -156,4 +156,4 @@ const styles = StyleSheet.create({
 });
 
 // Export the component
-export default MyPage;
+export default SignUpSelection;
