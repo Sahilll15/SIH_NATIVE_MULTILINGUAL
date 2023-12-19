@@ -1,26 +1,43 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useLawyer } from '../../Context/LawyerContext';
 
 const ExisitngClient = ({ route, navigation }) => {
-  const clientInfo = {
-    name: 'John Doe',
-    caseId: '123456',
-    prevDate: '2023-01-01',
-    nextDate: '2023-02-01',
-    sections: ['Section 1', 'Section 2'],
-    email: 'john.doe@example.com',
-    contactNo: '+1 234-567-8901',
-  };
+  const { setCurrentClientFunction, currentClient } = useLawyer();
+
+  let token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTc4NzFmOWZjZmJkNWI1M2MzNzQ3NzMiLCJpYXQiOjE3MDI2NTMyMzh9.htgnfrEThCRoY1gBlkLRDW_bSmK7nosmjtipnC_mdGo`
+
+
+  const fetchDocs = async () => {
+    console.log('fetching..')
+    const response = await axios.get(`http://localhost:8000/api/v1/document/getDocuments`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+
+    })
+
+    if (response.status === 200) {
+      console.log(response.data)
+      setDocuments(response.data.docs)
+    }
+    else {
+      console.log('error')
+    }
+  }
+
+
+
 
   const handleViewDocuments = () => {
     // Navigate to the client documents page
-    navigation.navigate('ClientDocuments', { clientId: route.params.clientId });
+    navigation.navigate('ClientDocument');
   };
 
   const handleCallClient = () => {
 
-    alert(`Calling ${clientInfo.name} at ${clientInfo.contactNo}`);
+    alert(`Calling ${currentClient.accused.name} at ${currentClient.accused.phoneNumber}`);
   };
 
   return (
@@ -34,17 +51,17 @@ const ExisitngClient = ({ route, navigation }) => {
       <View style={styles.content}>
         {/* First Box: Client Details */}
         <View style={styles.box}>
-          <Text>Name: {clientInfo.name}</Text>
-          <Text>Case ID: {clientInfo.caseId}</Text>
-          <Text>Previous Date: {clientInfo.prevDate}</Text>
+          <Text>Name: {currentClient.accused.name}</Text>
+          <Text>Case ID: {currentClient.accused._id}</Text>
+          {/* <Text>Previous Date: {clientInfo.prevDate}</Text>
           <Text>Next Date: {clientInfo.nextDate}</Text>
-          <Text>Sections: {clientInfo.sections.join(', ')}</Text>
+          <Text>Sections: {clientInfo.sections.join(', ')}</Text> */}
         </View>
 
         {/* Second Box: Contact Information */}
         <View style={styles.box}>
-          <Text>Email: {clientInfo.email}</Text>
-          <Text>Contact No: {clientInfo.contactNo}</Text>
+          <Text>Email: {currentClient.accused.email}</Text>
+          <Text>Contact No: {currentClient.accused.phoneNumber}</Text>
         </View>
 
         {/* View Client Documents Button */}
@@ -57,6 +74,10 @@ const ExisitngClient = ({ route, navigation }) => {
         <TouchableOpacity style={styles.buttond} onPress={handleCallClient}>
           <Icon name="phone" size={20} color="white" style={styles.icon} />
           <Text style={styles.buttonText}>Call Client</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.buttonde} onPress={handleCallClient}>
+          <Icon name="phone" size={20} color="white" style={styles.icon} />
+          <Text style={styles.buttonText}>File Case Client</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -103,6 +124,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     marginTop: '10%',
+  },
+  buttonde: {
+    backgroundColor: '#16a34a', // Blue color
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 15,
+    borderRadius: 5,
+    marginBottom: 8,
+    alignSelf: 'center',
+    width: '100%',
+    marginTop: '5%',
   },
   button: {
     backgroundColor: '#2563eb', // Blue color
