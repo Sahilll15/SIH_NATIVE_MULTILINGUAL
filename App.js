@@ -47,6 +47,7 @@ import LawyerConnect from './screens/Prisioner/LawyerConnect';
 import LawyerDetailsPage from './screens/Prisioner/LawyerSelect';
 import Bot from './screens/Bot';
 import VideoCall from './screens/VideoCall';
+import BailDetail from './screens/Court/BailDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -57,7 +58,7 @@ export default function App() {
         <LawyerProvider>
 
           <NavigationContainer>
-            <Stack.Navigator initialRouteName="Land">
+            <Stack.Navigator initialRouteName="BailDetail">
               <Stack.Screen name='Land' component={Land} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Login" component={LoginScreen} />
@@ -98,6 +99,7 @@ export default function App() {
               <Stack.Screen name="LawyerConnect" component={LawyerConnect} />
               <Stack.Screen name="Bot" component={Bot} />
               <Stack.Screen name="VideoCall" component={VideoCall} />
+              <Stack.Screen name="BailDetail" component={BailDetail} />
             </Stack.Navigator>
             <Bottom />
             <Toast ref={(ref) => Toast.setRef(ref)} />
