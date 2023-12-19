@@ -1,6 +1,4 @@
-// screens/LoginScreen.js
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,40 +8,75 @@ import {
   StatusBar,
   Image,
   Alert,
+  Modal,
+  Pressable,
 } from 'react-native';
 import baseUrl from '../../config';
 import { useAuth } from '../../Context/AuthContext';
-import axios from 'axios'
+import axios from 'axios';
 
 const LoginScreen = ({ navigation }) => {
-  const [email, setemail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setemail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedType, setSelectedType] = useState(''); // State for the selected type
   const { setUserDetailsFunctions, setTokenFunction } = useAuth();
 
-
   const handleLogin = async () => {
-    try {
-      const response = await axios.post(`${baseUrl}/priosioner/login/`, {
-        email,
-        password,
-      });
+    if (selectedType === 'Lawyer') {
+      try {
+        const response = await axios.post(`http://localhost:8000/api/v1/lawyer/loginLawyer`, {
+          email,
+          password,
+        });
 
-      if (response.status === 200) {
-        setUserDetailsFunctions(
-          response.data.user,
-          // response.data.token
-        )
-        setTokenFunction(response.data.token)
-        console.log(response.data.user)
-        console.log(response.data.token)
-        Alert.alert('logged')
-        navigation.navigate('Home')
+        if (response.status === 200) {
+          Alert.alert('Logged in successfully');
+          navigation.navigate('Home');
+        } else {
+          Alert.alert('Error');
+        }
+      } catch (error) {
+        console.log(error.message);
+        Alert.alert(error.response.data.message);
       }
-    } catch (error) {
-      console.log(error.message)
-      Alert.alert(error.response.data.message)
+    } else {
+      try {
+        const response = await axios.post(`http://localhost:8000/api/v1/priosioner/login/`, {
+          email,
+          password,
+        });
+
+        if (response.status === 200) {
+          setUserDetailsFunctions(
+            response.data.user,
+            // response.data.token
+          )
+          setTokenFunction(response.data.token)
+          console.log(response.data.user)
+          console.log(response.data.token)
+          Alert.alert('logged')
+          navigation.navigate('Home')
+        }
+      } catch (error) {
+        console.log(error.message);
+        Alert.alert(error.response.data.message);
+      }
     }
   };
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
+  const handleTypeSelect = (type) => {
+    setSelectedType(type);
+    toggleModal();
+  };
+
+  useEffect(() => {
+    console.log(selectedType)
+  }, [selectedType])
 
   return (
     <View style={styles.container}>
@@ -52,7 +85,25 @@ const LoginScreen = ({ navigation }) => {
         source={require('../../assets/logo.png')}
       />
       <StatusBar barStyle="light-content" />
+
       <View style={styles.inputContainer}>
+        <TouchableOpacity style={styles.input} onPress={toggleModal}>
+          <Text>{selectedType || 'Select Type'}</Text>
+        </TouchableOpacity>
+        <Modal visible={isModalVisible} transparent animationType="slide">
+          <View style={styles.modal}>
+            <Pressable style={styles.modalOption} onPress={() => handleTypeSelect('Prisioner')}>
+              <Text>Prisioner</Text>
+            </Pressable>
+            <Pressable style={styles.modalOption} onPress={() => handleTypeSelect('Lawyer')}>
+              <Text>Lawyer</Text>
+            </Pressable>
+            {/* Add more options as needed */}
+            <Pressable style={styles.modalClose} onPress={toggleModal}>
+              <Text>Close</Text>
+            </Pressable>
+          </View>
+        </Modal>
         <View style={styles.labelContainer}>
           <Text style={styles.label}>email</Text>
         </View>
@@ -70,10 +121,13 @@ const LoginScreen = ({ navigation }) => {
           secureTextEntry
           onChangeText={(text) => setPassword(text)}
         />
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Type</Text>
+        </View>
+
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
-
 
         <View style={styles.dwcontainer}>
           <TouchableOpacity
@@ -90,7 +144,6 @@ const LoginScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-
         <View style={styles.dcontainer}>
           <Text>Don't have an account?</Text>
           <TouchableOpacity
@@ -98,14 +151,8 @@ const LoginScreen = ({ navigation }) => {
             style={styles.signupLink}>
             <Text style={styles.signupText}>Sign up here </Text>
           </TouchableOpacity>
-
-
-
         </View>
-
       </View>
-
-
 
       <View>
         <TouchableOpacity style={styles.ChatBody} onPress={handleLogin}>
@@ -131,11 +178,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
     backgroundColor: '#FFFF',
-    // marginBottom: 30,
-    // padding: 20,
     position: 'relative',
   },
-
 
   inputContainer: {
     width: '100%',
@@ -162,10 +206,10 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: 'red',
-    width: "50%",
+    width: '50%',
     padding: 10,
-    marginTop: "5%",
-    marginBottom: "5%",
+    marginTop: '5%',
+    marginBottom: '5%',
     borderRadius: 5,
     alignSelf: 'center',
   },
@@ -188,7 +232,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'baseline',
     marginLeft: 50,
-    // marginTop: 10, 
   },
   dwcontainer: {
     flexDirection: 'row',
@@ -196,7 +239,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   helpLink: {
-    // backgroundColor:'blue',
     marginTop: -12,
   },
   ChatBody: {
@@ -209,6 +251,25 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     padding: 10,
     fontSize: 12,
+  },
+  modal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  modalClose: {
+    backgroundColor: 'lightgray',
+    padding: 10,
+    marginTop: 10,
+  },
+  modalOption: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgray',
+    width: '100%',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
 });
 

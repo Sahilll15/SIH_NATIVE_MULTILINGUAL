@@ -1,14 +1,52 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Modal } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Modal, ScrollView } from 'react-native';
+import axios from 'axios'
 
 const LawyerSignup = ({ navigation }) => {
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [aadharNumber, setAadharNumber] = useState('');
   const [licenseno, setLicense] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [password, setPassword] = useState('')
+  const [address, setAddress] = useState('')
 
-  const handleLicenseNo = () => {
-    // Implement your signup logic here
-    console.log('Submitting License no:', licenseno);
+  const handleSubmit = async () => {
+
+    const obj = {
+      name,
+      phone: phoneNumber,
+      email,
+      password,
+      aadharNumber,
+      LicenseNumber: licenseno,
+      type: selectedOption,
+      address
+    }
+
+    console.log(obj)
+
+
+    try {
+      const response = await axios.post(`http://localhost:8000/api/v1/lawyer/signupLawyer`, obj, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+
+      if (response.status === 200) {
+        console.log(response.data)
+        navigation.navigate('Login')
+      }
+      else {
+        console.log('error')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
   };
 
   const toggleModal = () => {
@@ -20,10 +58,10 @@ const LawyerSignup = ({ navigation }) => {
     toggleModal();
   };
 
-  // name,email,phone password,aadhar ,type, license number
+  // name, email, phone number, aadhar number, type, license number
 
   return (
-    <View style={styles.mainn}>
+    <ScrollView style={styles.mainn}>
       <Text style={styles.headingText}>Please Fill the Details!</Text>
 
       <TouchableOpacity
@@ -39,22 +77,38 @@ const LawyerSignup = ({ navigation }) => {
       <TextInput
         style={styles.inputt}
         placeholder="Enter Name"
-        onChangeText={(text) => setLicense(text)}
+        onChangeText={(text) => setName(text)}
       />
       <TextInput
         style={styles.inputt}
         placeholder="Enter Phone Number"
+        onChangeText={(text) => setPhoneNumber(text)}
+      />
+      <TextInput
+        style={styles.inputt}
+        placeholder="Enter License Number"
         onChangeText={(text) => setLicense(text)}
+      />
+
+      <TextInput
+        style={styles.inputt}
+        placeholder="Enter Address "
+        onChangeText={(text) => setAddress(text)}
       />
       <TextInput
         style={styles.inputt}
         placeholder="Enter Email"
-        onChangeText={(text) => setLicense(text)}
+        onChangeText={(text) => setEmail(text)}
+      />
+      <TextInput
+        style={styles.inputt}
+        placeholder="Enter Password"
+        onChangeText={(text) => setPassword(text)}
       />
       <TextInput
         style={styles.inputt}
         placeholder="Enter Aadhar Number"
-        onChangeText={(text) => setLicense(text)}
+        onChangeText={(text) => setAadharNumber(text)}
       />
 
       <TouchableOpacity style={styles.dropdownButton} onPress={toggleModal}>
@@ -63,11 +117,11 @@ const LawyerSignup = ({ navigation }) => {
 
       <Modal visible={isModalVisible} transparent animationType="slide">
         <View style={styles.modal}>
-         
-          <TouchableOpacity style={styles.modalOption} onPress={() => handleOptionSelect('Government Lawyer')}>
+
+          <TouchableOpacity style={styles.modalOption} onPress={() => handleOptionSelect('Government')}>
             <Text>Government Lawyer</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.modalOption} onPress={() => handleOptionSelect('Private Firm')}>
+          <TouchableOpacity style={styles.modalOption} onPress={() => handleOptionSelect('private')}>
             <Text>Private Firm</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.modalClose} onPress={toggleModal}>
@@ -76,10 +130,10 @@ const LawyerSignup = ({ navigation }) => {
         </View>
       </Modal>
 
-      <TouchableOpacity style={styles.signupButton} onPress={handleLicenseNo}>
+      <TouchableOpacity style={styles.signupButton} onPress={handleSubmit}>
         <Text style={styles.signupButtonText}>Submit</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -180,19 +234,21 @@ const styles = StyleSheet.create({
     borderBottomColor: 'lightgray',
     width: '100%',
     alignItems: 'center',
-    backgroundColor:'white',
+    backgroundColor: 'white',
   },
   signupButton: {
     backgroundColor: 'red',
     marginVertical: 15,
     padding: 15,
     borderRadius: 5,
+    marginBottom: '30%'
   },
   signupButtonText: {
     color: 'white',
     textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
+
   },
 });
 
