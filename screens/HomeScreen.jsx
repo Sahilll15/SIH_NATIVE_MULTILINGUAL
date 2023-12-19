@@ -44,7 +44,7 @@ const HomeScreen = ({ navigation }) => {
       />
        <Button
         title="Text with bot"
-        onPress={() => navigation.navigate('ChatBot')}
+        onPress={() => navigation.navigate('Bot')}
       />
 
 <Button title="View PDF" onPress={handleViewPdf} />
@@ -52,6 +52,12 @@ const HomeScreen = ({ navigation }) => {
         title="Gifted Chat"
         onPress={() => navigation.navigate('ChatScreen')}
       />
+
+      <Button
+        title="Text with bot"
+        onPress={() => navigation.navigate('VideoCall')}
+      />
+
     </View>
   );
 }

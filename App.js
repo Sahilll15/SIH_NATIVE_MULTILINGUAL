@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -44,6 +44,8 @@ import LawyerSignup from './screens/Auth/LawyerSignup';
 import Land from './screens/Land';
 import YourApplication from './screens/Prisioner/YourApplication';
 import LawyerConnect from './screens/Prisioner/LawyerConnect';
+import Bot from './screens/Bot';
+import VideoCall from './screens/VideoCall';
 
 const Stack = createNativeStackNavigator();
 
@@ -93,6 +95,8 @@ export default function App() {
               <Stack.Screen name="Rehab" component={Rehab} />
               <Stack.Screen name="YourApplication" component={YourApplication} />
               <Stack.Screen name="LawyerConnect" component={LawyerConnect} />
+              <Stack.Screen name="Bot" component={Bot} />
+              <Stack.Screen name="VideoCall" component={VideoCall} />
             </Stack.Navigator>
             <Bottom />
             <Toast ref={(ref) => Toast.setRef(ref)} />
