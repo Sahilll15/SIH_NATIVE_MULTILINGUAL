@@ -112,6 +112,8 @@ const AddDoc = ({ navigation }) => {
           }
         );
 
+
+
         console.log('Upload response:', response.data);
 
         setLoading(false);
