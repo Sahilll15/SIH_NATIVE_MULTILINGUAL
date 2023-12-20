@@ -50,7 +50,7 @@ const LoginScreen = ({ navigation }) => {
     } else {
       try {
         const response = await axios.post(`http://localhost:8000/api/v1/priosioner/login/`, {
-          email,
+          email: email.toLocaleLowerCase(),
           password,
         });
 

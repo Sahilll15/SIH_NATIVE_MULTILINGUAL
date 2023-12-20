@@ -1,16 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const LawyerList = () => {
   const navigation = useNavigation();
 
-  const lawyers = [
-    { id: 1, name: 'Lawyer 1', status: 'Accepted' },
-    { id: 2, name: 'Lawyer 2', status: 'Rejected' },
-    { id: 3, name: 'Lawyer 3', status: 'Waiting' },
-    // Add more lawyers as needed
-  ];
+  const [lawyers, setLawyers] = React.useState([]);
+
+  const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTgxODcwMjc1ODc1YTBjY2M5NmRmZGIiLCJhZGRoYXJDYXJkIjoiNjA2My0zMjExLTg2OTQiLCJpYXQiOjE3MDMwNDQwOTV9._u2sNMSkPFztJ0LxJGIvy0Zu9-pxBGBPD5gy4jIKN1U`;
+
+  const fetchYourCases = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/v1/caseFight/fetchByUser`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+
+      if (response.status === 200) {
+        console.log(response.data);
+        setLawyers(response.data.cases);
+      } else {
+        console.log('error');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchYourCases();
+  }, []);
 
   const getTextColor = (status) => {
     switch (status) {
@@ -26,7 +47,7 @@ const LawyerList = () => {
   };
 
   const handleStatusClick = (item) => {
-    if (item.status === 'Accepted') {
+    if (item.Accepted) {
       // Navigate to another page when status is 'Accepted'
       navigation.navigate('LawyerConnect');
     }
@@ -37,9 +58,10 @@ const LawyerList = () => {
       style={styles.lawyerItem}
       onPress={() => handleStatusClick(item)}
     >
-      <Text style={styles.lawyerName}>{item.name}</Text>
+      <Text style={styles.lawyerName}>{item.lawyer.name}</Text>
+      <Text style={styles.lawyerName}>{item.lawyer.email}</Text>
       <Text style={[styles.lawyerStatus, { color: getTextColor(item.status) }]}>
-        Status: {item.status}
+        Status: {item.Accepted ? 'Accepted' : 'Waiting'}
       </Text>
     </TouchableOpacity>
   );
@@ -49,7 +71,7 @@ const LawyerList = () => {
       <Text style={styles.title}>Your Contacted Lawyers</Text>
       <FlatList
         data={lawyers}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item._id.toString()}
         renderItem={renderLawyerItem}
       />
     </View>

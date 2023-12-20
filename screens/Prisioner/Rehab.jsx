@@ -8,23 +8,23 @@ const Rehab = ({ navigation }) => {
       videos: [
         {
           videoUrl: 'https://www.youtube.com/watch?v=nsGbtrl1WkU&ab_channel=Headspace',
-          imageSource: require('../../assets/Meditation.png'),
+          imageSource: require('../../assets/Meditation.jpeg'),
         },
         {
           videoUrl: 'https://www.youtube.com/watch?v=nsGbtrl1WkU&list=PLW8o3_GFoCBOexWd8WK-hAjReSYifh1nx&ab_channel=Headspace',
-          imageSource: require('../../assets/Meditation.png'),
+          imageSource: require('../../assets/Meditation.jpeg'),
         },
         {
           videoUrl: 'https://www.youtube.com/watch?v=nsGbtrl1WkU&list=PLW8o3_GFoCBOexWd8WK-hAjReSYifh1nx&ab_channel=Headspace',
-          imageSource: require('../../assets/Meditation.png'),
+          imageSource: require('../../assets/Meditation.jpeg'),
         },
         {
           videoUrl: 'https://www.youtube.com/watch?v=nsGbtrl1WkU&list=PLW8o3_GFoCBOexWd8WK-hAjReSYifh1nx&ab_channel=Headspace',
-          imageSource: require('../../assets/Meditation.png'),
+          imageSource: require('../../assets/Meditation.jpeg'),
         },
         {
           videoUrl: 'https://www.youtube.com/watch?v=nsGbtrl1WkU&list=PLW8o3_GFoCBOexWd8WK-hAjReSYifh1nx&ab_channel=Headspace',
-          imageSource: require('../../assets/Meditation.png'),
+          imageSource: require('../../assets/Meditation.jpeg'),
         },
       ],
     },
@@ -33,23 +33,23 @@ const Rehab = ({ navigation }) => {
       videos: [
         {
           videoUrl: 'https://www.youtube.com/watch?v=zUNrUqMwUkY&ab_channel=JoshO%27Caoimh',
-          imageSource: require('../../assets/skills.png'),
+          imageSource: require('../../assets/skills.jpeg'),
         },
         {
           videoUrl: 'https://www.youtube.com/watch?v=zUNrUqMwUkY&ab_channel=JoshO%27Caoimh',
-          imageSource: require('../../assets/skills.png'),
+          imageSource: require('../../assets/skills.jpeg'),
         },
         {
           videoUrl: 'https://www.youtube.com/watch?v=zUNrUqMwUkY&ab_channel=JoshO%27Caoimh',
-          imageSource: require('../../assets/skills.png'),
+          imageSource: require('../../assets/skills.jpeg'),
         },
         {
           videoUrl: 'https://www.youtube.com/watch?v=zUNrUqMwUkY&ab_channel=JoshO%27Caoimh',
-          imageSource: require('../../assets/skills.png'),
+          imageSource: require('../../assets/skills.jpeg'),
         },
         {
           videoUrl: 'https://www.youtube.com/watch?v=zUNrUqMwUkY&ab_channel=JoshO%27Caoimh',
-          imageSource: require('../../assets/skills.png'),
+          imageSource: require('../../assets/skills.jpeg'),
         },
       ],
     },
@@ -58,23 +58,23 @@ const Rehab = ({ navigation }) => {
       videos: [
         {
           videoUrl: 'https://www.youtube.com/watch?v=domCDwp5u3I&ab_channel=EsyID',
-          imageSource: require('../../assets/motivation.png'),
+          imageSource: require('../../assets/motivation.jpeg'),
         },
         {
           videoUrl: 'https://www.youtube.com/watch?v=domCDwp5u3I&ab_channel=EsyID',
-          imageSource: require('../../assets/motivation.png'),
+          imageSource: require('../../assets/motivation.jpeg'),
         },
         {
           videoUrl: 'https://www.youtube.com/watch?v=domCDwp5u3I&ab_channel=EsyID',
-          imageSource: require('../../assets/motivation.png'),
+          imageSource: require('../../assets/motivation.jpeg'),
         },
         {
           videoUrl: 'https://www.youtube.com/watch?v=domCDwp5u3I&ab_channel=EsyID',
-          imageSource: require('../../assets/motivation.png'),
+          imageSource: require('../../assets/motivation.jpeg'),
         },
         {
           videoUrl: 'https://www.youtube.com/watch?v=domCDwp5u3I&ab_channel=EsyID',
-          imageSource: require('../../assets/motivation.png'),
+          imageSource: require('../../assets/motivation.jpeg'),
         },
 
       ],
@@ -85,15 +85,15 @@ const Rehab = ({ navigation }) => {
       videos: [
         {
           videoUrl: 'https://youtu.be/zUNrUqMwUkY?si=r0T8zE5w1zSGGGm2',
-          imageSource: require('../../assets/education.png'),
+          imageSource: require('../../assets/education.jpeg'),
         },
         {
           videoUrl: 'https://youtu.be/zUNrUqMwUkY?si=r0T8zE5w1zSGGGm2',
-          imageSource: require('../../assets/education.png'),
+          imageSource: require('../../assets/education.jpeg'),
         },
         {
           videoUrl: 'https://youtu.be/zUNrUqMwUkY?si=r0T8zE5w1zSGGGm2',
-          imageSource: require('../../assets/education.png'),
+          imageSource: require('../../assets/education.jpeg'),
         },
       ],
     },
@@ -168,4 +168,3 @@ const styles = StyleSheet.create({
 });
 
 export default Rehab;
-

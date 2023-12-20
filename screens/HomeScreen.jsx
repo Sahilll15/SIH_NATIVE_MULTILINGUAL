@@ -31,6 +31,11 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Welcome To Home Page</Text>
+      <Text style={{
+        marginBottom: 20,
+        fontSize: 18,
+        textAlign: 'center',
+      }} >This page is just for devlopment</Text>
       <ScrollView style={styles.scrollView}>
         {renderAppButtons()}
       </ScrollView>
