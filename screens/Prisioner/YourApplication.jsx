@@ -2,9 +2,12 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { useLawyer } from '../../Context/LawyerContext';
 
 const LawyerList = () => {
   const navigation = useNavigation();
+
+  const { activeContactedLawyer, setActiveContactedFunction } = useLawyer()
 
   const [lawyers, setLawyers] = React.useState([]);
 

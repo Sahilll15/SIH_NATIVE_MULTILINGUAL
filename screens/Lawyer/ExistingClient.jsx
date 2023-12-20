@@ -66,7 +66,7 @@ const ExistingClient = ({ route, navigation }) => {
 
   const handleCallClient = () => {
 
-    alert(`Calling ${currentClient.accused.name} at ${clientInfo.contactNo}`);
+    navigation.navigate('VideoCall')
   };
   const toggleModal = () => {
     setModalVisible(!isModalVisible);

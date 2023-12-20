@@ -19,4 +19,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VideoCall;
+export default VideoCall;

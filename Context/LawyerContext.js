@@ -8,6 +8,7 @@ const LawyerContext = createContext();
 const LawyerProvider = ({ children }) => {
 
 
+    const [activeContactedLawyer, setActiveContactedLayer] = useState(null)
     const [currentLawyer, setCurrentLawyer] = useState(null);
 
     const [currentClient, setCurrentClient] = useState(null);
@@ -26,6 +27,10 @@ const LawyerProvider = ({ children }) => {
         setCurrentCourtCase(casee)
     }
 
+    const setActiveContactedFunction = (lawyer) => {
+        setActiveContactedLayer(lawyer)
+    }
+
 
     useEffect(() => {
         console.log('currentCourtCase', currentCourtCase)
@@ -36,11 +41,13 @@ const LawyerProvider = ({ children }) => {
     }, [currentLawyer])
 
     useEffect(() => {
-        console.log('currentclient', currentClient)
-    })
+        console.log('currentClient', activeContactedLawyer)
+    }, [activeContactedLawyer])
+
+
 
     return (
-        <LawyerContext.Provider value={{ currentLawyer, setCurrentLawyerFunction, setCurrentClientFunction, currentClient, setCurrentCourtCaseFunction, currentCourtCase }}>
+        <LawyerContext.Provider value={{ activeContactedLawyer, setActiveContactedFunction, currentLawyer, setCurrentLawyerFunction, setCurrentClientFunction, currentClient, setCurrentCourtCaseFunction, currentCourtCase }}>
             {children}
         </LawyerContext.Provider>
     );

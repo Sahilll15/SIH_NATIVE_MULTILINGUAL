@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
+
 import Toast from 'react-native-toast-message';
 import LoginScreen from './screens/Auth/LoginScreen';
 // import SignupScreen from './screens/Auth/PrisionerSignup';
@@ -45,22 +45,27 @@ import LawyerSignup from './screens/Auth/LawyerSignup';
 import Land from './screens/Land';
 import YourApplication from './screens/Prisioner/YourApplication';
 import LawyerConnect from './screens/Prisioner/LawyerConnect';
+import VideoCall from './screens/VideoCall';
 import BailList from './screens/Court/BailList';
 import BailDetail from './screens/Court/BailDetail';
 import LawyerDetailsPage from './screens/Prisioner/LawyerSelect';
 import Rights from './screens/Prisioner/Rights';
 import Bot from './screens/Bot';
+
 import ClientDocument from './screens/Prisioner/ClientDocument';
 import TestClient from './screens/Lawyer/TestClient';
+
+
+
 import PrisonerLawyer from './screens/Guard/PrisonerLawyer';
-import ProductUpload from './screens/Guard/ProductUpload';
-import VideoCall from './screens/VideoCall';
 // import ChatBot from './screens/ChatBot/ChatBot';
 const Stack = createNativeStackNavigator();
 // new@gmail.com
 // new
 
-export default function App({ navigation }) {
+
+
+export default function App() {
   return (
     <AuthProvider>
       <FirProvider>
@@ -68,7 +73,7 @@ export default function App({ navigation }) {
 
 
           <NavigationContainer>
-            <Stack.Navigator initialRouteName="Home">
+            <Stack.Navigator initialRouteName="Login">
               <Stack.Screen name='Land' component={Land} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Rights" component={Rights} />
@@ -78,7 +83,7 @@ export default function App({ navigation }) {
               <Stack.Screen name="SignUpSelection" component={SignUpSelection} />
               {/* <Stack.Screen name="Signup" component={SignupScreen} /> */}
               <Stack.Screen name="PrisionerSignup" component={PrisionerSignup} />
-              {/* <Stack.Screen name="ClientDocument" component={ClientDocument} /> */}
+              <Stack.Screen name="ClientDocument" component={ClientDocument} />
               <Stack.Screen name="LawyerSignupSelection" component={LawyerSignupSelection} />
               <Stack.Screen name="LawyerHomePage" component={LawyerHomePage} />
               <Stack.Screen name="NewClientRequest" component={NewClientRequest} />
@@ -112,10 +117,9 @@ export default function App({ navigation }) {
               <Stack.Screen name="LawyerConnect" component={LawyerConnect} />
               <Stack.Screen name="BailList" component={BailList} />
               <Stack.Screen name="BailDetail" component={BailDetail} />
-              <Stack.Screen name="ProductUpload" component={ProductUpload} />
               <Stack.Screen name="VideoCall" component={VideoCall} />
             </Stack.Navigator>
-            <Bottom  navigation={navigation} />
+            <Bottom />
             <Toast ref={(ref) => Toast.setRef(ref)} />
           </NavigationContainer>
         </LawyerProvider>

@@ -41,11 +41,13 @@ const LoginScreen = ({ navigation }) => {
 
           navigation.navigate('Home');
         } else {
-          Alert.alert('Error');
+          // Alert.alert('Error');
+          navigation.navigate('Home');
         }
       } catch (error) {
-        console.log(error.message);
-        Alert.alert(error.response.data.message);
+        // console.log(error.message);
+        // Alert.alert(error.response.data.message);
+        navigation.navigate('Home');
       }
     } else {
       try {
@@ -66,8 +68,9 @@ const LoginScreen = ({ navigation }) => {
           navigation.navigate('Home')
         }
       } catch (error) {
-        console.log(error.message);
-        Alert.alert(error.response.data.message);
+        navigation.navigate('Home');
+        // console.log(error.message);
+        // Alert.alert(error.response.data.message);
       }
     }
   };
