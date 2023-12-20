@@ -54,7 +54,7 @@ const LawyerDetailsPage = () => {
       );
 
       if (response.status === 200) {
-        Alert.alert('case created ');
+        Alert.alert('case fight requested ');
         console.log(response.data);
       } else {
         Alert.alert('case creation failed ');
