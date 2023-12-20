@@ -26,12 +26,19 @@ const LoginScreen = ({ navigation }) => {
     if (selectedType === 'Lawyer') {
       try {
         const response = await axios.post(`http://localhost:8000/api/v1/lawyer/loginLawyer`, {
-          email,
+          email: email.toLocaleLowerCase(),
           password,
         });
 
         if (response.status === 200) {
-          Alert.alert('Logged in successfully');
+          console.log(response.data)
+          const { lawyer, token } = response.data;
+          console.log('lawyer', lawyer)
+          setUserDetailsFunctions(
+            lawyer
+          )
+          setTokenFunction(token)
+
           navigation.navigate('Home');
         } else {
           Alert.alert('Error');

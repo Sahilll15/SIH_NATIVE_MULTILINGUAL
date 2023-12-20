@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native'; // Add this line
 
-const Bottom = ({ navigation }) => {
+const Bottom = () => {
   const [selectedTab, setSelectedTab] = useState('home');
 
   const handleTabPress = (tabName) => {
@@ -10,12 +11,13 @@ const Bottom = ({ navigation }) => {
     // Add additional logic if needed, such as navigating to the corresponding screen.
     // Example: navigation.navigate(tabName);
   };
+  const navigation = useNavigation();
 
   return (
     <View style={styles.bottomContainer}>
       <TouchableOpacity
         style={[styles.tab, selectedTab === 'home' && styles.selectedTab && styles.selectedTabText]}
-        onPress={() => handleTabPress('home')}
+        onPress={() => navigation.navigate('Home')} // Fix here
       >
         <Icon name="home" size={24} color={selectedTab === 'home' ? '#3498db' : 'black'} />
         <Text style={[styles.tabText, selectedTab === 'home' && styles.selectedTabText]}>Home</Text>

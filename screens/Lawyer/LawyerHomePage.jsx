@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios'
+import { useLawyer } from '../../Context/LawyerContext';
 
 const LawyerHomePage = ({ navigation }) => {
   const [clients, setClients] = useState([])
+
+  const { setCurrentClientFunction, currentClient } = useLawyer();
 
   const fetchExistingUser = async () => {
     try {
@@ -27,7 +30,10 @@ const LawyerHomePage = ({ navigation }) => {
 
 
   const renderClientCard = (client) => (
-    <TouchableOpacity key={client.id} style={styles.clientCard} onPress={() => navigation.navigate('ExisitngClient')}>
+    <TouchableOpacity key={client.id} style={styles.clientCard} onPress={() => {
+      setCurrentClientFunction(client)
+      navigation.navigate('ExistingClient')
+    }}>
       <View style={styles.clientInfoContainer}>
         <View style={styles.profileImageContainer}>
           {/* Replace 'your_image_url' with the actual image URL */}
