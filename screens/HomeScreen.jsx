@@ -17,6 +17,7 @@ const HomeScreen = ({ navigation }) => {
     { title: 'Chat Screen', iconName: 'md-chatbubbles', onPress: () => navigation.navigate('ChatBot') },
     { title: 'PDF', iconName: 'md-document', onPress: handleViewPdf },
     { title: 'Chat Bot', iconName: 'md-chatbubbles', onPress: () => navigation.navigate('ChatScreen') },
+    { title: 'Market Upload', iconName: '', onPress: () => navigation.navigate('ProductUpload') },
   ];
 
   const renderAppButtons = () => {
