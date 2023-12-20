@@ -33,6 +33,9 @@ const AuthProvider = ({ children }) => {
 
 
 
+
+
+
     return (
         <AuthContext.Provider value={{ isLoggedIn, login, logout, setUserDetailsFunctions, setTokenFunction }}>
             {children}

@@ -32,7 +32,7 @@ const LawyerHomePage = ({ navigation }) => {
   const renderClientCard = (client) => (
     <TouchableOpacity key={client.id} style={styles.clientCard} onPress={() => {
       setCurrentClientFunction(client)
-      navigation.navigate('ExisitngClient')
+      navigation.navigate('ExistingClient')
     }}>
       <View style={styles.clientInfoContainer}>
         <View style={styles.profileImageContainer}>

@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import LoginScreen from './screens/Auth/LoginScreen';
 // import SignupScreen from './screens/Auth/PrisionerSignup';
+// import ClientDocument from './screens/Prisioner/ClientDocument';
 import PrisionerSignup from './screens/Auth/PrisionerSignup';
 import HomeScreen from './screens/HomeScreen';
 import LawyerSignupSelection from './screens/Auth/LawyerSignup';
@@ -66,7 +67,7 @@ export default function App() {
 
 
           <NavigationContainer>
-            <Stack.Navigator initialRouteName="TestClient">
+            <Stack.Navigator initialRouteName="Home">
               <Stack.Screen name='Land' component={Land} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Rights" component={Rights} />
@@ -77,6 +78,8 @@ export default function App() {
               <Stack.Screen name="SignUpSelection" component={SignUpSelection} />
               {/* <Stack.Screen name="Signup" component={SignupScreen} /> */}
               <Stack.Screen name="PrisionerSignup" component={PrisionerSignup} />
+              {/* <Stack.Screen name="ClientDocument" component={ClientDocument} /> */}
+
               <Stack.Screen name="LawyerSignupSelection" component={LawyerSignupSelection} />
               <Stack.Screen name="LawyerHomePage" component={LawyerHomePage} />
               <Stack.Screen name="NewClientRequest" component={NewClientRequest} />

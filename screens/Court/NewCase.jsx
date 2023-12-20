@@ -1,21 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import axios from 'axios';
+import { useLawyer } from '../../Context/LawyerContext';
 
-const NewCase = ({navigation}) => {
+const NewCase = ({ navigation }) => {
   // Dummy data for new cases
-  const newCasesData = [
-    { firNumber: '2023/001', lawyerName: 'John Doe' },
-    { firNumber: '2023/002', lawyerName: 'Jane Smith' },
-    { firNumber: '2023/003', lawyerName: 'Bob Johnson' },
-    // Add more cases as needed
-  ];
+  const [newCasesData, setnewCasesData] = useState([])
+
+  const { setCurrentCourtCaseFunction, currentCourtCase } = useLawyer()
+
+
+  const fetchCasesByCourt = async () => {
+    const response = await axios.get(`http://localhost:8000/api/v1/court/fetchCourtCaseFileRequest/65820a2b9084d68554b45303`)
+
+    if (response.status === 200) {
+      console.log(response.data)
+      setnewCasesData(response.data.courtss)
+    }
+    else {
+      console.log('error')
+    }
+  }
+
+  useEffect(() => {
+    fetchCasesByCourt()
+
+  }, [])
+
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {newCasesData.map((caseData, index) => (
-        <TouchableOpacity key={index} style={styles.card} onPress={() => navigation.navigate('NewCaseDoc')}>
-          <Text style={styles.firNumber}>{`FIR Number: ${caseData.firNumber}`}</Text>
-          <Text style={styles.lawyerName}>{`Lawyer Name: ${caseData.lawyerName}`}</Text>
+      {newCasesData?.map((caseData, index) => (
+        <TouchableOpacity key={index} style={styles.card} onPress={() => {
+          setCurrentCourtCaseFunction(caseData)
+          navigation.navigate('NewCaseDoc')
+        }}>
+          <Text style={styles.firNumber}>{`FIR Number: ${caseData.FirId.FirNumber}`}</Text>
+          <Text style={styles.lawyerName}>{`Lawyer Name: ${caseData.lawyer.name}`}</Text>
+          <Text style={styles.lawyerName}>{`Lawyer Phone: ${caseData.lawyer.phone}`}</Text>
+          <Text style={styles.lawyerName}>{`Lawyer Phone: ${caseData.lawyer.LicenseNumber}`}</Text>
+          <Text style={styles.clientName}>{`Sections: ${caseData.FirId.sections.join(', ')}`}</Text>
         </TouchableOpacity>
       ))}
     </ScrollView>

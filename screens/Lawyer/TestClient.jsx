@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet , TextInput, Modal} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
@@ -28,8 +28,8 @@ const TestClient = ({ route, navigation }) => {
     };
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
-       
-      };
+
+    };
     return (
         <View style={styles.container}>
             {/* Header */}
@@ -72,33 +72,33 @@ const TestClient = ({ route, navigation }) => {
 
 
                 <Modal visible={isModalVisible} animationType="slide" transparent={true}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Upload New Document</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Document Name"
-          
-          />
-          <View style={styles.fileInputContainer}>
-            {/* <FontAwesome5 name="file" size={20} color="#333" style={styles.documentIcon} /> */}
-            <TouchableOpacity style={styles.fileInput} >
-              
-                <Text>Select a file</Text>
-         
-            </TouchableOpacity>
-          </View>
-          <View style={styles.uploadButtonContainer}>
-            <TouchableOpacity style={styles.uploadButton} >
-              
-                <Text style={styles.buttonText}>Upload</Text>
-          
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton} onPress={toggleModal} >
-              <Text style={styles.buttonText}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+                    <View style={styles.modalContainer}>
+                        <Text style={styles.modalTitle}>Upload New Document</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Document Name"
+
+                        />
+                        <View style={styles.fileInputContainer}>
+                            {/* <FontAwesome5 name="file" size={20} color="#333" style={styles.documentIcon} /> */}
+                            <TouchableOpacity style={styles.fileInput} >
+
+                                <Text>Select a file</Text>
+
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.uploadButtonContainer}>
+                            <TouchableOpacity style={styles.uploadButton} >
+
+                                <Text style={styles.buttonText}>Upload</Text>
+
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.cancelButton} onPress={toggleModal} >
+                                <Text style={styles.buttonText}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
 
 
             </View>
@@ -112,10 +112,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
-    input:{
+    input: {
         backgroundColor: 'white',
-        height:60,
-        width:300,
+        height: 60,
+        width: 300,
 
     },
     header: {
@@ -129,15 +129,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    
-      },
-      modalTitle: {
+
+    },
+    modalTitle: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
         color: '#fff',
-        
-      },
+
+    },
     headerText: {
         color: 'white',
         fontSize: 20,

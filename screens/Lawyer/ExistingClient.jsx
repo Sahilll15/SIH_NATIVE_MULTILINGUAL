@@ -1,48 +1,78 @@
-import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Modal, FlatList, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useLawyer } from '../../Context/LawyerContext';
+import axios from 'axios';
+
 
 const ExistingClient = ({ route, navigation }) => {
-  const { setCurrentClientFunction, currentClient } = useLawyer();
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [courts, setCourts] = useState([])
+  const [selectedCourt, setSelectedCourt] = useState([])
 
-  let token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTc4NzFmOWZjZmJkNWI1M2MzNzQ3NzMiLCJpYXQiOjE3MDI2NTMyMzh9.htgnfrEThCRoY1gBlkLRDW_bSmK7nosmjtipnC_mdGo`
 
 
-  const fetchDocs = async () => {
-    console.log('fetching..')
-    const response = await axios.get(`http://localhost:8000/api/v1/document/getDocuments`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }
 
-    })
+  const fetchCourts = async () => {
+    const response = await axios(`http://localhost:8000/api/v1/court/fetchCourts`)
 
     if (response.status === 200) {
-      console.log(response.data)
-      setDocuments(response.data.docs)
+      // console.log(response.data)
+      setCourts(response.data.courts)
     }
     else {
       console.log('error')
     }
+
+  }
+
+
+  const createCourtFile = async () => {
+    const response = await axios.post(`http://localhost:8000/api/v1/court/createCourtFileRequest`, {
+      id: selectedCourt,
+      lawyerId: currentClient.lawyer,
+      accusedId: currentClient.accused._id,
+      firId: currentClient.FirId._id,
+
+
+    })
+
+    if (response.status === 200) {
+      console.log('response.data', response.data)
+      Alert.alert(response.data.message)
+    }
+    else {
+      console.log('error')
+    }
+
   }
 
 
-  const handleFileCase = () => {
+  useEffect(() => {
+    fetchCourts()
+  }, [])
 
-  }
+  useEffect(() => {
+    console.log(selectedCourt)
+  }, [selectedCourt])
+
+
+  const { currentClient } = useLawyer();
 
 
   const handleViewDocuments = () => {
-    // Navigate to the client documents page
     navigation.navigate('ClientDocument');
   };
 
   const handleCallClient = () => {
 
-    alert(`Calling ${currentClient.accused.name} at ${currentClient.accused.phoneNumber}`);
+    alert(`Calling ${currentClient.accused.name} at ${clientInfo.contactNo}`);
   };
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
 
+
+  };
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -54,11 +84,11 @@ const ExistingClient = ({ route, navigation }) => {
       <View style={styles.content}>
         {/* First Box: Client Details */}
         <View style={styles.box}>
-          <Text>Name: {currentClient.accused.name}</Text>
-          <Text>Case ID: {currentClient.accused._id}</Text>
+          <Text>Name: {currentClient?.accused?.name}</Text>
+          <Text>Case ID: {currentClient?._id}</Text>
           {/* <Text>Previous Date: {clientInfo.prevDate}</Text>
-          <Text>Next Date: {clientInfo.nextDate}</Text>
-          <Text>Sections: {clientInfo.sections.join(', ')}</Text> */}
+          <Text>Next Date: {clientInfo.nextDate}</Text> */}
+          <Text>Sections: {currentClient.FirId.sections.join(', ')}</Text>
         </View>
 
         {/* Second Box: Contact Information */}
@@ -78,25 +108,86 @@ const ExistingClient = ({ route, navigation }) => {
           <Icon name="phone" size={20} color="white" style={styles.icon} />
           <Text style={styles.buttonText}>Call Client</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.Filecase} onPress={handleFileCase}>
-          <Icon name="phone" size={20} color="white" style={styles.icon} />
-          <Text style={styles.buttonText}>File Case Client</Text>
+        <TouchableOpacity style={styles.buttond} onPress={toggleModal}>
+          <Text style={{
+            color: 'white',
+            fontWeight: 'bold',
+            marginLeft: 10,
+            textAlign: 'center',
+            alignItems: 'center'
+          }} >File Case</Text>
+
         </TouchableOpacity>
+
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isModalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <FlatList
+                data={courts.filter((court) => court.id)}
+                keyExtractor={(item) => item}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.modalItem}
+                    onPress={() => {
+                      setSelectedCourt(item.id)
+                      createCourtFile()
+                      setModalVisible(false);
+                    }}
+                  >
+                    <Text>Court -{item.id}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          </View>
+        </Modal>
+
+
       </View>
-    </View>
+    </View >
   );
 };
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  input: {
+    backgroundColor: 'white',
+    height: 60,
+    width: 300,
+
   },
   header: {
     backgroundColor: '#2563eb', // Blue color
     padding: 16,
     alignItems: 'center',
 
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 8,
+    width: '80%',
+  },
+  modalItem: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ecf0f1',
   },
   headerText: {
     color: 'white',
@@ -127,17 +218,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     marginTop: '10%',
-  },
-  buttonde: {
-    backgroundColor: '#16a34a', // Blue color
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 15,
-    borderRadius: 5,
-    marginBottom: 8,
-    alignSelf: 'center',
-    width: '100%',
-    marginTop: '5%',
   },
   button: {
     backgroundColor: '#2563eb', // Blue color

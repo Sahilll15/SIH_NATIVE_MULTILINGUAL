@@ -12,6 +12,7 @@ const LawyerProvider = ({ children }) => {
 
     const [currentClient, setCurrentClient] = useState(null);
 
+    const [currentCourtCase, setCurrentCourtCase] = useState(null)
     const setCurrentLawyerFunction = (Lawyer) => {
         setCurrentLawyer(Lawyer)
     }
@@ -21,6 +22,14 @@ const LawyerProvider = ({ children }) => {
         setCurrentClient(client)
     }
 
+    const setCurrentCourtCaseFunction = (casee) => {
+        setCurrentCourtCase(casee)
+    }
+
+
+    useEffect(() => {
+        console.log('currentCourtCase', currentCourtCase)
+    }, [currentCourtCase])
 
     useEffect(() => {
         console.log('currentLawyer', currentLawyer)
@@ -31,7 +40,7 @@ const LawyerProvider = ({ children }) => {
     })
 
     return (
-        <LawyerContext.Provider value={{ currentLawyer, setCurrentLawyerFunction, setCurrentClientFunction, currentClient }}>
+        <LawyerContext.Provider value={{ currentLawyer, setCurrentLawyerFunction, setCurrentClientFunction, currentClient, setCurrentCourtCaseFunction, currentCourtCase }}>
             {children}
         </LawyerContext.Provider>
     );
