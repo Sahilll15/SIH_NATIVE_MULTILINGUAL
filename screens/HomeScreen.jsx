@@ -14,9 +14,10 @@ const HomeScreen = ({ navigation }) => {
     { title: 'Guard', iconName: 'md-person', onPress: () => navigation.navigate('GuardHomePage') },
     { title: 'Court', iconName: 'md-person', onPress: () => navigation.navigate('CourtHome') },
     { title: 'Police', iconName: 'md-person', onPress: () => navigation.navigate('PoliceLand') },
-    { title: 'ChatBot', iconName: 'md-chatbubbles', onPress: () => navigation.navigate('ChatBot') },
+    { title: 'Chat Screen', iconName: 'md-chatbubbles', onPress: () => navigation.navigate('ChatBot') },
     { title: 'PDF', iconName: 'md-document', onPress: handleViewPdf },
-    { title: 'Chat', iconName: 'md-chatbubbles', onPress: () => navigation.navigate('ChatScreen') },
+    { title: 'Chat Bot', iconName: 'md-chatbubbles', onPress: () => navigation.navigate('ChatScreen') },
+    { title: 'Market Upload', iconName: '', onPress: () => navigation.navigate('ProductUpload') },
   ];
 
   const renderAppButtons = () => {
