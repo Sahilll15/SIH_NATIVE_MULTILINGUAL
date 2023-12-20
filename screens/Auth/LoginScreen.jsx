@@ -31,7 +31,14 @@ const LoginScreen = ({ navigation }) => {
         });
 
         if (response.status === 200) {
-          Alert.alert('Logged in successfully');
+          console.log(response.data)
+          const { lawyer, token } = response.data;
+          console.log('lawyer', lawyer)
+          setUserDetailsFunctions(
+            lawyer
+          )
+          setTokenFunction(token)
+
           navigation.navigate('Home');
         } else {
           Alert.alert('Error');

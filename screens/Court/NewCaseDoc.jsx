@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
+import axios from 'axios'
+import { useLawyer } from '../../Context/LawyerContext';
 
 const NewCaseDoc = ({ navigation }) => {
   const [files, setFiles] = useState([
@@ -8,10 +10,94 @@ const NewCaseDoc = ({ navigation }) => {
     // Add more files as needed
   ]);
 
-  const generateCaseNumber = () => {
-    // Add your logic to generate a case number
-    const caseNumber = Math.floor(1000 + Math.random() * 9000);
-    alert(`Generated Case Number: ${caseNumber}`);
+
+  const { currentCourtCase } = useLawyer();
+
+  const data = {
+    cnr_number: "",
+    courtCaseRequestId: currentCourtCase._id,
+    cnr_details: {
+      case_details: {
+        case_type: "",
+        filing_number: "",
+        filing_date: "",
+        registration_number: "",
+        registration_date: ""
+      },
+      case_status: {
+        first_hearing_date: "",
+        next_hearing_date: "",
+        case_stage: "",
+        court_number_and_judge: "",
+        decision_date: "",
+        nature_of_disposal: ""
+      },
+      petitioner_and_advocate_details: {
+        petitioner: "",
+        advocate: ""
+      },
+      respondent_and_advocate_details: [],
+      act_details: [
+        {
+          under_act: "",
+          under_section: ""
+        },
+        {
+          under_act: "",
+          under_section: ""
+        }
+      ],
+      subordinate_court_information_details: {},
+      case_history_details: [
+        {
+          judge: "",
+          business_on_date: "",
+          hearing_date: "",
+          purpose_of_hearing: ""
+        }
+      ],
+      interim_orders_details: [
+        {
+          order_number: "",
+          order_date: ""
+        }
+      ],
+      final_orders_and_judgements_details: [
+        {
+          order_number: "",
+          order_date: ""
+        }
+      ],
+      case_transfer_and_establishment_details: [
+        {
+          transfer_date: "",
+          from_court_number_and_judge: "",
+          to_court_number_and_judge: ""
+        }
+      ],
+      process_details: []
+    }
+  }
+
+
+  const generateCaseNumber = async () => {
+    try {
+      const response = await axios.post(`http://localhost:8000/api/v1/case/create`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.status === 200) {
+        console.log('response.data', response.data);
+        Alert.alert(response.data.message);
+      } else {
+        console.log();
+      }
+    } catch (error) {
+      console.error(error.response.data.message);
+      Alert.alert(error.response.data.message);
+    }
   };
 
   const renderItem = ({ item }) => (
