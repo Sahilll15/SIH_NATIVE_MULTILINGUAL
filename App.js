@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import LoginScreen from './screens/Auth/LoginScreen';
 // import SignupScreen from './screens/Auth/PrisionerSignup';
+// import ClientDocument from './screens/Prisioner/ClientDocument';
 import PrisionerSignup from './screens/Auth/PrisionerSignup';
 import HomeScreen from './screens/HomeScreen';
 import LawyerSignupSelection from './screens/Auth/LawyerSignup';
@@ -22,7 +23,7 @@ import PrisonerListPage from './screens/Guard/PrisonerListPage';
 import CaseDetail from './screens/Prisioner/CaseDetail';
 import { AuthProvider } from './Context/AuthContext';
 import { FirProvider } from './Context/FirContext';
-import ExisitngClient from './screens/Lawyer/ExisitngClient';
+import ExistingClient from './screens/Lawyer/ExistingClient';
 import ChatBot from './screens/ChatBot/ChatBot';
 import Bottom from './screens/Navigation/Bottom';
 import PoliceLand from './screens/Police/PoliceLand';
@@ -49,6 +50,10 @@ import BailDetail from './screens/Court/BailDetail';
 import LawyerDetailsPage from './screens/Prisioner/LawyerSelect';
 import Rights from './screens/Prisioner/Rights';
 import Bot from './screens/Bot';
+import ClientDocument from './screens/Prisioner/ClientDocument';
+import TestClient from './screens/Lawyer/TestClient';
+
+
 import PrisonerLawyer from './screens/Guard/PrisonerLawyer';
 // import ChatBot from './screens/ChatBot/ChatBot';
 const Stack = createNativeStackNavigator();
@@ -74,6 +79,8 @@ export default function App() {
               <Stack.Screen name="SignUpSelection" component={SignUpSelection} />
               {/* <Stack.Screen name="Signup" component={SignupScreen} /> */}
               <Stack.Screen name="PrisionerSignup" component={PrisionerSignup} />
+              {/* <Stack.Screen name="ClientDocument" component={ClientDocument} /> */}
+
               <Stack.Screen name="LawyerSignupSelection" component={LawyerSignupSelection} />
               <Stack.Screen name="LawyerHomePage" component={LawyerHomePage} />
               <Stack.Screen name="NewClientRequest" component={NewClientRequest} />
@@ -86,7 +93,7 @@ export default function App() {
               <Stack.Screen name="LawyerListPage" component={LawyerListPage} />
               <Stack.Screen name="LawyerSelect" component={LawyerDetailsPage} />
               <Stack.Screen name="LandingPage" component={LandingPage} />
-              <Stack.Screen name="ExisitngClient" component={ExisitngClient} />
+              <Stack.Screen name="ExistingClient" component={ExistingClient} />
               <Stack.Screen name="GuardHomePage" component={GuardHomePage} />
               <Stack.Screen name="PrisonerListPage" component={PrisonerListPage} />
               <Stack.Screen name="PoliceLand" component={PoliceLand} />
@@ -107,7 +114,6 @@ export default function App() {
               <Stack.Screen name="LawyerConnect" component={LawyerConnect} />
               <Stack.Screen name="BailList" component={BailList} />
               <Stack.Screen name="BailDetail" component={BailDetail} />
-              <Stack.Screen name="PrisonerLawyer" component={PrisonerLawyer}/>
             </Stack.Navigator>
             <Bottom />
             <Toast ref={(ref) => Toast.setRef(ref)} />
