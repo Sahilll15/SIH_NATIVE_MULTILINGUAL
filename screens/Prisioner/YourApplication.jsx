@@ -2,10 +2,14 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import { useAuth } from '../../Context/AuthContext';
 import { useLawyer } from '../../Context/LawyerContext';
 
 const LawyerList = () => {
+
   const navigation = useNavigation();
+
+  const { selectedLang } = useAuth();
 
   const { activeContactedLawyer, setActiveContactedFunction } = useLawyer()
 
@@ -64,14 +68,19 @@ const LawyerList = () => {
       <Text style={styles.lawyerName}>{item.lawyer.name}</Text>
       <Text style={styles.lawyerName}>{item.lawyer.email}</Text>
       <Text style={[styles.lawyerStatus, { color: getTextColor(item.status) }]}>
-        Status: {item.Accepted ? 'Accepted' : 'Waiting'}
+        {
+          selectedLang === 'Hindi' ? 'स्थिति' : 'Status'
+        }: {item.Accepted ? 'Accepted' : 'Waiting'}
       </Text>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Your Contacted Lawyers</Text>
+      <Text style={styles.title}>{
+        selectedLang === 'Hindi' ? 'आपके मामले' : 'Your Cases'
+
+      }</Text>
       <FlatList
         data={lawyers}
         keyExtractor={(item) => item._id.toString()}

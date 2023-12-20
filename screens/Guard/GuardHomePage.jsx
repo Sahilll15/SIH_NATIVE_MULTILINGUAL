@@ -9,8 +9,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { useAuth } from "../../Context/AuthContext";
+import { guardHomePage } from "../../utils";
 
 const GuardHomePage = ({ navigation }) => {
+
+  const { selectedLang } = useAuth();
 
   const courtOrders = [
     {
@@ -22,7 +26,7 @@ const GuardHomePage = ({ navigation }) => {
       id: 2,
       title: "Court Order 2",
       description: "This is the second court order.",
-    },{
+    }, {
       id: 3,
       title: "Court Order 3",
       description: "This is the first court order.",
@@ -95,14 +99,16 @@ const GuardHomePage = ({ navigation }) => {
   };
 
   const roles = [
-    { name: 'Contact Lawyer', icon: 'gavel', screen: 'PrisonerLawyer' },
-    { name: 'Prisoner List', icon: 'list', screen: 'PrisonerListPage' },
+    { name: selectedLang === 'Hindi' ? guardHomePage[1].Hindi : guardHomePage[1].English, icon: 'gavel', screen: 'PrisonerLawyer' },
+    { name: selectedLang === 'Hindi' ? guardHomePage[2].Hindi : guardHomePage[2].English, icon: 'list', screen: 'PrisonerListPage' },
   ];
 
   return (
     <View>
       <View style={styles.header}>
-        <Text style={styles.Guarddashstyles}>Guard Dashboard</Text>
+        <Text style={styles.Guarddashstyles}>
+          {selectedLang === 'Hindi' ? guardHomePage[0].Hindi : guardHomePage[0].English}
+        </Text>
       </View>
 
       {/* Upper Half: Lawyer Request and Prisoner List */}
@@ -121,7 +127,10 @@ const GuardHomePage = ({ navigation }) => {
       {/* Lower Half: Court Orders */}
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.lowerHalf}>
-          <Text style={styles.headerText}>Court / Lawyer Updates</Text>
+          <Text style={styles.headerText}>{
+            selectedLang === 'Hindi' ? guardHomePage[3].Hindi : guardHomePage[3].English
+          }
+          </Text>
           <ScrollView style={{ width: "100%" }}>
             {courtOrders.map((order) => (
               <TouchableOpacity
@@ -146,8 +155,8 @@ const GuardHomePage = ({ navigation }) => {
           </ScrollView>
         </View>
       </ScrollView>
-   
-       </View>
+
+    </View>
   );
 };
 

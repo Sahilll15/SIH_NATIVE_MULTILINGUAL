@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Linking } from 'react-native';
+import { rehab } from '../../utils';
+import { useAuth } from '../../Context/AuthContext';
 
 const Rehab = ({ navigation }) => {
+  const { selectedLang } = useAuth();
   const categories = [
     {
-      name: 'Meditate',
+      name: selectedLang === 'Hindi' ? rehab[0].Hindi : rehab[0].English,
       videos: [
         {
           videoUrl: 'https://www.youtube.com/watch?v=nsGbtrl1WkU&ab_channel=Headspace',
@@ -29,7 +32,7 @@ const Rehab = ({ navigation }) => {
       ],
     },
     {
-      name: 'Skills',
+      name: selectedLang === 'Hindi' ? rehab[1].Hindi : rehab[1].English,
       videos: [
         {
           videoUrl: 'https://www.youtube.com/watch?v=zUNrUqMwUkY&ab_channel=JoshO%27Caoimh',
@@ -54,7 +57,7 @@ const Rehab = ({ navigation }) => {
       ],
     },
     {
-      name: 'Motivation',
+      name: selectedLang === 'Hindi' ? rehab[2].Hindi : rehab[2].English,
       videos: [
         {
           videoUrl: 'https://www.youtube.com/watch?v=domCDwp5u3I&ab_channel=EsyID',
@@ -81,7 +84,7 @@ const Rehab = ({ navigation }) => {
     },
 
     {
-      name: 'Educational Videos',
+      name: selectedLang === 'Hindi' ? rehab[3].Hindi : rehab[3].English,
       videos: [
         {
           videoUrl: 'https://youtu.be/zUNrUqMwUkY?si=r0T8zE5w1zSGGGm2',

@@ -1,42 +1,51 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { useAuth } from '../../Context/AuthContext';
+import { rights, rightsInfo } from '../../utils';
 
-const rightsData = [
-  {
-    id: 'right1',
-    title: 'Right to Equality',
-    description: 'This right includes equality before law, prohibition of discrimination on grounds of religion, race, caste, sex, or place of birth, and equality of opportunity in matters of employment, abolition of untouchability, and abolition of titles.',
-  },
-  {
-    id: 'right2',
-    title: 'Right to Freedom',
-    description: 'It includes freedom of speech and expression, assembly, association or union, movement, residence, and the right to practice any profession or occupation.',
-  },
-  {
-    id: 'right3',
-    title: 'Right Against Exploitation',
-    description: 'Prohibits all forms of forced labor and child labor.',
-  },
-  {
-    id: 'right4',
-    title: 'Right to Freedom of Religion',
-    description: 'Guarantees the freedom of conscience and the right to freely profess, practice, and propagate religion.',
-  },
-  {
-    id: 'right5',
-    title: 'Cultural and Educational Rights',
-    description: 'Preserves the right of any section of citizens to conserve their culture, language, or script and the right of minorities to establish and administer educational institutions.',
-  },
-  {
-    id: 'right6',
-    title: 'Right to Constitutional Remedies',
-    description: 'Provides for the enforcement of fundamental rights through legal remedies such as writs (Habeas Corpus, Mandamus, Prohibition, Certiorari, and Quo Warranto).',
-  },
-  // Add more rights as needed
-];
+
+
+
 
 
 const Rights = () => {
+
+  const { selectedLang } = useAuth();
+
+  const rightsData = [
+    {
+      id: 'right1',
+      title: selectedLang === 'Hindi' ? rights[0].Hindi : rights[0].English,
+      description: selectedLang === 'Hindi' ? rightsInfo[0].Hindi : rightsInfo[0].English,
+    },
+    {
+      id: 'right2',
+      title: selectedLang === 'Hindi' ? rights[1].Hindi : rights[1].English,
+      description: selectedLang === 'Hindi' ? rightsInfo[1].Hindi : rightsInfo[1].English,
+    },
+    {
+      id: 'right3',
+      title: selectedLang === 'Hindi' ? rights[2].Hindi : rights[2].English,
+      description: selectedLang === 'Hindi' ? rightsInfo[2].Hindi : rightsInfo[2].English,
+    },
+    {
+      id: 'right4',
+      title: selectedLang === 'Hindi' ? rights[3].Hindi : rights[3].English,
+      description: selectedLang === 'Hindi' ? rightsInfo[3].Hindi : rightsInfo[3].English,
+    },
+    {
+      id: 'right5',
+      title: selectedLang === 'Hindi' ? rights[4].Hindi : rights[4].English,
+      description: selectedLang === 'Hindi' ? rightsInfo[4].Hindi : rightsInfo[4].English,
+    },
+    {
+      id: 'right6',
+      title: selectedLang === 'Hindi' ? rights[5].Hindi : rights[5].English,
+      description: selectedLang === 'Hindi' ? rightsInfo[5].Hindi : rightsInfo[5].English,
+    },
+
+  ];
+
   const [selectedRight, setSelectedRight] = useState(null);
 
   const showDescription = (rightId) => {
@@ -45,7 +54,11 @@ const Rights = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Indian Fundamental Rights</Text>
+      <Text style={styles.heading}>{
+
+        selectedLang === 'Hindi' ? `भारतीय मौलिक अधिकार` : `Indian Fundamental Rights`
+      }
+      </Text>
       <ScrollView style={styles.scrollView}>
         {rightsData.map((right) => (
           <TouchableOpacity

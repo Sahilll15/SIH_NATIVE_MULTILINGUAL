@@ -11,6 +11,7 @@ import {
     Alert,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { useAuth } from '../../Context/AuthContext';
 
 import * as DocumentPicker from 'expo-document-picker';
 import axios from 'axios';
@@ -19,6 +20,10 @@ import * as FileSystem from 'expo-file-system';
 const pdfUrl = 'https://drive.google.com/file/d/1HatoP0RbhW9pOLLTudZ2omee-Y3WAuyl/view';
 
 const ClientDocument = ({ navigation }) => {
+
+
+    const { selectedLang } = useAuth();
+
     const [documents, setDocuments] = useState([
         { id: '1', name: 'Document 1' },
         { id: '2', name: 'Document 2' },
@@ -147,7 +152,12 @@ const ClientDocument = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Client Documents</Text>
+            <Text style={styles.title}>{
+                selectedLang === 'Hindi'
+                    ? 'दस्तावेज़'
+                    : 'Documents'
+            }</Text>
+
 
             <FlatList
                 data={documents.filter((doc) => doc.document && doc.name !== undefined)}

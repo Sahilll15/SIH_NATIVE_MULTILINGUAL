@@ -4,9 +4,16 @@ import Toast from 'react-native-toast-message';
 import { useFir } from '../../Context/FirContext';
 import { useEffect } from 'react';
 import { useLawyer } from '../../Context/LawyerContext';
+import { useAuth } from '../../Context/AuthContext';
+import { lawyerSelect } from '../../utils';
 import axios from 'axios'
 
 const LawyerDetailsPage = () => {
+
+
+
+  const { selectedLang } = useAuth();
+
   const { fetchfir, FirData } = useFir();
   const [selectedCase, setSelectedCase] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -97,16 +104,26 @@ const LawyerDetailsPage = () => {
         <Image source={{ uri: profilePic }} style={styles.profilePic} />
         <View style={styles.detailsText}>
           <Text style={styles.lawyerName}>{currentLawyer?.name}</Text>
-          <Text>Contact: {currentLawyer.phone}</Text>
-          <Text>License Number: {currentLawyer.LicenseNumber}</Text>
+          <Text>{
+            selectedLang === 'Hindi' ? lawyerSelect[0].Hindi : lawyerSelect[0].English
+
+          }: {currentLawyer.phone}</Text>
+          <Text>{
+            selectedLang === 'Hindi' ? lawyerSelect[1].Hindi : lawyerSelect[1].English
+          }: {currentLawyer.LicenseNumber}</Text>
           {/* <Text>Approx. Charge: {currentLawyer.approxCharge}</Text> */}
-          <Text>Address : {currentLawyer.address}</Text>
+          <Text>{
+            selectedLang === 'Hindi' ? lawyerSelect[2].Hindi : lawyerSelect[2].English
+          } : {currentLawyer.address}</Text>
         </View>
       </View>
 
       {/* Case Dropdown */}
       <View style={styles.dropdownContainer}>
-        <Text>Select Case:</Text>
+        <Text>{
+
+          selectedLang === 'Hindi' ? lawyerSelect[3].Hindi : lawyerSelect[3].English
+        }:</Text>
         <TouchableOpacity style={styles.dropdown} onPress={() => setModalVisible(true)}>
           <Text>{selectedCase || 'Select a Case'}</Text>
         </TouchableOpacity>
@@ -142,7 +159,11 @@ const LawyerDetailsPage = () => {
 
       {/* Contact Lawyer Button */}
       <TouchableOpacity style={styles.contactButton} onPress={handleContactLawyer}>
-        <Text style={styles.contactButtonText}>Contact Lawyer</Text>
+        <Text style={styles.contactButtonText}>
+          {
+            selectedLang === 'Hindi' ? lawyerSelect[4].Hindi : lawyerSelect[4].English
+          }
+        </Text>
       </TouchableOpacity>
     </View>
   );

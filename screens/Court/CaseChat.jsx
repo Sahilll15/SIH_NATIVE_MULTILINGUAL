@@ -1,8 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo
+import { useAuth } from '../../Context/AuthContext';
+import { caseChat } from '../../utils';
 
 const UploadedFiles = () => {
+
+  const { selectedLang } = useAuth();
   const [files, setFiles] = useState([
     { id: '1', name: 'File 1.pdf' },
     { id: '2', name: 'File 2.docx' },
@@ -50,7 +54,9 @@ const UploadedFiles = () => {
   return (
     <View style={styles.container}>
       <View style={styles.filesContainer}>
-        <Text style={styles.heading}>Uploaded Files</Text>
+        <Text style={styles.heading}>{
+          selectedLang === 'Hindi' ? caseChat[0].Hindi : caseChat[0].English
+        }</Text>
         <FlatList
           data={files}
           keyExtractor={(item) => item.id}
@@ -61,12 +67,17 @@ const UploadedFiles = () => {
       {/* Button for Document Upload */}
       <TouchableOpacity style={styles.uploadButton} onPress={handleUpload}>
         <Ionicons name="ios-add" size={24} color="#fff" />
-        <Text style={styles.buttonText}>Upload Doc</Text>
+        <Text style={styles.buttonText}>{
+          selectedLang === 'Hindi' ? caseChat[1].Hindi : caseChat[1].English
+        }</Text>
       </TouchableOpacity>
 
       {/* Button for Marking Case as Closed */}
       <TouchableOpacity style={styles.closeButton} onPress={markCaseAsClosed}>
-        <Text style={styles.buttonText}>Mark Case as Closed</Text>
+        <Text style={styles.buttonText}>{
+          selectedLang === 'Hindi' ? caseChat[2].Hindi : caseChat[2].English
+        }
+        </Text>
       </TouchableOpacity>
     </View>
   );

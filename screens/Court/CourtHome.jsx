@@ -1,7 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { useAuth } from '../../Context/AuthContext';
+import { courtHome } from '../../utils';
 
 const CourtHome = ({ navigation }) => {
+
+  const { selectedLang } = useAuth();
   return (
     <View style={styles.container}>
       {/* Top Half: Image */}
@@ -15,12 +19,14 @@ const CourtHome = ({ navigation }) => {
 
       {/* Bottom Half: New Case and Existing Case Buttons */}
       <View style={styles.bottomHalf}>
-        <TouchableOpacity style={styles.button}  onPress={() => navigation.navigate('NewCase')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('NewCase')}>
           <Image
             source={require('../../assets/law.png')} // Replace with the actual image path for new case
             style={styles.buttonImage}
           />
-          <Text style={styles.buttonText}>New Case</Text>
+          <Text style={styles.buttonText}>{
+            selectedLang === 'Hindi' ? courtHome[0].Hindi : courtHome[0].English
+          }</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ExistingCase')}>
@@ -28,13 +34,18 @@ const CourtHome = ({ navigation }) => {
             source={require('../../assets/law.png')} // Replace with the actual image path for existing case
             style={styles.buttonImage}
           />
-          <Text style={styles.buttonText}>Existing Case</Text>
+          <Text style={styles.buttonText}>{
+            selectedLang === 'Hindi' ? courtHome[1].Hindi : courtHome[1].English
+          }</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.bail} onPress={() => navigation.navigate('BailList')}>
-        
-          <Text style={styles.bailText}>Bail List</Text>
-        </TouchableOpacity>
+
+        <Text style={styles.bailText}>{
+          selectedLang === 'Hindi' ? courtHome[2].Hindi : courtHome[2].English
+
+        }</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -100,7 +111,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 10,
   },
-  
+
 });
 
 export default CourtHome;

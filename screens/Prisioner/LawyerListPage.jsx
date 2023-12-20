@@ -3,8 +3,12 @@ import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Alert } from
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios'
 import { useLawyer } from '../../Context/LawyerContext';
+import { useAuth } from '../../Context/AuthContext';
+import { lawyerListPage } from '../../utils';
 
 const LawyerListPage = ({ navigation }) => {
+
+  const { selectedLang } = useAuth();
   const [lawyers, setLawyers] = useState([]);
 
   const { currentLawyer, setCurrentLawyerFunction } = useLawyer()
@@ -73,15 +77,28 @@ const LawyerListPage = ({ navigation }) => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={[styles.sortButton, currentFilter === 'All' && styles.activeSortButton]} onPress={() => handleSort('All')}>
           <FontAwesome5 name="globe" size={20} color={currentFilter === 'All' ? '#fff' : '#3498db'} />
-          <Text style={[styles.buttonText, currentFilter === 'All' && styles.activeButtonText]}>All Lawyers</Text>
+          <Text style={[styles.buttonText, currentFilter === 'All' && styles.activeButtonText]}>{
+            selectedLang === 'Hindi'
+              ? lawyerListPage[0].Hindi
+              : lawyerListPage[0].English
+          }</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.sortButton, currentFilter === 'Pro Bono' && styles.activeSortButton]} onPress={() => handleSort('Pro Bono')}>
           <FontAwesome5 name="handshake" size={20} color={currentFilter === 'Pro Bono' ? '#fff' : '#3498db'} />
-          <Text style={[styles.buttonText, currentFilter === 'Pro Bono' && styles.activeButtonText]}>Pro Bono</Text>
+          <Text style={[styles.buttonText, currentFilter === 'Pro Bono' && styles.activeButtonText]}>{
+            selectedLang === 'Hindi'
+              ? lawyerListPage[1].Hindi
+              : lawyerListPage[1].English
+
+          }</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.sortButton, currentFilter === 'Private' && styles.activeSortButton]} onPress={() => handleSort('Private')}>
           <FontAwesome5 name="briefcase" size={20} color={currentFilter === 'Private' ? '#fff' : '#3498db'} />
-          <Text style={[styles.buttonText, currentFilter === 'Private' && styles.activeButtonText]}>Private</Text>
+          <Text style={[styles.buttonText, currentFilter === 'Private' && styles.activeButtonText]}>{
+            selectedLang === 'Hindi'
+              ? lawyerListPage[2].Hindi
+              : lawyerListPage[2].English
+          }</Text>
         </TouchableOpacity>
       </View>
 

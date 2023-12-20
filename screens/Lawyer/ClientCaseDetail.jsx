@@ -3,9 +3,15 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, Linking, Alert } from 
 import { Card, Icon } from "react-native-elements";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useLawyer } from "../../Context/LawyerContext";
+import { useAuth } from "../../Context/AuthContext";
+import { clientCaseDetail } from "../../utils";
 import axios from 'axios'
 
 const ClientCaseDetail = () => {
+
+
+  const { selectedLang } = useAuth();
+
   const { setCurrentClientFunction, currentClient } = useLawyer();
 
   const handleCall = async () => {
@@ -85,7 +91,10 @@ const ClientCaseDetail = () => {
   return (
     <View style={styles.container}>
       <Card containerStyle={styles.card}>
-        <Text style={styles.cardText}>CLIENT DETAILS</Text>
+        <Text style={styles.cardText}>{
+          selectedLang === 'Hindi' ? clientCaseDetail[0].Hindi : clientCaseDetail[0].English
+        }
+        </Text>
         <View style={styles.clientDetails}>
           <Image
             style={styles.clientImage}
@@ -94,16 +103,24 @@ const ClientCaseDetail = () => {
             }}
           />
           <View style={styles.clientText}>
-            <Text style={styles.listItemTitle}>Client Name</Text>
+            <Text style={styles.listItemTitle}>{
+              selectedLang === 'Hindi' ? clientCaseDetail[1].Hindi : clientCaseDetail[1].English
+            }</Text>
             <Text style={styles.listItemSubtitle}>{currentClient?.accused?.name}</Text>
 
-            <Text style={styles.listItemTitle}>Fir Number</Text>
+            <Text style={styles.listItemTitle}>{
+              selectedLang === 'Hindi' ? clientCaseDetail[2].Hindi : clientCaseDetail[2].English
+            }</Text>
             <Text style={styles.listItemSubtitle}>Fir - {currentClient?.FirId?.FirNumber}</Text>
 
-            <Text style={styles.listItemTitle}>Case Status</Text>
+            <Text style={styles.listItemTitle}>{
+              selectedLang === 'Hindi' ? clientCaseDetail[3].Hindi : clientCaseDetail[3].English
+            }</Text>
             <Text style={styles.listItemSubtitle}>In Progress</Text>
 
-            <Text style={styles.listItemTitle}>Charges</Text>
+            <Text style={styles.listItemTitle}>{
+              selectedLang === 'Hindi' ? clientCaseDetail[4].Hindi : clientCaseDetail[4].English
+            }</Text>
             <Text style={styles.listItemSubtitle}>{currentClient?.FirId?.sections[0]} {currentClient?.FirId?.sections[1]}</Text>
 
           </View>
@@ -111,7 +128,9 @@ const ClientCaseDetail = () => {
       </Card>
 
       <Card containerStyle={styles.card}>
-        <Text style={styles.cardText}>EVENT DESCRIPTION</Text>
+        <Text style={styles.cardText}>{
+          selectedLang === 'Hindi' ? clientCaseDetail[5].Hindi : clientCaseDetail[5].English
+        }</Text>
         <Text>
           {currentClient?.FirId?.firDescription}
         </Text>
@@ -119,7 +138,9 @@ const ClientCaseDetail = () => {
 
       <TouchableOpacity style={[styles.button, styles.contactClientButton]} onPress={handleCall}>
 
-        <Text style={styles.buttonText} >Contact Client</Text>
+        <Text style={styles.buttonText} >{
+          selectedLang === 'Hindi' ? clientCaseDetail[6].Hindi : clientCaseDetail[6].English
+        }</Text>
         <FontAwesome5 name="phone" size={20} color="#fff" style={styles.buttonIcon} />
       </TouchableOpacity>
       {
@@ -127,12 +148,16 @@ const ClientCaseDetail = () => {
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={[styles.button, { backgroundColor: '#3498db' }]} onPress={handleAccept}>
               <FontAwesome5 name="check" size={20} color="#fff" style={styles.buttonIcon} />
-              <Text style={styles.buttonText}>Accept</Text>
+              <Text style={styles.buttonText}>{
+                selectedLang === 'Hindi' ? clientCaseDetail[7].Hindi : clientCaseDetail[7].English
+              }</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={[styles.button, { backgroundColor: '#e74c3c' }]}>
               <FontAwesome5 name="times" size={20} color="#fff" style={styles.buttonIcon} />
-              <Text style={styles.buttonText}>Reject</Text>
+              <Text style={styles.buttonText}>{
+                selectedLang === 'Hindi' ? clientCaseDetail[8].Hindi : clientCaseDetail[8].English
+              }</Text>
             </TouchableOpacity>
           </View>
         ) :

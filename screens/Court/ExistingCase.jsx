@@ -1,8 +1,13 @@
 import React from 'react';
 import { StyleSheet, ScrollView, View, Text, TouchableOpacity } from 'react-native';
+import { useAuth } from '../../Context/AuthContext';
+import { existingCase } from '../../utils';
 
 const ExistingCase = ({ navigation }) => {
   // Dummy data for new cases
+
+  const { selectedLang } = useAuth();
+
   const newCasesData = [
     { caseNumber: 'sh122', lawyerName: 'John Doe', clientName: 'sahil' },
     { caseNumber: 'sh2321', lawyerName: 'Jane Smith', clientName: 'sahil' },
@@ -20,9 +25,9 @@ const ExistingCase = ({ navigation }) => {
     <ScrollView contentContainerStyle={styles.container} >
       {newCasesData.map((caseData, index) => (
         <TouchableOpacity key={index} style={styles.card} onPress={() => navigation.navigate('CaseChat')}>
-          <Text style={styles.firNumber}>{`Case Number: ${caseData.caseNumber}`}</Text>
-          <Text style={styles.lawyerName}>{`Lawyer Name: ${caseData.lawyerName}`}</Text>
-          <Text style={styles.clientName}>{`Client Name: ${caseData.clientName}`}</Text>
+          <Text style={styles.firNumber}>{`${selectedLang === 'Hindi' ? existingCase[0].Hindi : existingCase[0].English}: ${caseData.caseNumber}`}</Text>
+          <Text style={styles.lawyerName}>{`${selectedLang === 'Hindi' ? existingCase[1].Hindi : existingCase[1].English}: ${caseData.lawyerName}`}</Text>
+          <Text style={styles.clientName}>{`${selectedLang === 'Hindi' ? existingCase[2].Hindi : existingCase[2].English}: ${caseData.clientName}`}</Text>
 
         </TouchableOpacity>
       ))}

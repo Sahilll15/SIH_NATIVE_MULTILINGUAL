@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Modal, FlatList, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useLawyer } from '../../Context/LawyerContext';
+import { existingClient } from '../../utils';
+import { useAuth } from '../../Context/AuthContext';
 import axios from 'axios';
 
 
@@ -9,6 +11,11 @@ const ExistingClient = ({ route, navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [courts, setCourts] = useState([])
   const [selectedCourt, setSelectedCourt] = useState([])
+
+  const { selectedLang } = useAuth();
+
+
+
 
 
 
@@ -77,36 +84,68 @@ const ExistingClient = ({ route, navigation }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>Client Details</Text>
+        <Text style={styles.headerText}>{
+          selectedLang === 'Hindi'
+            ? existingClient[0].Hindi
+            : existingClient[0].English
+        }</Text>
       </View>
 
       {/* Content */}
       <View style={styles.content}>
         {/* First Box: Client Details */}
         <View style={styles.box}>
-          <Text>Name: {currentClient?.accused?.name}</Text>
-          <Text>Case ID: {currentClient?._id}</Text>
+          <Text>{
+            selectedLang === 'Hindi'
+              ? existingClient[1].Hindi
+              : existingClient[1].English
+          }: {currentClient?.accused?.name}</Text>
+          <Text>{
+            selectedLang === 'Hindi'
+              ? existingClient[2].Hindi
+              : existingClient[2].English
+          }: {currentClient?._id}</Text>
           {/* <Text>Previous Date: {clientInfo.prevDate}</Text>
           <Text>Next Date: {clientInfo.nextDate}</Text> */}
-          <Text>Sections: {currentClient.FirId.sections.join(', ')}</Text>
+          <Text>{
+            selectedLang === 'Hindi'
+              ? existingClient[3].Hindi
+              : existingClient[3].English
+          }: {currentClient.FirId.sections.join(', ')}</Text>
         </View>
 
         {/* Second Box: Contact Information */}
         <View style={styles.box}>
-          <Text>Email: {currentClient.accused.email}</Text>
-          <Text>Contact No: {currentClient.accused.phoneNumber}</Text>
+          <Text>{
+            selectedLang === 'Hindi'
+              ? existingClient[4].Hindi
+              : existingClient[4].English
+          }: {currentClient.accused.email}</Text>
+          <Text>{
+            selectedLang === 'Hindi'
+              ? existingClient[5].Hindi
+              : existingClient[5].English
+          }: {currentClient.accused.phoneNumber}</Text>
         </View>
 
         {/* View Client Documents Button */}
         <TouchableOpacity style={styles.button} onPress={handleViewDocuments}>
           <Icon name="file-text-o" size={20} color="white" style={styles.icon} />
-          <Text style={styles.buttonText}>View Client Documents</Text>
+          <Text style={styles.buttonText}>{
+            selectedLang === 'Hindi'
+              ? existingClient[6].Hindi
+              : existingClient[6].English
+          }</Text>
         </TouchableOpacity>
 
         {/* Call Client Button */}
         <TouchableOpacity style={styles.buttond} onPress={handleCallClient}>
           <Icon name="phone" size={20} color="white" style={styles.icon} />
-          <Text style={styles.buttonText}>Call Client</Text>
+          <Text style={styles.buttonText}>{
+            selectedLang === 'Hindi'
+              ? existingClient[7].Hindi
+              : existingClient[7].English
+          }</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.buttond} onPress={toggleModal}>
           <Text style={{
@@ -115,7 +154,11 @@ const ExistingClient = ({ route, navigation }) => {
             marginLeft: 10,
             textAlign: 'center',
             alignItems: 'center'
-          }} >File Case</Text>
+          }} >{
+              selectedLang === 'Hindi'
+                ? existingClient[8].Hindi
+                : existingClient[8].English
+            }</Text>
 
         </TouchableOpacity>
 

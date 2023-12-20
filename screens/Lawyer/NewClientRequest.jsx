@@ -2,9 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Button } from 'react-native';
 import axios from 'axios'
 import { useLawyer } from '../../Context/LawyerContext';
+import { useAuth } from '../../Context/AuthContext';
+import { newClientRequest } from '../../utils';
 
 const NewClientRequest = ({ navigation }) => {
 
+
+
+
+  const { selectedLang } = useAuth();
   const [clients, setClients] = useState([])
 
   const { setCurrentClientFunction, currentClient } = useLawyer();
@@ -55,9 +61,9 @@ const NewClientRequest = ({ navigation }) => {
         <View style={styles.clientInfoContainer}>
           <Text style={styles.clientName}>{client?.accused?.name}</Text>
           <Text style={styles.caseDetails}>
-            <Text style={{ color: 'black' }}>{`FIR No: ${client?.FirNumber}\n`}</Text>
+            <Text style={{ color: 'black' }}>{`${selectedLang === 'Hindi' ? newClientRequest[1].Hindi : newClientRequest[1].English}: ${client?.FirNumber}\n`}</Text>
             <Text style={{ color: 'black' }}>
-              Section Charges: {client?.FirId?.sections?.map((section, index) => (
+              {selectedLang === 'Hindi' ? newClientRequest[2].Hindi : newClientRequest[2].English}: {client?.FirId?.sections?.map((section, index) => (
                 <Text key={index} style={{ color: 'black' }}>{`${section} `}</Text>
               ))}
             </Text>
@@ -79,7 +85,10 @@ const NewClientRequest = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <View style={styles.header}>
-          <Text style={styles.dashboardText}>New Client Requests</Text>
+          <Text style={styles.dashboardText}>{
+            selectedLang === 'Hindi' ? newClientRequest[0].Hindi : newClientRequest[0].English
+          }
+          </Text>
         </View>
       </View>
       <View style={styles.bottomContainer}>

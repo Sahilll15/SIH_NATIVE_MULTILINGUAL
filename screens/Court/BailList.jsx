@@ -2,17 +2,21 @@
 
 import React from 'react';
 import { View, ScrollView, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { useAuth } from '../../Context/AuthContext';
+import { bailList } from '../../utils';
 
 const BailList = ({ navigation }) => {
-  // Sample data representing persons
+
+  const { selectedLang } = useAuth();
   const persons = [
     { id: 1, name: 'John Doe', lawyer: 'Lawyer Smith', caseNumber: 'ABC123' },
     { id: 2, name: 'Jane Doe', lawyer: 'Lawyer Johnson', caseNumber: 'XYZ456' },
     { id: 3, name: 'Alice Johnson', lawyer: 'Lawyer Williams', caseNumber: '123DEF' },
-    // Add more persons as needed
   ];
 
-  
+
+
+
 
   return (
     <View style={styles.container}>
@@ -24,9 +28,15 @@ const BailList = ({ navigation }) => {
             onPress={() => navigation.navigate('BailDetail')}
           >
             <Text style={styles.personName}>{person.name}</Text>
-            <Text style={styles.personDetails}>ID: {person.id}</Text>
-            <Text style={styles.personDetails}>Lawyer: {person.lawyer}</Text>
-            <Text style={styles.personDetails}>Case Number: {person.caseNumber}</Text>
+            <Text style={styles.personDetails}>{
+              selectedLang === 'Hindi' ? bailList[0].Hindi : bailList[0].English
+            }: {person.id}</Text>
+            <Text style={styles.personDetails}>{
+              selectedLang === 'Hindi' ? bailList[1].Hindi : bailList[1].English
+            }: {person.lawyer}</Text>
+            <Text style={styles.personDetails}>{
+              selectedLang === 'Hindi' ? bailList[2].Hindi : bailList[2].English
+            }: {person.caseNumber}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>

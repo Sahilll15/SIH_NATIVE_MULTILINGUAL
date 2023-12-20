@@ -9,7 +9,12 @@ const AuthProvider = ({ children }) => {
     const [userDetails, setUserDetails] = useState(null)
     const [token, setToken] = useState('')
 
-    const [selectedLang, setSelectedLang] = useState('Hindi');
+    const [selectedLang, setSelectedLang] = useState('English');
+
+
+    const setSelectedlangFunction = (lang) => {
+        setSelectedLang(lang)
+    }
 
     const login = () => {
         setIsLoggedIn(true);
@@ -36,7 +41,7 @@ const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ selectedLang, setSelectedLang, isLoggedIn, login, logout, setUserDetailsFunctions, setTokenFunction }}>
+        <AuthContext.Provider value={{ setSelectedlangFunction, selectedLang, setSelectedLang, isLoggedIn, login, logout, setUserDetailsFunctions, setTokenFunction }}>
             {children}
         </AuthContext.Provider>
     );

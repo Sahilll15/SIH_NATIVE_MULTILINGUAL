@@ -386,7 +386,7 @@ export const Rehab = [
     }
 ]
 
-export const Rights = [
+export const rights = [
     {
         English: "RIght To Equality",
         Hindi: "समानता का अधिकार"
@@ -411,6 +411,10 @@ export const Rights = [
         English: "Right To Constitutional Remedies",
         Hindi: "संवैधानिक उपचार का अधिकार"
     },
+
+]
+
+export const rightsInfo = [
     {
         English: "This right includes equality before law, prohibition of discrimination on grounds of religion, race, caste, sex, or place of birth, and equality of opportunity in matters of employment, abolition of untouchability, and abolition of titles.",
         Hindi: "इस अधिकार में कानून के सामने समानता, धर्म, जाति, लिंग या जन्म स्थान के आधार पर भेदभाव के प्रतिबंध और रोजगार के मामलों में अवसर की समानता, अस्पृश्यता के उन्मूलन और उपाधि के उन्मूलन शामिल है।"
@@ -438,16 +442,28 @@ export const Rights = [
 ]
 
 
-export const YourApplication = [
+export const rehab = [
     {
-        English: "Status",
-        Hindi: "स्थिति"
+        English: "Meditate",
+        Hindi: "ध्यान करें"
     },
     {
-        English: "Your contacted lawyer",
-        Hindi: "आपके संपर्क में वकील"
+        English: "Skills",
+        Hindi: "कौशल"
     },
+    {
+        English: "Motivation",
+        Hindi: "प्रेरणा"
+    },
+    {
+        English: "Educational Video",
+        Hindi: "शैक्षिक वीडियो"
+    },
+
+
 ]
+
+
 
 export const YourCase = [
     {
@@ -459,4 +475,333 @@ export const YourCase = [
         Hindi: "मुकदमा संख्या"
     },
 
+]
+
+export const guardHomePage = [
+    {
+        English: "Guard Dashboard",
+        Hindi: "गार्ड डैशबोर्ड",
+    },
+    {
+        English: "Contact Lawyer",
+        Hindi: "वकील से संपर्क करें",
+    },
+    {
+        English: "Prisoner List",
+        Hindi: "कैदी सूची",
+    },
+    {
+        English: "Court / Lawyer Updates",
+        Hindi: "न्यायालय / वकील की अपडेट",
+    },
+
+];
+export const prisonerLawyer = [
+    {
+        English: "Prisoner-Lawyer Information",
+        Hindi: "कैदी-वकील सूचना",
+    },
+    {
+        English: "Search...",
+        Hindi: "खोजें...",
+    },
+    {
+        English: "Lawyer:",
+        Hindi: "वकील:",
+    },
+    {
+        English: "Contact:",
+        Hindi: "संपर्क:",
+    },
+];
+export const PrisonerListPage = [
+    {
+        English: "PrisonerListPage",
+        Hindi: "कैदी सूची पृष्ठ",
+    },
+    {
+        English: "Under Development",
+        Hindi: "विकास के अधीन",
+    },
+];
+export const lawyerHomePage = [
+
+    {
+        English: "Layer Dashboard",
+        Hindi: "वकील डैशबोर्ड",
+    },
+    {
+        English: 'FirNumber',
+        Hindi: 'एफआईआर संख्या'
+    }
+];
+
+export const existingCase = [
+    {
+        English: "Case Number",
+        Hindi: "मुकदमा संख्या"
+    },
+    {
+        English: "Lawyer Name",
+        Hindi: "वकील का नाम"
+    },
+    {
+        English: "Client Name",
+        Hindi: "ग्राहक का नाम"
+    }
+]
+
+export const existingClient = [
+    {
+        English: 'Client Details',
+        Hindi: 'ग्राहक विवरण'
+    },
+    {
+        English: 'Name',
+        Hindi: 'नाम'
+    },
+    {
+        English: 'Case Id',
+        Hindi: 'मामला आईडी'
+    },
+    {
+        English: 'Sections',
+        Hindi: 'धाराएं'
+    },
+    {
+        English: 'Email',
+        Hindi: 'ईमेल'
+    },
+    {
+        English: 'Contact',
+        Hindi: 'संपर्क'
+    },
+    {
+        English: 'View Client Documents',
+        Hindi: 'ग्राहक दस्तावेज़ देखें'
+    },
+    {
+        English: "Call Client",
+        Hindi: "कॉल क्लाइंट"
+    },
+    {
+        English: "File Case",
+        Hindi: "मामला दर्ज करें"
+    }
+
+
+]
+
+export const courtHome = [
+
+
+    {
+        English: "New Case",
+        Hindi: "नया मुकदमा",
+    },
+    {
+        English: "Existing Case",
+        Hindi: "मौजूदा मुकदमा",
+    },
+    {
+        English: "Bail List",
+        Hindi: "जमानत सूची",
+    },
+];
+export const NewCase = [
+    {
+        English: "New Case",
+        Hindi: "नया मुकदमा",
+    },
+    {
+        English: "FIR Number:",
+        Hindi: "एफआईआर नंबर:",
+    },
+    {
+        English: "Lawyer Name:",
+        Hindi: "वकील का नाम:",
+    },
+    {
+        English: "Lawyer Phone:",
+        Hindi: "वकील का फ़ोन नंबर:",
+    },
+    {
+        English: "Client Name:",
+        Hindi: "ग्राहक का नाम:",
+    },
+    {
+        English: "Sections:",
+        Hindi: "धाराएँ:",
+    },
+];
+
+
+export const bailList = [
+    {
+        English: "ID",
+        Hindi: "आईडी",
+    },
+    {
+        English: "Lawyer Name",
+        Hindi: "वकील का नाम",
+    },
+    {
+        English: "Case Number",
+        Hindi: "मुकदमा संख्या",
+    },
+];
+export const caseChat = [
+
+    {
+        English: "Uploaded Files",
+        Hindi: "अपलोड की गई फ़ाइलें",
+    },
+    {
+        English: "+ Upload Doc",
+        Hindi: "+ दस्तावेज़ अपलोड करें",
+    },
+    {
+        English: "Mark Case as Closed",
+        Hindi: "मुकदमा को बंद के रूप में चिह्नित करें",
+    },
+];
+// export const CaseChat = [
+//     {
+//         English: "Alert",
+//         Hindi: "चेतावनी",
+//     },
+//     {
+//         English: "Handle Document Upload",
+//         Hindi: "दस्तावेज़ अपलोड को संभालें",
+//     },
+//     {
+//         English: "Confirmation",
+//         Hindi: "पुष्टि",
+//     },
+//     {
+//         English: "Are you sure you want to mark this case as closed?",
+//         Hindi: "क्या आप इस मुकदमे को बंद के रूप में चिह्नित करना चाहते हैं?",
+//     },
+//     {
+//         English: "CANCEL",
+//         Hindi: "रद्द करें",
+//     },
+//     {
+//         English: "MARK AS CLOSED",
+//         Hindi: "बंद के रूप में चिह्नित करें",
+//     },
+// ];
+
+export const newClientRequest = [
+    {
+        English: 'New CLient Request',
+        Hindi: 'नया ग्राहक अनुरोध'
+    },
+    {
+        English: 'Fir No',
+        Hindi: 'एफआईआर नंबर'
+    },
+    {
+        English: "Section Charges",
+        Hindi: "धारा आरोप"
+    }
+]
+
+
+export const clientCaseDetail = [
+    {
+        English: "CLIENT DETAILS",
+        Hindi: "ग्राहक विवरण"
+    }
+    ,
+    {
+        English: "Client Name",
+        Hindi: "ग्राहक का नाम"
+    },
+    {
+        English: "Fir Niumber",
+        Hindi: "एफआईआर नंबर"
+    },
+    {
+        English: "Case Status",
+        Hindi: "मुकदमे की स्थिति"
+    },
+    {
+        English: "Charges",
+        Hindi: "आरोप"
+    }, {
+        English: "Event Description",
+        Hindi: "घटना का विवरण"
+    },
+    {
+        English: "Contact Client",
+        Hindi: "संपर्क क्लाइंट"
+    },
+    {
+        English: "Accept",
+        Hindi: "स्वीकार करना"
+    },
+    {
+        English: "Reject",
+        Hindi: "अस्वीकार"
+    }
+]
+export const lawyerListPage = [
+    {
+        English: "All Lawyers",
+        Hindi: "सभी वकील"
+    },
+    {
+        English: "Pro Bono",
+        Hindi: "प्रो बोनो"
+    },
+    {
+        English: "Private",
+        Hindi: "निजी"
+    },
+    {
+        English: "LegalAssistance",
+        Hindi: "कानूनी सहायता"
+    },
+    {
+        English: "LawyerListPage",
+        Hindi: "वकील सूची पृष्ठ"
+    },
+]
+export const yourApplication = [
+
+    {
+        English: "Your Contacted Lawyers",
+        Hindi: "आपके संपर्क में वकील"
+    }, {
+        English: "Accepted",
+        Hindi: "स्वीकार किया"
+    }, {
+        English: "Waiting",
+        Hindi: "प्रतीक्षा"
+    }
+]
+
+export const lawyerSelect = [
+    {
+        English: "Contact",
+        Hindi: "संपर्क"
+    },
+    {
+        English: "License Number",
+        Hindi: "लाइसेंस नंबर"
+    },
+    {
+        English: "Address",
+        Hindi: "पता"
+    },
+    {
+        English: "Select Case",
+        Hindi: "मुकदमा चुनें"
+    },
+
+    {
+        English: "Contact Lawyer",
+        Hindi: "वकील से संपर्क करें"
+    }
 ]
