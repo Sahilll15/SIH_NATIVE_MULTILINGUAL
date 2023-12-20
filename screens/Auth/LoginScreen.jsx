@@ -170,7 +170,7 @@ const LoginScreen = ({ navigation }) => {
           </Text>
         </View>
         <TouchableOpacity style={styles.input} onPress={toggleModal}>
-          <Text>{selectedType || "Select Type"}</Text>
+          <Text>{selectedType}</Text>
         </TouchableOpacity>
         <Modal visible={isModalVisible} transparent animationType="slide">
           <View style={styles.modal}>

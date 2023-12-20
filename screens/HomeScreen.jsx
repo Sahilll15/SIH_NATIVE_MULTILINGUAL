@@ -16,7 +16,7 @@ const HomeScreen = ({ navigation }) => {
     { title: 'Police', iconName: 'md-person', onPress: () => navigation.navigate('PoliceLand') },
     { title: 'Chat Screen', iconName: 'md-chatbubbles', onPress: () => navigation.navigate('ChatBot') },
     { title: 'PDF', iconName: 'md-document', onPress: handleViewPdf },
-    { title: 'Chat Bot', iconName: 'md-chatbubbles', onPress: () => navigation.navigate('ChatScreen') },
+    { title: 'Chat Bot', iconName: 'md-chatbubbles', onPress: () => navigation.navigate('Bot') },
     { title: 'Market Upload', iconName: '', onPress: () => navigation.navigate('ProductUpload') },
   ];
 
