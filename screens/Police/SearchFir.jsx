@@ -3,9 +3,13 @@ import { StyleSheet, View, Image, TextInput, TouchableOpacity, Text, Alert } fro
 import { SearchBar, Button } from 'react-native-elements';
 import axios from 'axios'
 import baseUrl from '../../config';
+import { useAuth } from '../../Context/AuthContext';
+import { searchFir } from '../../utils';
 const SearchFir = () => {
   const [searchText, setSearchText] = useState('');
   const [firNumber, setFirNumber] = useState('');
+
+  const { selectedLang } = useAuth();
 
 
   const fetchFir = async () => {
@@ -54,7 +58,9 @@ const SearchFir = () => {
         <View style={styles.formContainer}>
           <TextInput
             style={styles.formInput}
-            placeholder="FIR Number"
+            placeholder={
+              selectedLang === 'Hindi' ? searchFir[0].Hindi : searchFir[0].English
+            }
             onChangeText={(text) => setFirNumber(text)}
             value={firNumber}
           />
@@ -63,7 +69,9 @@ const SearchFir = () => {
             style={styles.submitButton}
             onPress={handleFormSubmit}
           >
-            <Text style={styles.submitButtonText}>Submit</Text>
+            <Text style={styles.submitButtonText}>
+              {selectedLang === 'Hindi' ? searchFir[1].Hindi : searchFir[1].English}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

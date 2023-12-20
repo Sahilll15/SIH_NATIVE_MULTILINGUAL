@@ -2,6 +2,9 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Toast from 'react-native-toast-message';
+import { useAuth } from '../../Context/AuthContext';
+import { legalAssistance } from '../../utils';
+
 const LegalAssistance = ({ navigation }) => {
 
   // const navigateToChat = () => {
@@ -13,12 +16,14 @@ const LegalAssistance = ({ navigation }) => {
   //   });
   // };
 
+  const { selectedLang } = useAuth();
+
   const navigateToChat = () => {
     // Navigate to the Rehab screen
     navigation.navigate('Bot');
 
   };
-  
+
   const navigateToDoc = () => {
     // Navigate to the Rehab screen
     navigation.navigate('AddDoc');
@@ -35,27 +40,37 @@ const LegalAssistance = ({ navigation }) => {
     <View
       style={styles.container}
     >
-      <Text style={styles.title}>How can we assist you today!</Text>
+      <Text style={styles.title}>{
+        selectedLang === 'Hindi' ? legalAssistance[0].Hindi : legalAssistance[0].English
+      }</Text>
 
       <TouchableOpacity style={styles.option} onPress={navigateToChat}>
         <FontAwesome5 name="comments" size={30} color="#fff" style={styles.optionIcon} />
-        <Text style={styles.optionText}>Chatbot</Text>
+        <Text style={styles.optionText}>{
+          selectedLang === 'Hindi' ? legalAssistance[1].Hindi : legalAssistance[1].English
+        }</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.option} onPress={navigateToDoc}>
         <FontAwesome5 name="file-alt" size={30} color="#fff" style={styles.optionIcon} />
-        <Text style={styles.optionText}>Add Your Documents</Text>
+        <Text style={styles.optionText}>{
+          selectedLang === 'Hindi' ? legalAssistance[2].Hindi : legalAssistance[2].English
+        }</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.option} onPress={SelectLayer}>
         <FontAwesome5 name="phone" size={30} color="#fff" style={styles.optionIcon} />
-        <Text style={styles.optionText}>Choose Lawyer</Text>
+        <Text style={styles.optionText}>{
+          selectedLang === 'Hindi' ? legalAssistance[3].Hindi : legalAssistance[3].English
+        }</Text>
       </TouchableOpacity>
 
-      
+
       <TouchableOpacity style={styles.option} onPress={YourApplication}>
-      <FontAwesome5 name="briefcase" size={30} color="#fff" style={styles.optionIcon} />
-        <Text style={styles.optionText}>Your Application</Text>
+        <FontAwesome5 name="briefcase" size={30} color="#fff" style={styles.optionIcon} />
+        <Text style={styles.optionText}>{
+          selectedLang === 'Hindi' ? legalAssistance[4].Hindi : legalAssistance[4].English
+        }</Text>
       </TouchableOpacity>
     </View>
   );

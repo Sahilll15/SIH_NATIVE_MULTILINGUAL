@@ -1,11 +1,16 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { useAuth } from '../../Context/AuthContext';
+import { policeLand } from '../../utils';
+
 
 const PoliceLand = ({ navigation }) => {
+
+  const { selectedLang } = useAuth();
   return (
     <View style={styles.container}>
       <View style={styles.topHalf}>
-      <Image
+        <Image
           source={require('../../assets/Pmain.png')} // Update the filename
           style={styles.image}
           resizeMode="cover"
@@ -15,12 +20,20 @@ const PoliceLand = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SearchFir')} >
           {/* You can replace the icon source with your own image */}
           <Image source={require('../../assets/search.png')} style={styles.buttonIcon} />
-          <Text style={styles.buttonText}>Find FIR</Text>
+          <Text style={styles.buttonText}>
+            {
+              selectedLang === 'Hindi' ? policeLand[0].Hindi : policeLand[0].English
+            }
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Fir')} >
           {/* You can replace the icon source with your own image */}
           <Image source={require('../../assets/make.png')} style={styles.buttonIcon} />
-          <Text style={styles.buttonText}>Make FIR</Text>
+          <Text style={styles.buttonText}>
+            {
+              selectedLang === 'Hindi' ? policeLand[1].Hindi : policeLand[1].English
+            }
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -29,7 +42,7 @@ const PoliceLand = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor:'white',
+    backgroundColor: 'white',
     flex: 1,
   },
   topHalf: {

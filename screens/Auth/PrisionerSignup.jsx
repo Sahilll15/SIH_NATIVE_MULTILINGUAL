@@ -12,6 +12,8 @@ import {
 import axios from 'axios';
 import baseUrl from '../../config';
 import { useAuth } from '../../Context/AuthContext';
+import { SignupPrisioner } from '../../utils';
+
 
 const PrisionerSignup = ({ navigation }) => {
   const [username, setUsername] = React.useState('');
@@ -22,7 +24,8 @@ const PrisionerSignup = ({ navigation }) => {
   console.log(baseUrl);
   // console.log(useAuth())
 
-  const { setUserDetailsFunctions } = useAuth();
+  const { setUserDetailsFunctions, selectedLang } = useAuth();
+
 
   const signUpForm = async () => {
     try {
@@ -59,7 +62,10 @@ const PrisionerSignup = ({ navigation }) => {
       <StatusBar barStyle="light-content" />
       <View style={styles.inputContainer}>
         <View style={styles.labelContainer}>
-          <Text style={styles.label}>Username</Text>
+          <Text style={styles.label}>{
+
+            selectedLang === 'Hindi' ? SignupPrisioner[0].Hindi : SignupPrisioner[0].English
+          }</Text>
         </View>
         <TextInput
           style={styles.input}
@@ -67,7 +73,9 @@ const PrisionerSignup = ({ navigation }) => {
           onChangeText={(text) => setUsername(text)}
         />
         <View style={styles.labelContainer}>
-          <Text style={styles.label}>Mobile no</Text>
+          <Text style={styles.label}>
+            {selectedLang === 'Hindi' ? SignupPrisioner[1].Hindi : SignupPrisioner[1].English}
+          </Text>
         </View>
         <TextInput
           style={styles.input}
@@ -75,7 +83,9 @@ const PrisionerSignup = ({ navigation }) => {
           onChangeText={(text) => setMobileNo(text)}
         />
         <View style={styles.labelContainer}>
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label}>
+            {selectedLang === 'Hindi' ? SignupPrisioner[2].Hindi : SignupPrisioner[2].English}
+          </Text>
         </View>
         <TextInput
           style={styles.input}
@@ -83,7 +93,9 @@ const PrisionerSignup = ({ navigation }) => {
           onChangeText={(text) => setEmail(text)}
         />
         <View style={styles.labelContainer}>
-          <Text style={styles.label}>Password</Text>
+          <Text style={styles.label}>
+            {selectedLang === 'Hindi' ? SignupPrisioner[3].Hindi : SignupPrisioner[3].English}
+          </Text>
         </View>
         <TextInput
           style={styles.input}
@@ -94,15 +106,21 @@ const PrisionerSignup = ({ navigation }) => {
         <TouchableOpacity
           style={styles.loginButton}
           onPress={signUpForm}>
-          <Text style={styles.loginButtonText}>Sign up</Text>
+          <Text style={styles.loginButtonText}>
+            {selectedLang === 'Hindi' ? SignupPrisioner[4].Hindi : SignupPrisioner[4].English}
+          </Text>
         </TouchableOpacity>
 
         <View style={styles.dcontainer}>
-          <Text>Already have an account ?</Text>
+          <Text>
+            {selectedLang === 'Hindi' ? SignupPrisioner[5].Hindi : SignupPrisioner[5].English}
+          </Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate('Signup')}
+            onPress={() => navigation.navigate('Login')}
             style={styles.signupLink}>
-            <Text style={styles.signupText}> Log in </Text>
+            <Text style={styles.signupText}>
+              {selectedLang === 'Hindi' ? SignupPrisioner[6].Hindi : SignupPrisioner[6].English}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

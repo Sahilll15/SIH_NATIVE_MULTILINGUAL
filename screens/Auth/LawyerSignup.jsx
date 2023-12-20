@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Modal, ScrollView } from 'react-native';
 import axios from 'axios'
+import { SignupLawyer } from '../../utils';
+import { useAuth } from '../../Context/AuthContext';
 
 const LawyerSignup = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -12,6 +14,8 @@ const LawyerSignup = ({ navigation }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [password, setPassword] = useState('')
   const [address, setAddress] = useState('')
+
+  const { selectedLang } = useAuth();
 
   const handleSubmit = async () => {
 
@@ -62,14 +66,14 @@ const LawyerSignup = ({ navigation }) => {
 
   return (
     <ScrollView style={styles.mainn}>
-      <Text style={styles.headingText}>Please Fill the Details!</Text>
+      <Text style={styles.headingText}>{selectedLang === 'Hindi' ? SignupLawyer[0].Hindi : SignupLawyer[0].English}</Text>
 
       <TouchableOpacity
         style={styles.card}
         onPress={() => navigation.navigate('UploadCertificate')}
       >
         <View style={styles.licenseContainer}>
-          <Text style={styles.lcontainerText}>CLICK HERE TO UPLOAD CERTIFICATE</Text>
+          <Text style={styles.lcontainerText}>{selectedLang === 'Hindi' ? SignupLawyer[1].Hindi : SignupLawyer[1].English}</Text>
           <Image style={styles.imageStyle} source={require("../../assets/license.png")} />
         </View>
       </TouchableOpacity>
@@ -131,7 +135,7 @@ const LawyerSignup = ({ navigation }) => {
       </Modal>
 
       <TouchableOpacity style={styles.signupButton} onPress={handleSubmit}>
-        <Text style={styles.signupButtonText}>Submit</Text>
+        <Text style={styles.signupButtonText}>{selectedLang === 'Hindi' ? SignupLawyer[2].Hindi : SignupLawyer[2].English}</Text>
       </TouchableOpacity>
     </ScrollView>
   );

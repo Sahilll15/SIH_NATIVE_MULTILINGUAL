@@ -1,6 +1,7 @@
 // Import necessary React and React Native components
 import React, { useState } from 'react';
 import { View, Image, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { SignupSelection } from '../../utils';
 
 // Import your local images
 const topImage = require('../../assets/signupm.png');
@@ -16,7 +17,7 @@ import { useAuth } from '../../Context/AuthContext';
 const SignUpSelection = ({ navigation }) => {
   const [userType, setUserType] = useState('');
 
-  const { setUserDetailsFunctions, userDetails } = useAuth();
+  const { setUserDetailsFunctions, userDetails, selectedLang } = useAuth();
 
   const handleUserTypeSelection = (selectedUserType) => {
     Alert.alert(
@@ -72,7 +73,7 @@ const SignUpSelection = ({ navigation }) => {
 
       <View style={styles.bottomHalf}>
         {/* Text instruction */}
-        <Text style={styles.selectRoleText}>Select Your Role</Text>
+        <Text style={styles.selectRoleText}>{selectedLang === 'Hindi' ? SignupSelection[0].Hindi : SignupSelection[0].English}</Text>
 
         {/* First row with two boxes */}
         <View style={styles.row}>
@@ -81,14 +82,14 @@ const SignUpSelection = ({ navigation }) => {
             onPress={() => navigation.navigate('LawyerSignup')}
           >
             <Image source={image1} style={styles.boxImage} />
-            <Text style={styles.boxText}>LAWYER</Text>
+            <Text style={styles.boxText}>{selectedLang === 'Hindi' ? SignupSelection[1].Hindi : SignupSelection[1].English}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.box}
             onPress={() => navigation.navigate('PrisionerSignup')}
           >
             <Image source={image2} style={styles.boxImage} />
-            <Text style={styles.boxText}>PRISONER</Text>
+            <Text style={styles.boxText}>{selectedLang === 'Hindi' ? SignupSelection[2].Hindi : SignupSelection[2].English}</Text>
           </TouchableOpacity>
         </View>
 

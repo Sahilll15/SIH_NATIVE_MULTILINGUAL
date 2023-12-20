@@ -2,9 +2,13 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Toast from 'react-native-toast-message';
+import { useAuth } from '../../Context/AuthContext';
+import { prisionerIntro } from '../../utils';
 
 const PrisonerIntro = ({ navigation }) => {
   const backgroundImageUrl = 'https://www.example.com/path/to/your/image.jpg'; // Replace with your image URL
+
+  const { selectedLang } = useAuth();
 
   const navigateToRights = () => {
     navigation.navigate('Rights');
@@ -33,7 +37,11 @@ const PrisonerIntro = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.dashboardText}>Prisoner Dashboard</Text>
+      <Text style={styles.dashboardText}>
+        {
+          selectedLang === 'Hindi' ? prisionerIntro[0].Hindi : prisionerIntro[0].English
+        }
+      </Text>
       <View style={styles.profileContainer}>
         <View style={styles.profileHeader}>
           {/* Profile Image */}
@@ -46,12 +54,20 @@ const PrisonerIntro = ({ navigation }) => {
           />
           {/* Profile Information */}
           <View style={styles.profileInfo}>
-            <Text style={styles.profileInfoText}>Name: John Doe</Text>
-            <Text style={styles.profileInfoText}>Email: johndoe@example.com</Text>
-            <Text style={styles.profileInfoText}>Phone: +1234567890</Text>
+            <Text style={styles.profileInfoText}>{
+              selectedLang === 'Hindi' ? prisionerIntro[1].Hindi : prisionerIntro[1].English
+            } : John Doe</Text>
+            <Text style={styles.profileInfoText}>{
+              selectedLang === 'Hindi' ? prisionerIntro[2].Hindi : prisionerIntro[2].English
+            }: johndoe@example.com</Text>
+            <Text style={styles.profileInfoText}>{
+              selectedLang === 'Hindi' ? prisionerIntro[3].Hindi : prisionerIntro[3].English
+            }: +1234567890</Text>
             {/* Replace "Total Cases" text with a button */}
             <TouchableOpacity style={styles.redButton} onPress={() => navigation.navigate('YourCase')}>
-              <Text style={styles.buttonText}>Your Cases</Text>
+              <Text style={styles.buttonText}>{
+                selectedLang === 'Hindi' ? prisionerIntro[4].Hindi : prisionerIntro[4].English
+              }</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -60,15 +76,21 @@ const PrisonerIntro = ({ navigation }) => {
       <View style={styles.buttonsContainer}>
         <TouchableOpacity style={styles.button} onPress={navigateToRights}>
           <FontAwesome5 name="gavel" size={20} color="#fff" style={styles.buttonIcon} />
-          <Text style={styles.buttonText}>RIGHTS</Text>
+          <Text style={styles.buttonText}>{
+            selectedLang === 'Hindi' ? prisionerIntro[5].Hindi : prisionerIntro[5].English
+          }</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={navigateToLegalAssistance}>
           <FontAwesome5 name="balance-scale" size={20} color="#fff" style={styles.buttonIcon} />
-          <Text style={styles.buttonText}>LEGAL ASSISTANCE</Text>
+          <Text style={styles.buttonText}>{
+            selectedLang === 'Hindi' ? prisionerIntro[6].Hindi : prisionerIntro[6].English
+          }</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={navigateToRehab}>
           <FontAwesome5 name="hospital" size={20} color="#fff" style={styles.buttonIcon} />
-          <Text style={styles.buttonText}>REHAB</Text>
+          <Text style={styles.buttonText}>{
+            selectedLang === 'Hindi' ? prisionerIntro[7].Hindi : prisionerIntro[7].English
+          }</Text>
         </TouchableOpacity>
       </View>
     </View>

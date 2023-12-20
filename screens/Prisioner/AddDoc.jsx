@@ -11,7 +11,8 @@ import {
   Alert,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
+import { useAuth } from '../../Context/AuthContext';
+import { addDoc } from '../../utils';
 import * as DocumentPicker from 'expo-document-picker';
 import axios from 'axios';
 import * as FileSystem from 'expo-file-system';
@@ -19,6 +20,9 @@ import * as FileSystem from 'expo-file-system';
 const pdfUrl = 'https://drive.google.com/file/d/1HatoP0RbhW9pOLLTudZ2omee-Y3WAuyl/view';
 
 const AddDoc = ({ navigation }) => {
+
+  const { selectedLang } = useAuth();
+
   const [documents, setDocuments] = useState([
     { id: '1', name: 'Document 1' },
     { id: '2', name: 'Document 2' },
@@ -147,7 +151,9 @@ const AddDoc = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Your Documents</Text>
+      <Text style={styles.title}>
+        {selectedLang === 'Hindi' ? addDoc[0].Hindi : addDoc[0].English}
+      </Text>
 
       <FlatList
         data={documents.filter((doc) => doc.document && doc.name !== undefined)}
@@ -165,12 +171,18 @@ const AddDoc = ({ navigation }) => {
 
       <TouchableOpacity style={styles.uploadButton} onPress={toggleModal}>
         <FontAwesome5 name="cloud-upload-alt" size={25} color="#fff" style={styles.uploadIcon} />
-        <Text style={styles.uploadButtonText}>Upload New Document</Text>
+        <Text style={styles.uploadButtonText}>{
+          selectedLang === 'Hindi' ? addDoc[1].Hindi : addDoc[1].English
+        }</Text>
       </TouchableOpacity>
 
       <Modal visible={isModalVisible} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Upload New Document</Text>
+          <Text style={styles.modalTitle}>
+            {
+              selectedLang === 'Hindi' ? 'नया दस्तावेज़ अपलोड करें' : 'Upload New Document'
+            }
+          </Text>
           <TextInput
             style={styles.input}
             placeholder="Document Name"
@@ -183,7 +195,12 @@ const AddDoc = ({ navigation }) => {
               {selectedDocument ? (
                 <Text>{selectedDocument.name}</Text>
               ) : (
-                <Text>Select a file</Text>
+                <Text>
+                  {
+                    selectedLang === 'Hindi' ? addDoc[3].Hindi : addDoc[3].English
+
+                  }
+                </Text>
               )}
             </TouchableOpacity>
           </View>
@@ -192,11 +209,19 @@ const AddDoc = ({ navigation }) => {
               {isLoading ? (
                 <ActivityIndicator size="small" color="#fff" />
               ) : (
-                <Text style={styles.buttonText}>Upload</Text>
+                <Text style={styles.buttonText}>
+                  {
+                    selectedLang === 'Hindi' ? addDoc[4].Hindi : addDoc[4].English
+                  }
+                </Text>
               )}
             </TouchableOpacity>
             <TouchableOpacity style={styles.cancelButton} onPress={toggleModal} disabled={isLoading}>
-              <Text style={styles.buttonText}>Cancel</Text>
+              <Text style={styles.buttonText}>
+                {
+                  selectedLang === 'Hindi' ? addDoc[5].Hindi : addDoc[5].English
+                }
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -4,6 +4,8 @@ import { Picker } from '@react-native-picker/picker';
 import baseUrl from '../../config'
 
 import axios from 'axios'
+import { useAuth } from '../../Context/AuthContext';
+import { fir } from '../../utils';
 
 const Fir = () => {
   const [accusedName, setAccusedName] = useState("");
@@ -20,6 +22,8 @@ const Fir = () => {
   const [informerAddress, setInformerAddress] = useState("");
   const [informerContactNumber, setInformerContactNumber] = useState(0);
 
+  const { selectedLang
+  } = useAuth();
 
   const handleChange = (field, value) => {
     switch (field) {
@@ -109,91 +113,89 @@ const Fir = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>FIR Form</Text>
+      <Text style={styles.title}>{selectedLang === 'Hindi' ? fir[0].Hindi : fir[0].English}</Text>
       <View style={styles.formContainer}>
         {/* Suspect Section */}
-        <Text style={styles.sectionTitle}>Suspect Details</Text>
+        <Text style={styles.sectionTitle}>{selectedLang === 'Hindi' ? fir[1].Hindi : fir[1].English}</Text>
         <TextInput
           style={styles.input}
-          placeholder="Name"
+          placeholder={selectedLang === 'Hindi' ? fir[2].Hindi : fir[2].English}
           value={accusedName}
           onChangeText={(text) => handleChange('accusedName', text)}
           required
         />
         <TextInput
           style={styles.input}
-          placeholder="Age"
+          placeholder={selectedLang === 'Hindi' ? fir[3].Hindi : fir[3].English}
+
           value={accusedAge}
           onChangeText={(text) => handleChange('accusedAge', text)}
           required
         />
         <TextInput
           style={styles.input}
-          placeholder="IPC Sections"
+          placeholder={selectedLang === 'Hindi' ? fir[4].Hindi : fir[4].English}
           value={sections.join(", ")}
           onChangeText={(text) => handleChange('sections', text)}
           required
         />
         <TextInput
           style={styles.input}
-          placeholder="Address"
+          placeholder={selectedLang === 'Hindi' ? fir[5].Hindi : fir[5].English}
           value={accusedAddress}
           onChangeText={(text) => handleChange('accusedAddress', text)}
           required
         />
         <TextInput
           style={styles.input}
-          placeholder="Contact Number"
+          placeholder={selectedLang === 'Hindi' ? fir[6].Hindi : fir[6].English}
           value={accusedContactNumber}
           onChangeText={(text) => handleChange('accusedContactNumber', text)}
           required
         />
         <TextInput
           style={styles.input}
-          placeholder="AadharCard"
+          placeholder={selectedLang === 'Hindi' ? fir[7].Hindi : fir[7].English}
           value={accusedAddharCard}
           onChangeText={(text) => handleChange('accusedAddharCard', text)}
           required
         />
+
         <TextInput
           style={styles.input}
-          placeholder="AadharCard"
-          onChangeText={(text) => handleChange('suspect', 'aadhar', text)}
-          required
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Gender"
+          placeholder={selectedLang === 'Hindi' ? fir[9].Hindi : fir[9].English}
           value={accusedGender}
           onChangeText={(text) => handleChange('accusedGender', text)}
           required
         />
         <TextInput
           style={styles.input}
-          placeholder="Place of Occurrence"
+          placeholder={selectedLang === 'Hindi' ? fir[10].Hindi : fir[10].English}
           value={firPlace}
           onChangeText={(text) => handleChange('firPlace', text)}
           required
         />
 
         {/* Police Officer Section */}
-        <Text style={styles.sectionTitle}>Police Officer Details</Text>
+        <Text style={styles.sectionTitle}>{selectedLang === 'Hindi' ? fir[11].Hindi : fir[11].English}</Text>
         <Picker
           selectedValue={policeName}
           onValueChange={(value) => handleChange('policeName', value)}
           style={styles.input}
         >
-          <Picker.Item label="Select Police Officer" value="" />
+          <Picker.Item label=
+            {selectedLang === 'Hindi' ? fir[10].Hindi : fir[10].English}
+            value="" />
           <Picker.Item label="Officer 1" value="Officer 1" />
           <Picker.Item label="Officer 2" value="Officer 2" />
           {/* Add more officers as needed */}
         </Picker>
 
         {/* Description Section */}
-        <Text style={styles.sectionTitle}>Description</Text>
+        <Text style={styles.sectionTitle}>{selectedLang === 'Hindi' ? fir[12].Hindi : fir[12].English}</Text>
         <TextInput
           style={[styles.input, { height: 100 }]}
-          placeholder="Description"
+          placeholder={selectedLang === 'Hindi' ? fir[11].Hindi : fir[11].English}
           multiline
           value={firDescription}
           onChangeText={(text) => handleChange('firDescription', text)}
@@ -201,29 +203,33 @@ const Fir = () => {
         />
 
         {/* Informer Section */}
-        <Text style={styles.sectionTitle}>Informer Details</Text>
+        <Text style={styles.sectionTitle}>
+          {selectedLang === 'Hindi' ? fir[12].Hindi : fir[12].English}
+        </Text>
         <TextInput
           style={styles.input}
-          placeholder="Name"
+          placeholder={selectedLang === 'Hindi' ? fir[13].Hindi : fir[13].English}
           value={informerName}
           onChangeText={(text) => handleChange('informerName', text)}
         />
         <TextInput
           style={styles.input}
-          placeholder="Address"
+          placeholder={selectedLang === 'Hindi' ? fir[14].Hindi : fir[14].English}
           value={informerAddress}
           onChangeText={(text) => handleChange('informerAddress', text)}
         />
         <TextInput
           style={styles.input}
-          placeholder="Contact Number"
+          placeholder={selectedLang === 'Hindi' ? fir[15].Hindi : fir[15].English}
           value={informerContactNumber}
           onChangeText={(text) => handleChange('informerContactNumber', text)}
         />
 
         {/* Submit Button */}
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Submit</Text>
+          <Text style={styles.submitButtonText}>
+            {selectedLang === 'Hindi' ? fir[16].Hindi : fir[16].English}
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

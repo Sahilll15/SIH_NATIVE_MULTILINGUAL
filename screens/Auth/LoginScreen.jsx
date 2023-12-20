@@ -14,13 +14,21 @@ import {
 import baseUrl from '../../config';
 import { useAuth } from '../../Context/AuthContext';
 import axios from 'axios';
+import { login } from '../../utils';
 
 const LoginScreen = ({ navigation }) => {
+  const { selectedLang } = useAuth();
   const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedType, setSelectedType] = useState(''); // State for the selected type
+  const [selectedType, setSelectedType] = useState('');
   const { setUserDetailsFunctions, setTokenFunction } = useAuth();
+
+  useEffect(() => {
+    console.log(selectedLang)
+  }, [selectedLang])
+
+
 
   const handleLogin = async () => {
     if (selectedType === 'Lawyer') {
@@ -101,7 +109,7 @@ const LoginScreen = ({ navigation }) => {
 
       <View style={styles.inputContainer}>
         <View style={styles.labelContainer}>
-          <Text style={styles.label}>Type</Text>
+          <Text style={styles.label}>{selectedLang === 'Hindi' ? login[0].Hindi : login[0].English}</Text>
         </View>
         <TouchableOpacity style={styles.input} onPress={toggleModal}>
           <Text>{selectedType || 'Select Type'}</Text>
@@ -121,7 +129,7 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </Modal>
         <View style={styles.labelContainer}>
-          <Text style={styles.label}>email</Text>
+          <Text style={styles.label}>{selectedLang === 'Hindi' ? login[1].Hindi : login[1].English}</Text>
         </View>
         <TextInput
           style={styles.input}
@@ -129,7 +137,7 @@ const LoginScreen = ({ navigation }) => {
           onChangeText={(text) => setemail(text)}
         />
         <View style={styles.labelContainer}>
-          <Text style={styles.label}>Password</Text>
+          <Text style={styles.label}>{selectedLang === 'Hindi' ? login[2].Hindi : login[2].English}</Text>
         </View>
         <TextInput
           style={styles.input}
@@ -140,37 +148,37 @@ const LoginScreen = ({ navigation }) => {
 
 
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.loginButtonText}>Login</Text>
+          <Text style={styles.loginButtonText}>{selectedLang === 'Hindi' ? login[3].Hindi : login[3].English}</Text>
         </TouchableOpacity>
 
         <View style={styles.dwcontainer}>
           <TouchableOpacity
             onPress={() => navigation.navigate()}
             style={styles.helpLink}>
-            <Text style={styles.helpText}>Forgot email</Text>
+            <Text style={styles.helpText}>{selectedLang === 'Hindi' ? login[6].Hindi : login[6].English}</Text>
           </TouchableOpacity>
 
           <Text style={styles.helpLink}> | </Text>
           <TouchableOpacity
             onPress={() => navigation.navigate()}
             style={styles.helpLink}>
-            <Text style={styles.helpText}>Forgot Password</Text>
+            <Text style={styles.helpText}>{selectedLang === 'Hindi' ? login[7].Hindi : login[7].English}</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.dcontainer}>
-          <Text>Don't have an account?</Text>
+          <Text>{selectedLang === 'Hindi' ? login[4].Hindi : login[4].English}</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate('SignUpSelection')}
             style={styles.signupLink}>
-            <Text style={styles.signupText}>Sign up here </Text>
+            <Text style={styles.signupText}>{selectedLang === 'Hindi' ? login[5].Hindi : login[5].English}</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       <View>
         <TouchableOpacity style={styles.ChatBody} onPress={handleLogin}>
-          <Text style={styles.ChatText}>CHAT WITH AI BOT</Text>
+          <Text style={styles.ChatText}>{selectedLang === 'Hindi' ? login[8].Hindi : login[8].English}</Text>
         </TouchableOpacity>
       </View>
     </View>
