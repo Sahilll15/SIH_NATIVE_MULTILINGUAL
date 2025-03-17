@@ -1,29 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, SafeAreaView, StatusBar, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import AddCaseModal from './Case/AddCaseModal';
 
 const HomeScreen = ({ navigation }) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const cards = [
     {
       id: 'rights',
       title: 'Know Your Rights',
       icon: 'https://cdn-icons-png.flaticon.com/512/1642/1642097.png',
       color: '#FF6B6B',
-      onPress: () => console.log('Know Your Rights')
+      onPress: () => navigation.navigate('Rights')
     },
     {
-      id: 'legal',
-      title: 'Legal Assistance',
+      id: 'ai',
+      title: 'AI Assistant',
       icon: 'https://cdn-icons-png.flaticon.com/512/3063/3063176.png',
       color: '#4ECDC4',
-      onPress: () => console.log('Legal Assistance')
+      onPress: () => navigation.navigate('AIChatScreen')
     },
     {
       id: 'market',
-      title: 'Market Place',
+      title: 'Legal Documents',
       icon: 'https://cdn-icons-png.flaticon.com/512/3144/3144456.png',
       color: '#45B7D1',
-      onPress: () => console.log('Market Place')
+      onPress: () => navigation.navigate('LegalDocuments')
     },
     {
       id: 'rehab',
@@ -32,22 +35,37 @@ const HomeScreen = ({ navigation }) => {
       color: '#96CEB4',
       onPress: () => navigation.navigate('Rehab')
     },
+    {
+      id: 'lawyer',
+      title: 'Find a Lawyer',
+      icon: 'https://cdn-icons-png.flaticon.com/512/3116/3116416.png',
+      color: '#45B7D1',
+      onPress: () => navigation.navigate('LawyerList')
+    },
+    
+    {
+      id: 'My Documents',
+      title: 'My Documents',
+      icon: 'https://cdn-icons-png.flaticon.com/512/3117/3117712.png',
+      color: '#FF6B6B',
+      onPress: () => navigation.navigate('AddDoc')
+    },
   ];
 
   const renderHeader = () => (
     <View style={styles.header}>
-      <View style={styles.headerContent}>
-        <Text style={styles.greeting}>Welcome Back</Text>
-        <Text style={styles.headerTitle}>Legal Support Portal</Text>
-      </View>
-      <TouchableOpacity style={styles.profileButton}>
-        <Icon name="user-circle" size={30} color="#4A90E2" />
+      <Text style={styles.headerText}>Welcome Back!</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <Icon name="user-circle" size={30} color="#333" />
       </TouchableOpacity>
     </View>
   );
 
   const renderAddCase = () => (
-    <TouchableOpacity style={styles.addCaseContainer} onPress={() => console.log('Add Case')}>
+    <TouchableOpacity 
+      style={styles.addCaseContainer} 
+      onPress={() => setIsModalVisible(true)}
+    >
       <View style={styles.addCaseContent}>
         <View style={styles.addCaseIconContainer}>
           <Icon name="plus-circle" size={32} color="#FFFFFF" />
@@ -93,6 +111,12 @@ const HomeScreen = ({ navigation }) => {
           {renderCards()}
         </View>
       </ScrollView>
+
+      <AddCaseModal
+        visible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        navigation={navigation}
+      />
     </SafeAreaView>
   );
 };
@@ -115,21 +139,10 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
-  headerContent: {
-    flex: 1,
-  },
-  greeting: {
+  headerText: {
     fontSize: 16,
     color: '#666',
     marginBottom: 4,
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#2C3E50',
-  },
-  profileButton: {
-    padding: 8,
   },
   addCaseContainer: {
     backgroundColor: '#4A90E2',
