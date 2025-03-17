@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, FlatList, Alert } from 'react-native';
 import axios from 'axios'
 import { useLawyer } from '../../Context/LawyerContext';
+import baseUrl from '../../config';
 
 const NewCaseDoc = ({ navigation }) => {
   const [files, setFiles] = useState([
@@ -82,7 +83,7 @@ const NewCaseDoc = ({ navigation }) => {
 
   const generateCaseNumber = async () => {
     try {
-      const response = await axios.post(`http://localhost:8000/api/v1/case/create`, data, {
+      const response = await axios.post(`${baseUrl}/case/create`, data, {
         headers: {
           'Content-Type': 'application/json',
         },

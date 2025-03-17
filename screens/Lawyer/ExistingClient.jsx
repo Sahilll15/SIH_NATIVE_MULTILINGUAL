@@ -5,7 +5,7 @@ import { useLawyer } from '../../Context/LawyerContext';
 import { existingClient } from '../../utils';
 import { useAuth } from '../../Context/AuthContext';
 import axios from 'axios';
-
+import baseUrl from '../../config';
 
 const ExistingClient = ({ route, navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -21,7 +21,7 @@ const ExistingClient = ({ route, navigation }) => {
 
 
   const fetchCourts = async () => {
-    const response = await axios(`http://localhost:8000/api/v1/court/fetchCourts`)
+    const response = await axios(`${baseUrl}/court/fetchCourts`)
 
     if (response.status === 200) {
       // console.log(response.data)
@@ -35,7 +35,7 @@ const ExistingClient = ({ route, navigation }) => {
 
 
   const createCourtFile = async () => {
-    const response = await axios.post(`http://localhost:8000/api/v1/court/createCourtFileRequest`, {
+    const response = await axios.post(`${baseUrl}/court/createCourtFileRequest`, {
       id: selectedCourt,
       lawyerId: currentClient.lawyer,
       accusedId: currentClient.accused._id,

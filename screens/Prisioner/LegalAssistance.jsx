@@ -1,110 +1,173 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+  StatusBar,
+  Platform,
+} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Toast from 'react-native-toast-message';
 import { useAuth } from '../../Context/AuthContext';
-import { legalAssistance } from '../../utils';
 
 const LegalAssistance = ({ navigation }) => {
-
-  // const navigateToChat = () => {
-  //   // Navigate to the Rehab screen
-  //   Toast.show({
-  //     type: 'error', // Can be 'success', 'error', 'info', or 'any custom type'
-  //     text1: 'Hello',
-  //     text2: 'This is UNDER DEVELOPMENT',
-  //   });
-  // };
-
   const { selectedLang } = useAuth();
 
-  const navigateToChat = () => {
-    // Navigate to the Rehab screen
-    navigation.navigate('Bot');
+  const services = [
+    {
+      id: 1,
+      icon: 'gavel',
+      titleEn: 'Find a Lawyer',
+      titleHi: 'वकील खोजें',
+      descEn: 'Connect with experienced lawyers who can help with your case',
+      descHi: 'अनुभवी वकीलों से जुड़ें जो आपके केस में मदद कर सकते हैं',
+      route: 'LawyerListPage',
+    },
+    {
+      id: 2,
+      icon: 'file-alt',
+      titleEn: 'Case Status',
+      titleHi: 'केस की स्थिति',
+      descEn: 'Track and monitor your ongoing case progress',
+      descHi: 'अपने चल रहे केस की प्रगति को ट्रैक करें',
+      route: 'CaseDashboard',
+    },
+    {
+      id: 3,
+      icon: 'balance-scale',
+      titleEn: 'Legal Rights',
+      titleHi: 'कानूनी अधिकार',
+      descEn: 'Learn about your legal rights and protections',
+      descHi: 'अपने कानूनी अधिकारों और सुरक्षा के बारे में जानें',
+      route: 'Rights',
+    },
+    {
+      id: 4,
+      icon: 'robot',
+      titleEn: 'Legal Assistant',
+      titleHi: 'कानूनी सहायक',
+      descEn: 'Get instant answers to your legal questions',
+      descHi: 'अपने कानूनी सवालों के तुरंत जवाब पाएं',
+      route: 'Bot',
+    },
+  ];
 
-  };
+  const ServiceCard = ({ icon, title, description, onPress }) => (
+    <TouchableOpacity style={styles.card} onPress={onPress}>
+      <View style={styles.iconContainer}>
+        <FontAwesome5 name={icon} size={24} color="#4A90E2" />
+      </View>
+      <View style={styles.cardContent}>
+        <Text style={styles.cardTitle}>{title}</Text>
+        <Text style={styles.cardDescription}>{description}</Text>
+      </View>
+      <FontAwesome5 name="chevron-right" size={16} color="#A0A0A0" />
+    </TouchableOpacity>
+  );
 
-  const navigateToDoc = () => {
-    // Navigate to the Rehab screen
-    navigation.navigate('AddDoc');
-  };
-  const SelectLayer = () => {
-    // Navigate to the Rehab screen
-    navigation.navigate('LawyerListPage');
-  };
-  const YourApplication = () => {
-    // Navigate to the Rehab screen
-    navigation.navigate('YourApplication');
-  };
   return (
-    <View
-      style={styles.container}
-    >
-      <Text style={styles.title}>{
-        selectedLang === 'Hindi' ? legalAssistance[0].Hindi : legalAssistance[0].English
-      }</Text>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
+      <ScrollView 
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.header}>
+          <Text style={styles.title}>
+            {selectedLang === 'Hindi' ? 'कानूनी सहायता' : 'Legal Assistance'}
+          </Text>
+          <Text style={styles.subtitle}>
+            {selectedLang === 'Hindi' 
+              ? 'आपकी कानूनी यात्रा में मदद के लिए उपलब्ध सेवाएं'
+              : 'Available services to help in your legal journey'}
+          </Text>
+        </View>
 
-      <TouchableOpacity style={styles.option} onPress={navigateToChat}>
-        <FontAwesome5 name="comments" size={30} color="#fff" style={styles.optionIcon} />
-        <Text style={styles.optionText}>{
-          selectedLang === 'Hindi' ? legalAssistance[1].Hindi : legalAssistance[1].English
-        }</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.option} onPress={navigateToDoc}>
-        <FontAwesome5 name="file-alt" size={30} color="#fff" style={styles.optionIcon} />
-        <Text style={styles.optionText}>{
-          selectedLang === 'Hindi' ? legalAssistance[2].Hindi : legalAssistance[2].English
-        }</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.option} onPress={SelectLayer}>
-        <FontAwesome5 name="phone" size={30} color="#fff" style={styles.optionIcon} />
-        <Text style={styles.optionText}>{
-          selectedLang === 'Hindi' ? legalAssistance[3].Hindi : legalAssistance[3].English
-        }</Text>
-      </TouchableOpacity>
-
-
-      <TouchableOpacity style={styles.option} onPress={YourApplication}>
-        <FontAwesome5 name="briefcase" size={30} color="#fff" style={styles.optionIcon} />
-        <Text style={styles.optionText}>{
-          selectedLang === 'Hindi' ? legalAssistance[4].Hindi : legalAssistance[4].English
-        }</Text>
-      </TouchableOpacity>
-    </View>
+        <View style={styles.servicesContainer}>
+          {services.map((service) => (
+            <ServiceCard
+              key={service.id}
+              icon={service.icon}
+              title={selectedLang === 'Hindi' ? service.titleHi : service.titleEn}
+              description={selectedLang === 'Hindi' ? service.descHi : service.descEn}
+              onPress={() => navigation.navigate(service.route)}
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#F8F9FA',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  header: {
+    padding: 24,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 24 : 24,
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 20,
+    color: '#2C3E50',
+    marginBottom: 8,
   },
-  option: {
+  subtitle: {
+    fontSize: 16,
+    color: '#7F8C8D',
+    lineHeight: 24,
+  },
+  servicesContainer: {
+    padding: 16,
+  },
+  card: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 20,
-    borderRadius: 10,
-    marginVertical: 10,
-    width: '100%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
-  optionIcon: {
-    marginRight: 15,
+  iconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#EBF5FF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
   },
-  optionText: {
-    color: '#fff',
+  cardContent: {
+    flex: 1,
+  },
+  cardTitle: {
     fontSize: 18,
+    fontWeight: '600',
+    color: '#2C3E50',
+    marginBottom: 4,
+  },
+  cardDescription: {
+    fontSize: 14,
+    color: '#7F8C8D',
+    lineHeight: 20,
   },
 });
 

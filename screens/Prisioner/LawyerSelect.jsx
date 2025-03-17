@@ -6,7 +6,8 @@ import { useEffect } from 'react';
 import { useLawyer } from '../../Context/LawyerContext';
 import { useAuth } from '../../Context/AuthContext';
 import { lawyerSelect } from '../../utils';
-import axios from 'axios'
+import axios from 'axios';
+import baseUrl from '../../config';
 
 const LawyerDetailsPage = () => {
 
@@ -50,7 +51,7 @@ const LawyerDetailsPage = () => {
   const caseFightSubmit = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/v1/caseFight/createCaseFight/${currentLawyer?._id}`,
+        `${baseUrl}/caseFight/createCaseFight/${currentLawyer?._id}`,
         { FirNumber: formatedCaseNumber() },
         {
           headers: {

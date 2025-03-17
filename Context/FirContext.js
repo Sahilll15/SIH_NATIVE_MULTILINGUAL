@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import axios from 'axios'
-
+import axios from 'axios';
+import baseUrl from '../config';
 
 const FirContext = createContext();
-
 
 const FirProvider = ({ children }) => {
     const [FirData, setFirData] = useState([
@@ -20,7 +19,7 @@ const FirProvider = ({ children }) => {
 
     const fetchfir = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/v1/fir/getFirByUser', {
+            const response = await axios.get(`${baseUrl}/fir/getFirByUser`, {
                 headers: {
                     Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTdmMmFkMWFmY2Y1ZmNjNjk1NmY4YmUiLCJhZGRoYXJDYXJkIjoiNjA2My0zMjExLTg2OTQiLCJpYXQiOjE3MDI4MzQ1NDZ9.kMAdRnYe3oBB_hUbC5cpv_guOMG4zxBx36vMlccjHfo`
                 }
@@ -64,4 +63,3 @@ const useFir = () => {
 };
 
 export { FirProvider, useFir };
-

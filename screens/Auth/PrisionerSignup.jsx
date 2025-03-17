@@ -1,204 +1,265 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  StatusBar,
-  Image,
+  ScrollView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
-import axios from 'axios';
-import baseUrl from '../../config';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useAuth } from '../../Context/AuthContext';
-import { SignupPrisioner } from '../../utils';
+import { handleError } from '../../utils/errorHandler';
+import axiosInstance from '../../utils/axiosInstance';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
+const PrisonerSignupScreen = ({ navigation }) => {
+  const { selectedLang, setTokenFunction, setUserDetailsFunctions } = useAuth();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    name: '',
+    phoneNumber: '',
+    addharCard: '',
+  });
+  const [loading, setLoading] = useState(false);
 
-const PrisionerSignup = ({ navigation }) => {
-  const [username, setUsername] = React.useState('');
-  const [mobileNo, setMobileNo] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const handleInputChange = useCallback((field, value) => {
+    setFormData(prevState => ({
+      ...prevState,
+      [field]: value
+    }));
+  }, []);
 
-  console.log(baseUrl);
-  // console.log(useAuth())
-
-  const { setUserDetailsFunctions, selectedLang } = useAuth();
-
-
-  const signUpForm = async () => {
+  const handleSignup = async () => {
     try {
-      const response = await axios.post(`${baseUrl}/priosioner/signup/`, {
-        email: email,
-        name: username,
-        phoneNumber: mobileNo,
-        password: password
-      });
-
-      if (response.status === 200) {
-        Alert.alert(response.data.message);
-        setUserDetailsFunctions(response.data.user);
-        navigation.navigate('SignUpSelection');
-      } else {
-        Alert.alert(`Server returned status: ${response.status}`);
+      setLoading(true);
+      
+      // Basic validation
+      if (!formData.email || !formData.password || !formData.name) {
+        throw new Error('Email, password and name are required');
       }
 
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        throw new Error('Invalid email format');
+      }
+
+      // Phone number validation (10 digits)
+      if (formData.phoneNumber && !/^\d{10}$/.test(formData.phoneNumber)) {
+        throw new Error('Invalid phone number format');
+      }
+
+      // Aadhar card validation (12 digits)
+      if (!formData.addharCard || !/^\d{12}$/.test(formData.addharCard)) {
+        throw new Error('Invalid Aadhar card number');
+      }
+
+      const response = await axiosInstance.post('/prisioners/signup', formData);
+
+      if (response.status === 200) {
+        const { token, user } = response.data;
+        
+        // First set the token to trigger user data fetch
+        await setTokenFunction(token);
+        
+        // Then set user details
+        await setUserDetailsFunctions(user);
+
+        Alert.alert(
+          selectedLang === 'Hindi' ? 'सफलता' : 'Success',
+          selectedLang === 'Hindi' 
+            ? 'आपका खाता सफलतापूर्वक बनाया गया है'
+            : 'Your account has been created successfully',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.replace('Home')
+            }
+          ]
+        );
+      }
     } catch (error) {
-      console.error('Error signing up:', error.message);
-      Alert.alert(error.response.data.message)
+      const { message } = handleError(error, selectedLang === 'Hindi' ? 'hi' : 'en');
+      Alert.alert(
+        selectedLang === 'Hindi' ? 'त्रुटि' : 'Error',
+        message
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-
-
+  const InputField = React.memo(({ placeholder, value, onChangeText, icon, secureTextEntry, keyboardType }) => (
+    <View style={styles.inputContainer}>
+      <FontAwesome5 name={icon} size={20} color="#4A90E2" style={styles.inputIcon} />
+      <TextInput
+        style={styles.input}
+        placeholder={selectedLang === 'Hindi' ? placeholder.hi : placeholder.en}
+        value={value}
+        onChangeText={onChangeText}
+        secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType}
+        placeholderTextColor="#7F8C8D"
+        autoCapitalize="none"
+        autoCorrect={false}
+        editable={!loading}
+      />
+    </View>
+  ));
 
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.imageStyle}
-        source={require('../../assets/logo.png')}
-      />
-      <StatusBar barStyle="light-content" />
-      <View style={styles.inputContainer}>
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>{
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <View style={styles.formContainer}>
+        <Text style={styles.title}>
+          {selectedLang === 'Hindi' ? 'बंदी पंजीकरण' : 'Prisoner Registration'}
+        </Text>
+        
+        <InputField
+          placeholder={{ en: 'Name', hi: 'नाम' }}
+          value={formData.name}
+          onChangeText={(text) => handleInputChange('name', text)}
+          icon="user"
+        />
 
-            selectedLang === 'Hindi' ? SignupPrisioner[0].Hindi : SignupPrisioner[0].English
-          }</Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Username"
-          onChangeText={(text) => setUsername(text)}
+        <InputField
+          placeholder={{ en: 'Email', hi: 'ईमेल' }}
+          value={formData.email}
+          onChangeText={(text) => handleInputChange('email', text)}
+          icon="envelope"
+          keyboardType="email-address"
         />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>
-            {selectedLang === 'Hindi' ? SignupPrisioner[1].Hindi : SignupPrisioner[1].English}
-          </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Phone Number"
-          onChangeText={(text) => setMobileNo(text)}
-        />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>
-            {selectedLang === 'Hindi' ? SignupPrisioner[2].Hindi : SignupPrisioner[2].English}
-          </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Email"
-          onChangeText={(text) => setEmail(text)}
-        />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>
-            {selectedLang === 'Hindi' ? SignupPrisioner[3].Hindi : SignupPrisioner[3].English}
-          </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Password"
+
+        <InputField
+          placeholder={{ en: 'Password', hi: 'पासवर्ड' }}
+          value={formData.password}
+          onChangeText={(text) => handleInputChange('password', text)}
+          icon="lock"
           secureTextEntry
-          onChangeText={(text) => setPassword(text)}
         />
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={signUpForm}>
-          <Text style={styles.loginButtonText}>
-            {selectedLang === 'Hindi' ? SignupPrisioner[4].Hindi : SignupPrisioner[4].English}
-          </Text>
+
+        <InputField
+          placeholder={{ en: 'Phone Number', hi: 'फोन नंबर' }}
+          value={formData.phoneNumber}
+          onChangeText={(text) => handleInputChange('phoneNumber', text)}
+          icon="phone"
+          keyboardType="numeric"
+        />
+
+        <InputField
+          placeholder={{ en: 'Aadhar Card Number', hi: 'आधार कार्ड नंबर' }}
+          value={formData.addharCard}
+          onChangeText={(text) => handleInputChange('addharCard', text)}
+          icon="id-card"
+          keyboardType="numeric"
+        />
+
+        <TouchableOpacity 
+          style={[styles.signupButton, loading && styles.signupButtonDisabled]}
+          onPress={handleSignup}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <Text style={styles.signupButtonText}>
+              {selectedLang === 'Hindi' ? 'पंजीकरण करें' : 'Register'}
+            </Text>
+          )}
         </TouchableOpacity>
 
-        <View style={styles.dcontainer}>
-          <Text>
-            {selectedLang === 'Hindi' ? SignupPrisioner[5].Hindi : SignupPrisioner[5].English}
+        <TouchableOpacity 
+          style={styles.loginLink}
+          onPress={() => navigation.navigate('Login')}
+          disabled={loading}
+        >
+          <Text style={styles.loginLinkText}>
+            {selectedLang === 'Hindi' 
+              ? 'पहले से खाता है? लॉग इन करें' 
+              : 'Already have an account? Login'}
           </Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Login')}
-            style={styles.signupLink}>
-            <Text style={styles.signupText}>
-              {selectedLang === 'Hindi' ? SignupPrisioner[6].Hindi : SignupPrisioner[6].English}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
+// Wrap with ErrorBoundary
+const PrisonerSignup = (props) => (
+  <ErrorBoundary>
+    <PrisonerSignupScreen {...props} />
+  </ErrorBoundary>
+);
+
 const styles = StyleSheet.create({
-  imageStyle: {
-    width: '50%',
-    height: 50,
-    position: 'absolute',
-    top: 10,
-    left: 10,
-  },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    backgroundColor: '#FFFF',
-    position: 'relative',
+    backgroundColor: '#F8F9FA',
+  },
+  formContainer: {
+    padding: 24,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 32,
+    textAlign: 'center',
   },
   inputContainer: {
-    width: '100%',
-    marginBottom: 10,
-    marginTop: 1,
-    padding: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    marginBottom: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
   },
-  labelContainer: {
-    marginBottom: 1,
-  },
-  label: {
-    fontSize: 16,
-    color: 'black',
+  inputIcon: {
+    marginRight: 12,
   },
   input: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#808080',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    color: 'black',
-    borderRightWidth: 0,
-    borderTopWidth: 0,
-    borderLeftWidth: 0,
-    marginTop: 10,
-  },
-  loginButton: {
-    backgroundColor: 'red',
-    width: '50%',
-    padding: 10,
-    marginTop: '5%',
-    marginBottom: '5%',
-    borderRadius: 5,
-    alignSelf: 'center',
-  },
-  loginButtonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-  signupLink: {
-    marginTop: 20,
+    flex: 1,
     fontSize: 16,
+    color: '#2C3E50',
   },
-  signupText: {
-    color: 'blue',
+  signupButton: {
+    backgroundColor: '#4A90E2',
+    borderRadius: 12,
+    paddingVertical: 16,
+    marginTop: 24,
+    alignItems: 'center',
+  },
+  signupButtonDisabled: {
+    backgroundColor: '#95A5A6',
+  },
+  signupButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  loginLink: {
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  loginLinkText: {
+    color: '#4A90E2',
     fontSize: 16,
-    marginTop: 7,
-  },
-  dcontainer: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    marginLeft: 50,
   },
 });
 
-export default PrisionerSignup;
+export default PrisonerSignup;

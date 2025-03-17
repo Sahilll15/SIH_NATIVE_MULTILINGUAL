@@ -1,258 +1,280 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Modal, ScrollView } from 'react-native';
-import axios from 'axios'
-import { SignupLawyer } from '../../utils';
+import React, { useState, useCallback } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useAuth } from '../../Context/AuthContext';
+import { handleError } from '../../utils/errorHandler';
+import axiosInstance from '../../utils/axiosInstance';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
-const LawyerSignup = ({ navigation }) => {
-  const [name, setName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [aadharNumber, setAadharNumber] = useState('');
-  const [licenseno, setLicense] = useState('');
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [password, setPassword] = useState('')
-  const [address, setAddress] = useState('')
+const LawyerSignupScreen = ({ navigation }) => {
+  const { selectedLang, setTokenFunction, setUserDetailsFunctions } = useAuth();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    name: '',
+    phoneNumber: '',
+    barCouncilId: '',
+    experience: '',
+    specialization: '',
+  });
+  const [loading, setLoading] = useState(false);
 
-  const { selectedLang } = useAuth();
+  const handleInputChange = useCallback((field, value) => {
+    setFormData(prevState => ({
+      ...prevState,
+      [field]: value
+    }));
+  }, []);
 
-  const handleSubmit = async () => {
-
-    const obj = {
-      name,
-      phone: phoneNumber,
-      email,
-      password,
-      aadharNumber,
-      LicenseNumber: licenseno,
-      type: selectedOption,
-      address
-    }
-
-    console.log(obj)
-
-
+  const handleSignup = async () => {
     try {
-      const response = await axios.post(`http://localhost:8000/api/v1/lawyer/signupLawyer`, obj, {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
+      setLoading(true);
+      
+      // Basic validation
+      if (!formData.email || !formData.password || !formData.name) {
+        throw new Error('Email, password and name are required');
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        throw new Error('Invalid email format');
+      }
+
+      // Phone number validation (10 digits)
+      if (formData.phoneNumber && !/^\d{10}$/.test(formData.phoneNumber)) {
+        throw new Error('Invalid phone number format');
+      }
+
+      // Bar Council ID validation
+      if (!formData.barCouncilId) {
+        throw new Error('Bar Council ID is required');
+      }
+
+      const response = await axiosInstance.post('/lawyer/signup', formData);
 
       if (response.status === 200) {
-        console.log(response.data)
-        navigation.navigate('Login')
-      }
-      else {
-        console.log('error')
+        const { token, user } = response.data;
+        
+        // First set the token to trigger user data fetch
+        await setTokenFunction(token);
+        
+        // Then set user details
+        await setUserDetailsFunctions(user);
+
+        Alert.alert(
+          selectedLang === 'Hindi' ? 'सफलता' : 'Success',
+          selectedLang === 'Hindi' 
+            ? 'आपका खाता सफलतापूर्वक बनाया गया है'
+            : 'Your account has been created successfully',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.replace('Home')
+            }
+          ]
+        );
       }
     } catch (error) {
-      console.log(error)
+      const { message } = handleError(error, selectedLang === 'Hindi' ? 'hi' : 'en');
+      Alert.alert(
+        selectedLang === 'Hindi' ? 'त्रुटि' : 'Error',
+        message
+      );
+    } finally {
+      setLoading(false);
     }
-
   };
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-  };
-
-  const handleOptionSelect = (option) => {
-    setSelectedOption(option);
-    toggleModal();
-  };
-
-  // name, email, phone number, aadhar number, type, license number
+  const InputField = React.memo(({ placeholder, value, onChangeText, icon, secureTextEntry, keyboardType }) => (
+    <View style={styles.inputContainer}>
+      <FontAwesome5 name={icon} size={20} color="#4A90E2" style={styles.inputIcon} />
+      <TextInput
+        style={styles.input}
+        placeholder={selectedLang === 'Hindi' ? placeholder.hi : placeholder.en}
+        value={value}
+        onChangeText={onChangeText}
+        secureTextEntry={secureTextEntry}
+        keyboardType={keyboardType}
+        placeholderTextColor="#7F8C8D"
+        autoCapitalize="none"
+        autoCorrect={false}
+        editable={!loading}
+      />
+    </View>
+  ));
 
   return (
-    <ScrollView style={styles.mainn}>
-      <Text style={styles.headingText}>{selectedLang === 'Hindi' ? SignupLawyer[0].Hindi : SignupLawyer[0].English}</Text>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <View style={styles.formContainer}>
+        <Text style={styles.title}>
+          {selectedLang === 'Hindi' ? 'वकील पंजीकरण' : 'Lawyer Registration'}
+        </Text>
+        
+        <InputField
+          placeholder={{ en: 'Name', hi: 'नाम' }}
+          value={formData.name}
+          onChangeText={(text) => handleInputChange('name', text)}
+          icon="user"
+        />
 
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => navigation.navigate('UploadCertificate')}
-      >
-        <View style={styles.licenseContainer}>
-          <Text style={styles.lcontainerText}>{selectedLang === 'Hindi' ? SignupLawyer[1].Hindi : SignupLawyer[1].English}</Text>
-          <Image style={styles.imageStyle} source={require("../../assets/license.png")} />
-        </View>
-      </TouchableOpacity>
+        <InputField
+          placeholder={{ en: 'Email', hi: 'ईमेल' }}
+          value={formData.email}
+          onChangeText={(text) => handleInputChange('email', text)}
+          icon="envelope"
+          keyboardType="email-address"
+        />
 
-      <TextInput
-        style={styles.inputt}
-        placeholder="Enter Name"
-        onChangeText={(text) => setName(text)}
-      />
-      <TextInput
-        style={styles.inputt}
-        placeholder="Enter Phone Number"
-        onChangeText={(text) => setPhoneNumber(text)}
-      />
-      <TextInput
-        style={styles.inputt}
-        placeholder="Enter License Number"
-        onChangeText={(text) => setLicense(text)}
-      />
+        <InputField
+          placeholder={{ en: 'Password', hi: 'पासवर्ड' }}
+          value={formData.password}
+          onChangeText={(text) => handleInputChange('password', text)}
+          icon="lock"
+          secureTextEntry
+        />
 
-      <TextInput
-        style={styles.inputt}
-        placeholder="Enter Address "
-        onChangeText={(text) => setAddress(text)}
-      />
-      <TextInput
-        style={styles.inputt}
-        placeholder="Enter Email"
-        onChangeText={(text) => setEmail(text)}
-      />
-      <TextInput
-        style={styles.inputt}
-        placeholder="Enter Password"
-        onChangeText={(text) => setPassword(text)}
-      />
-      <TextInput
-        style={styles.inputt}
-        placeholder="Enter Aadhar Number"
-        onChangeText={(text) => setAadharNumber(text)}
-      />
+        <InputField
+          placeholder={{ en: 'Phone Number', hi: 'फोन नंबर' }}
+          value={formData.phoneNumber}
+          onChangeText={(text) => handleInputChange('phoneNumber', text)}
+          icon="phone"
+          keyboardType="numeric"
+        />
 
-      <TouchableOpacity style={styles.dropdownButton} onPress={toggleModal}>
-        <Text style={styles.dropdownButtonText}>{selectedOption || 'Select Lawyer Type'}</Text>
-      </TouchableOpacity>
+        <InputField
+          placeholder={{ en: 'Bar Council ID', hi: 'बार काउंसिल आईडी' }}
+          value={formData.barCouncilId}
+          onChangeText={(text) => handleInputChange('barCouncilId', text)}
+          icon="id-card"
+        />
 
-      <Modal visible={isModalVisible} transparent animationType="slide">
-        <View style={styles.modal}>
+        <InputField
+          placeholder={{ en: 'Experience (Years)', hi: 'अनुभव (वर्षों में)' }}
+          value={formData.experience}
+          onChangeText={(text) => handleInputChange('experience', text)}
+          icon="briefcase"
+          keyboardType="numeric"
+        />
 
-          <TouchableOpacity style={styles.modalOption} onPress={() => handleOptionSelect('Government')}>
-            <Text>Government Lawyer</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.modalOption} onPress={() => handleOptionSelect('private')}>
-            <Text>Private Firm</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.modalClose} onPress={toggleModal}>
-            <Text>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+        <InputField
+          placeholder={{ en: 'Specialization', hi: 'विशेषज्ञता' }}
+          value={formData.specialization}
+          onChangeText={(text) => handleInputChange('specialization', text)}
+          icon="gavel"
+        />
 
-      <TouchableOpacity style={styles.signupButton} onPress={handleSubmit}>
-        <Text style={styles.signupButtonText}>{selectedLang === 'Hindi' ? SignupLawyer[2].Hindi : SignupLawyer[2].English}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.signupButton, loading && styles.signupButtonDisabled]}
+          onPress={handleSignup}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <Text style={styles.signupButtonText}>
+              {selectedLang === 'Hindi' ? 'पंजीकरण करें' : 'Register'}
+            </Text>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.loginLink}
+          onPress={() => navigation.navigate('Login')}
+          disabled={loading}
+        >
+          <Text style={styles.loginLinkText}>
+            {selectedLang === 'Hindi' 
+              ? 'पहले से खाता है? लॉग इन करें' 
+              : 'Already have an account? Login'}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
 
+// Wrap with ErrorBoundary
+const LawyerSignup = (props) => (
+  <ErrorBoundary>
+    <LawyerSignupScreen {...props} />
+  </ErrorBoundary>
+);
+
 const styles = StyleSheet.create({
-  mainn: {
-    backgroundColor: 'white',
+  container: {
     flex: 1,
-    padding: 20,
+    backgroundColor: '#F8F9FA',
   },
-  headingText: {
-    marginTop: '10%',
-    fontSize: 24,
+  formContainer: {
+    padding: 24,
+  },
+  title: {
+    fontSize: 32,
     fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 32,
     textAlign: 'center',
   },
-  card: {
-    height: '25%',
-    width: '90%',
-    alignContent: 'center',
-    backgroundColor: 'white',
-    borderRadius: 8,
-    padding: 16,
-    margin: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  licenseContainer: {
-    height: '35%',
-    width: '100%',
-    justifyContent: 'center',
+  inputContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: '20%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    marginBottom: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
   },
-  lcontainerText: {
-    color: 'black',
-    marginTop: 0,
-    textAlign: 'center',
-  },
-  imageStyle: {
-    marginTop: '5%',
-    width: '20%',
-    height: '100%',
+  inputIcon: {
+    marginRight: 12,
   },
   input: {
-    marginVertical: 20,
-    height: 40,
-    borderColor: 'black',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    color: 'black',
-  },
-  inputt: {
-    marginVertical: 10,
-    height: 40,
-    borderColor: 'black',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 5,
-    color: 'black',
-  },
-  dropdownButton: {
-    marginTop: 10,
-    height: 40,
-    borderColor: 'black',
-    borderWidth: 1,
-    borderRadius: 5,
-    justifyContent: 'center',
-    paddingLeft: 10,
-    marginBottom: 10,
-  },
-  dropdownButtonText: {
-    color: 'black',
-  },
-  modal: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-
-  },
-  modalClose: {
-    backgroundColor: 'lightgray',
-    padding: 10,
-    marginTop: 10,
-  },
-  modalOption: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: 'lightgray',
-    width: '100%',
-    alignItems: 'center',
-    backgroundColor: 'white',
+    fontSize: 16,
+    color: '#2C3E50',
   },
   signupButton: {
-    backgroundColor: 'red',
-    marginVertical: 15,
-    padding: 15,
-    borderRadius: 5,
-    marginBottom: '30%'
+    backgroundColor: '#4A90E2',
+    borderRadius: 12,
+    paddingVertical: 16,
+    marginTop: 24,
+    alignItems: 'center',
+  },
+  signupButtonDisabled: {
+    backgroundColor: '#95A5A6',
   },
   signupButtonText: {
-    color: 'white',
-    textAlign: 'center',
+    color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: 'bold',
-
+    fontWeight: '600',
+  },
+  loginLink: {
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  loginLinkText: {
+    color: '#4A90E2',
+    fontSize: 16,
   },
 });
 

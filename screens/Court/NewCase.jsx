@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useLawyer } from '../../Context/LawyerContext';
+import baseUrl from '../../config';
 
 const NewCase = ({ navigation }) => {
   // Dummy data for new cases
@@ -11,7 +12,7 @@ const NewCase = ({ navigation }) => {
 
 
   const fetchCasesByCourt = async () => {
-    const response = await axios.get(`http://localhost:8000/api/v1/court/fetchCourtCaseFileRequest/65820a2b9084d68554b45303`)
+    const response = await axios.get(`${baseUrl}/court/fetchCourtCaseFileRequest/65820a2b9084d68554b45303`)
 
     if (response.status === 200) {
       console.log(response.data)

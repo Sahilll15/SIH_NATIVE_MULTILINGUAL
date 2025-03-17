@@ -5,6 +5,7 @@ import axios from 'axios'
 import { useAuth } from '../../Context/AuthContext';
 import { useLawyer } from '../../Context/LawyerContext';
 import { lawyerHomePage } from '../../utils';
+import baseUrl from '../../config';
 
 const LawyerHomePage = ({ navigation }) => {
   const [clients, setClients] = useState([])
@@ -16,7 +17,7 @@ const LawyerHomePage = ({ navigation }) => {
 
   const fetchExistingUser = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/v1/caseFight/caseFightCurrent/6581571df0bff1df52f9f2c9`)
+      const response = await axios.get(`${baseUrl}/caseFight/caseFightCurrent/6581571df0bff1df52f9f2c9`)
 
       if (response.status === 200) {
         console.log(response.data.caseFights)

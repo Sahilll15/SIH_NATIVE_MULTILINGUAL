@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { useAuth } from '../../Context/AuthContext';
 import { useLawyer } from '../../Context/LawyerContext';
+import baseUrl from '../../config';
 
 const LawyerList = () => {
 
@@ -19,7 +20,7 @@ const LawyerList = () => {
 
   const fetchYourCases = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/v1/caseFight/fetchByUser`, {
+      const response = await axios.get(`${baseUrl}/caseFight/fetchByUser`, {
         headers: {
           Authorization: `Bearer ${token}`,
         }

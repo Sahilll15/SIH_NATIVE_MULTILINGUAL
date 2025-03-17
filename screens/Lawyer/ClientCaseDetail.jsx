@@ -5,7 +5,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useLawyer } from "../../Context/LawyerContext";
 import { useAuth } from "../../Context/AuthContext";
 import { clientCaseDetail } from "../../utils";
-import axios from 'axios'
+import axios from 'axios';
+import baseUrl from '../../config';
 
 const ClientCaseDetail = () => {
 
@@ -36,7 +37,7 @@ const ClientCaseDetail = () => {
   const fetchCaseFightBylawyer = async () => {
     try {
 
-      const response = await axios.get('http://localhost:8000/api/v1/caseFight/fetchByLawyer', {
+      const response = await axios.get(`${baseUrl}/caseFight/fetchByLawyer`, {
         headers: {
           'Authorization': `Bearer ${tokenn}`
         }
@@ -59,7 +60,7 @@ const ClientCaseDetail = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/v1/caseFight/acceptRequest/${currentClient?._id}`,
+        `${baseUrl}/caseFight/acceptRequest/${currentClient?._id}`,
         {},
         {
           headers: {

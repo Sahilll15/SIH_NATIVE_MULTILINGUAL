@@ -15,6 +15,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import * as DocumentPicker from 'expo-document-picker';
 import axios from 'axios';
 import * as FileSystem from 'expo-file-system';
+import baseUrl from '../../config';
 
 const pdfUrl = 'https://drive.google.com/file/d/1HatoP0RbhW9pOLLTudZ2omee-Y3WAuyl/view';
 
@@ -35,7 +36,7 @@ const ClientDocument = ({ navigation }) => {
 
     const fetchDocs = async () => {
         console.log('fetching..')
-        const response = await axios.get(`http://localhost:8000/api/v1/document/getDocuments`, {
+        const response = await axios.get(`${baseUrl}/document/getDocuments`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
@@ -102,7 +103,7 @@ const ClientDocument = ({ navigation }) => {
                 });
 
                 const response = await axios.post(
-                    'http://localhost:8000/api/v1/document/upload',
+                    `${baseUrl}/document/upload`,
                     formData,
                     {
                         headers: {

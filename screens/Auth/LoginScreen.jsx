@@ -1,415 +1,222 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  SafeAreaView,
   StatusBar,
-  Image,
-  FlatList,
   Alert,
-  Modal,
-  Pressable,
-} from "react-native";
-import baseUrl from "../../config";
-import { useAuth } from "../../Context/AuthContext";
-import axios from "axios";
-import { login } from "../../utils";
+  ActivityIndicator,
+} from 'react-native';
+import { useAuth } from '../../Context/AuthContext';
+import { handleError } from '../../utils/errorHandler';
+import axiosInstance from '../../utils/axiosInstance';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
-
-const LoginScreen = ({ navigation }) => {
-  const [modalVisiblee, setModalVisiblee] = useState(false);
-
-  const { selectedLang } = useAuth();
-  const [email, setemail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isModalVisible, setModalVisible] = useState(false);
-
-  const [selectedType, setSelectedType] = useState("");
-  const { setUserDetailsFunctions, setTokenFunction, setSelectedlangFunction } = useAuth();
-
-  useEffect(() => {
-    console.log(selectedLang);
-  }, [selectedLang]);
+const LoginScreenContent = ({ navigation }) => {
+  const { selectedLang, setTokenFunction, setUserDetailsFunctions, selectedType } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    if (selectedType === "Lawyer") {
-      try {
-        const response = await axios.post(
-          `http://localhost:8000/api/v1/lawyer/loginLawyer`,
-          {
-            email: email.toLocaleLowerCase(),
-            password,
-          }
+    if (!email || !password) {
+      Alert.alert(
+        selectedLang === 'Hindi' ? 'त्रुटि' : 'Error',
+        selectedLang === 'Hindi' 
+          ? 'कृपया ईमेल और पासवर्ड दर्ज करें'
+          : 'Please enter email and password'
+      );
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const endpoint = selectedType === "Lawyer" ? '/lawyer/loginLawyer' : '/priosioner/login';
+      const response = await axiosInstance.post(endpoint, {
+        email: email.toLowerCase(),
+        password,
+      });
+
+      if (response.status === 200) {
+        const { token, user } = response.data;
+        
+        // First set the token to trigger user data fetch
+        await setTokenFunction(token);
+        
+        // Then set user details
+        await setUserDetailsFunctions(user);
+
+        Alert.alert(
+          selectedLang === 'Hindi' ? 'सफलता' : 'Success',
+          selectedLang === 'Hindi' 
+            ? 'सफलतापूर्वक लॉग इन किया गया'
+            : 'Successfully logged in',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.replace('Home')
+            }
+          ]
         );
-
-        if (response.status === 200) {
-          console.log(response.data);
-          const { lawyer, token } = response.data;
-          console.log("lawyer", lawyer);
-          setUserDetailsFunctions(lawyer);
-          setTokenFunction(token);
-
-          navigation.navigate("Home");
-        } else {
-          // Alert.alert('Error');
-          navigation.navigate("Home");
-        }
-      } catch (error) {
-        // console.log(error.message);
-        // Alert.alert(error.response.data.message);
-        navigation.navigate("Home");
       }
-    } else {
-      try {
-        const response = await axios.post(
-          `http://localhost:8000/api/v1/priosioner/login/`,
-          {
-            email: email.toLocaleLowerCase(),
-            password,
-          }
-        );
-
-        if (response.status === 200) {
-          setUserDetailsFunctions(
-            response.data.user
-            // response.data.token
-          );
-          setTokenFunction(response.data.token);
-          console.log(response.data.user);
-          console.log(response.data.token);
-          Alert.alert("logged");
-          navigation.navigate("Home");
-        }
-      } catch (error) {
-        navigation.navigate("Home");
-        // console.log(error.message);
-        // Alert.alert(error.response.data.message);
-      }
+    } catch (error) {
+      const { message } = handleError(error, selectedLang === 'Hindi' ? 'hi' : 'en');
+      Alert.alert(
+        selectedLang === 'Hindi' ? 'त्रुटि' : 'Error',
+        message
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-  const toggleModal = () => {
-    setModalVisible(!isModalVisible);
-    setModalVisiblee(false); // Close Language Modal when opening/closing the Lawyer Modal
-  };
-
-  const toggleModall = () => {
-    setModalVisiblee(!isModalVisiblee);
-  };
-
-  const handleTypeSelect = (type) => {
-    setSelectedType(type);
-    toggleModal();
-  };
-
-  useEffect(() => {
-    console.log(selectedType);
-  }, [selectedType]);
-
-  // new@gmail.com
-  //new
-
   return (
-    <View style={styles.container}>
-      <Image
-        style={styles.imageStyle}
-        source={require("../../assets/logo.png")}
-      />
-      <StatusBar barStyle="light-content" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
+      <View style={styles.formContainer}>
+        <Text style={styles.title}>
+          {selectedLang === 'Hindi' ? 'लॉग इन करें' : 'Login'}
+        </Text>
 
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder={selectedLang === 'Hindi' ? 'ईमेल' : 'Email'}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            editable={!loading}
+            placeholderTextColor="#7F8C8D"
+          />
+        </View>
 
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder={selectedLang === 'Hindi' ? 'पासवर्ड' : 'Password'}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            editable={!loading}
+            placeholderTextColor="#7F8C8D"
+          />
+          <TouchableOpacity
+            style={styles.eyeIcon}
+            onPress={() => setShowPassword(!showPassword)}
+            disabled={loading}
+          >
+            <Text>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.inputContainer}>
-
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisiblee}
-          onRequestClose={() => setModalVisiblee(false)}
+        <TouchableOpacity
+          style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+          onPress={handleLogin}
+          disabled={loading}
         >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <TouchableOpacity style={styles.modalItem}>
-                <Pressable
-                  style={styles.modalOption}
-                  onPress={() => {
-                    console.log("Hindi")
-                    setSelectedlangFunction("Hindi")
-                    setModalVisiblee(false)
-                  }}
-                >
-                  <Text>HINDI</Text>
-                </Pressable>
-                <Pressable
-                  style={styles.modalOption}
-                  onPress={() => {
-                    console.log("ENGLISH")
-                    setSelectedlangFunction("English")
-                    setModalVisiblee(false)
-                  }}
-                >
-                  <Text>ENGLISH</Text>
-                </Pressable>
-                {/* Add more options as needed */}
-                <Pressable
-                  style={styles.modalClose}
-                  onPress={() => setModalVisiblee(false)}
-                >
-                  <Text>Close</Text>
-                </Pressable>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>
-            {selectedLang === "Hindi" ? login[0].Hindi : login[0].English}
-          </Text>
-        </View>
-        <TouchableOpacity style={styles.input} onPress={toggleModal}>
-          <Text>{selectedType}</Text>
-        </TouchableOpacity>
-        <Modal visible={isModalVisible} transparent animationType="slide">
-          <View style={styles.modal}>
-            <Pressable
-              style={styles.modalOption}
-              onPress={() => handleTypeSelect("Prisioner")}
-            >
-              <Text>Prisioner</Text>
-            </Pressable>
-            <Pressable
-              style={styles.modalOption}
-              onPress={() => handleTypeSelect("Lawyer")}
-            >
-              <Text>Lawyer</Text>
-            </Pressable>
-            {/* Add more options as needed */}
-            <Pressable style={styles.modalClose} onPress={toggleModal}>
-              <Text>Close</Text>
-            </Pressable>
-          </View>
-        </Modal>
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>
-            {selectedLang === "Hindi" ? login[1].Hindi : login[1].English}
-          </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter email"
-          onChangeText={(text) => setemail(text)}
-        />
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>
-            {selectedLang === "Hindi" ? login[2].Hindi : login[2].English}
-          </Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Password"
-          secureTextEntry
-          onChangeText={(text) => setPassword(text)}
-        />
-
-        <View style={styles.dropdownContainer}>
-          <TouchableOpacity
-            style={styles.dropdown}
-            onPress={() => setModalVisiblee(true)}
-          >
-            <Text> Select Language</Text>
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.loginButtonText}>
-            {selectedLang === "Hindi" ? login[3].Hindi : login[3].English}
-          </Text>
+          {loading ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <Text style={styles.loginButtonText}>
+              {selectedLang === 'Hindi' ? 'लॉग इन करें' : 'Login'}
+            </Text>
+          )}
         </TouchableOpacity>
 
-        <View style={styles.dwcontainer}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate()}
-            style={styles.helpLink}
-          >
-            <Text style={styles.helpText}>
-              {selectedLang === "Hindi" ? login[6].Hindi : login[6].English}
-            </Text>
-          </TouchableOpacity>
-
-          <Text style={styles.helpLink}> | </Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate()}
-            style={styles.helpLink}
-          >
-            <Text style={styles.helpText}>
-              {selectedLang === "Hindi" ? login[7].Hindi : login[7].English}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.dcontainer}>
-          <Text>
-            {selectedLang === "Hindi" ? login[4].Hindi : login[4].English}
-          </Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("SignUpSelection")}
-            style={styles.signupLink}
-          >
-            <Text style={styles.signupText}>
-              {selectedLang === "Hindi" ? login[5].Hindi : login[5].English}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View>
-        <TouchableOpacity style={styles.ChatBody} onPress={handleLogin}>
-          <Text style={styles.ChatText}>
-            {selectedLang === "Hindi" ? login[8].Hindi : login[8].English}
+        <TouchableOpacity 
+          style={styles.signupLink}
+          onPress={() => navigation.navigate('SignUpSelection')}
+          disabled={loading}
+        >
+          <Text style={styles.signupLinkText}>
+            {selectedLang === 'Hindi' 
+              ? 'खाता नहीं है? साइन अप करें'
+              : 'No account? Sign up'}
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
+// Wrap with ErrorBoundary
+const LoginScreen = (props) => (
+  <ErrorBoundary>
+    <LoginScreenContent {...props} />
+  </ErrorBoundary>
+);
+
 const styles = StyleSheet.create({
-  imageStyle: {
-    width: "50%",
-    height: "20%",
-    position: "absolute",
-    top: 20,
-    left: 10,
-    borderRadius: 50,
-  },
-
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 8,
-    width: "80%",
-  },
-  modalItem: {
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ecf0f1",
-  },
-
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 10,
-    backgroundColor: "#FFFF",
-    position: "relative",
+    backgroundColor: '#F8F9FA',
   },
-
+  formContainer: {
+    padding: 24,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 32,
+    textAlign: 'center',
+  },
   inputContainer: {
-    width: "100%",
-    marginBottom: 10,
-    marginTop: "40%",
-  },
-  labelContainer: {
-    marginBottom: 5,
-  },
-  label: {
-    fontSize: 16,
-    color: "black",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    marginBottom: 16,
+    paddingHorizontal: 16,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
   },
   input: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: "#808080",
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    color: "black",
-    borderRightWidth: 0,
-    borderTopWidth: 0,
-    borderLeftWidth: 0,
+    flex: 1,
+    fontSize: 16,
+    paddingVertical: 12,
+    color: '#2C3E50',
+  },
+  eyeIcon: {
+    padding: 8,
   },
   loginButton: {
-    backgroundColor: "red",
-    width: "50%",
-    padding: 10,
-    marginTop: "5%",
-    marginBottom: "5%",
-    borderRadius: 5,
-    alignSelf: "center",
+    backgroundColor: '#4A90E2',
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  loginButtonDisabled: {
+    backgroundColor: '#95A5A6',
   },
   loginButtonText: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 15,
-    fontWeight: "bold",
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
   },
   signupLink: {
-    marginTop: 20,
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  signupLinkText: {
+    color: '#4A90E2',
     fontSize: 16,
-  },
-  signupText: {
-    color: "blue",
-    fontSize: 16,
-    marginTop: 7,
-  },
-  dcontainer: {
-    flexDirection: "row",
-    alignItems: "baseline",
-    marginLeft: 50,
-  },
-  dwcontainer: {
-    flexDirection: "row",
-    marginTop: 5,
-    alignSelf: "center",
-  },
-  helpLink: {
-    marginTop: -12,
-  },
-  ChatBody: {
-    width: "70%",
-    alignSelf: "center",
-  },
-
-  ChatText: {
-    color: "white",
-    backgroundColor: "blue",
-    padding: 10,
-    fontSize: 12,
-  },
-  modal: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
-  },
-  modalClose: {
-    backgroundColor: "lightgray",
-    padding: 10,
-    marginTop: 10,
-  },
-  modalOption: {
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "lightgray",
-    width: "100%",
-    alignItems: "center",
-    backgroundColor: "white",
-  },
-  dropdown: {
-    backgroundColor: '#3498db',
-    padding: 10,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#2980b9', // Border color
   },
 });
 

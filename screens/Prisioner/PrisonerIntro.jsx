@@ -1,162 +1,235 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Toast from 'react-native-toast-message';
+import React, { useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import { useAuth } from '../../Context/AuthContext';
-import { prisionerIntro } from '../../utils';
+import ErrorBoundary from '../../components/ErrorBoundary';
 
-const PrisonerIntro = ({ navigation }) => {
-  const backgroundImageUrl = 'https://www.example.com/path/to/your/image.jpg'; // Replace with your image URL
+/**
+ * PrisonerIntroScreen component displays user information and actions for prisoners.
+ * Redirects to Login screen if the user is not authenticated.
+ * 
+ * @param {object} props - Contains navigation object for screen navigation.
+ */
+const PrisonerIntroScreen = ({ navigation }) => {
+  // Extract authentication-related data and functions
+  const { selectedLang, userDetails, token, logout } = useAuth();
 
-  const { selectedLang } = useAuth();
+  // Redirect to Login screen if token is not present
+  useEffect(() => {
+    if (!token) {
+      navigation.replace('Login');
+    }
+  }, [token, navigation]);
 
-  const navigateToRights = () => {
-    navigation.navigate('Rights');
-
-  };
-
-  const navigateToLegalAssistance = () => {
-    // Navigate to the Legal Assistance screen
-    navigation.navigate('LegalAssistance');
-  };
-
-  const navigateToRehab = () => {
-    navigation.navigate('Rehab');
-  };
-
-
-  // const navigateToRehab = () => {
-  //   Toast.show({
-  //     type: 'error',
-  //     text1: 'Hello',
-  //     text2: 'This is UNDER DEVELOPMENT',
-  //   });
-  // };
-
-
+  // Display loading screen if userDetails are not available
+  if (!userDetails) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#4A90E2" />
+        <Text style={styles.loadingText}>
+          {selectedLang === 'Hindi' ? 'लोड हो रहा है...' : 'Loading...'}
+        </Text>
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.dashboardText}>
-        {
-          selectedLang === 'Hindi' ? prisionerIntro[0].Hindi : prisionerIntro[0].English
-        }
-      </Text>
-      <View style={styles.profileContainer}>
-        <View style={styles.profileHeader}>
-          {/* Profile Image */}
-          <Image
-            source={{
-              uri:
-                'https://png.pngtree.com/png-clipart/20210915/ourmid/pngtree-user-avatar-placeholder-png-image_3918418.jpg',
-            }}
-            style={styles.profileImage}
-          />
-          {/* Profile Information */}
-          <View style={styles.profileInfo}>
-            <Text style={styles.profileInfoText}>{
-              selectedLang === 'Hindi' ? prisionerIntro[1].Hindi : prisionerIntro[1].English
-            } : John Doe</Text>
-            <Text style={styles.profileInfoText}>{
-              selectedLang === 'Hindi' ? prisionerIntro[2].Hindi : prisionerIntro[2].English
-            }: johndoe@example.com</Text>
-            <Text style={styles.profileInfoText}>{
-              selectedLang === 'Hindi' ? prisionerIntro[3].Hindi : prisionerIntro[3].English
-            }: +1234567890</Text>
-            {/* Replace "Total Cases" text with a button */}
-            <TouchableOpacity style={styles.redButton} onPress={() => navigation.navigate('YourCase')}>
-              <Text style={styles.buttonText}>{
-                selectedLang === 'Hindi' ? prisionerIntro[4].Hindi : prisionerIntro[4].English
-              }</Text>
-            </TouchableOpacity>
+    <ScrollView style={styles.container}>
+      {/* Header with user avatar and welcome message */}
+      <View style={styles.header}>
+        <Image
+          source={'https://png.pngtree.com/png-clipart/20210915/ourmid/pngtree-user-avatar-placeholder-png-image_3918418.jpg'}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+        <Text style={styles.welcomeText}>
+          {selectedLang === 'Hindi'
+            ? `नमस्ते, ${userDetails.name}`
+            : `Welcome, ${userDetails.name}`}
+        </Text>
+      </View>
+
+      {/* User information section */}
+      <View style={styles.infoContainer}>
+        <View style={styles.infoCard}>
+          <Text style={styles.infoTitle}>
+            {selectedLang === 'Hindi' ? 'आपकी जानकारी' : 'Your Information'}
+          </Text>
+          <View style={styles.infoRow}>
+            <Text style={styles.label}>
+              {selectedLang === 'Hindi' ? 'नाम:' : 'Name:'}
+            </Text>
+            <Text style={styles.value}>{userDetails.name}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.label}>
+              {selectedLang === 'Hindi' ? 'ईमेल:' : 'Email:'}
+            </Text>
+            <Text style={styles.value}>{userDetails.email}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.label}>
+              {selectedLang === 'Hindi' ? 'फोन:' : 'Phone:'}
+            </Text>
+            <Text style={styles.value}>{userDetails.phoneNumber || 'N/A'}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.label}>
+              {selectedLang === 'Hindi' ? 'आधार:' : 'Aadhar:'}
+            </Text>
+            <Text style={styles.value}>{userDetails.addharCard || 'N/A'}</Text>
           </View>
         </View>
       </View>
-      {/* Buttons */}
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.button} onPress={navigateToRights}>
-          <FontAwesome5 name="gavel" size={20} color="#fff" style={styles.buttonIcon} />
-          <Text style={styles.buttonText}>{
-            selectedLang === 'Hindi' ? prisionerIntro[5].Hindi : prisionerIntro[5].English
-          }</Text>
+
+      {/* Action buttons for navigation */}
+      <View style={styles.actionContainer}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => navigation.navigate('FindLawyer')}
+        >
+          <Text style={styles.actionButtonText}>
+            {selectedLang === 'Hindi'
+              ? 'वकील खोजें'
+              : 'Find a Lawyer'}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={navigateToLegalAssistance}>
-          <FontAwesome5 name="balance-scale" size={20} color="#fff" style={styles.buttonIcon} />
-          <Text style={styles.buttonText}>{
-            selectedLang === 'Hindi' ? prisionerIntro[6].Hindi : prisionerIntro[6].English
-          }</Text>
+
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => navigation.navigate('CaseStatus')}
+        >
+          <Text style={styles.actionButtonText}>
+            {selectedLang === 'Hindi'
+              ? 'केस की स्थिति'
+              : 'Case Status'}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={navigateToRehab}>
-          <FontAwesome5 name="hospital" size={20} color="#fff" style={styles.buttonIcon} />
-          <Text style={styles.buttonText}>{
-            selectedLang === 'Hindi' ? prisionerIntro[7].Hindi : prisionerIntro[7].English
-          }</Text>
+
+        <TouchableOpacity
+          style={[styles.actionButton, styles.logoutButton]}
+          onPress={() => {
+            logout();
+            navigation.replace('Login');
+          }}
+        >
+          <Text style={styles.actionButtonText}>
+            {selectedLang === 'Hindi'
+              ? 'लॉग आउट'
+              : 'Logout'}
+          </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
+
+// Wrap with ErrorBoundary
+const PrisonerIntro = (props) => (
+  <ErrorBoundary>
+    <PrisonerIntroScreen {...props} />
+  </ErrorBoundary>
+);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#F8F9FA',
   },
-  dashboardText: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginTop: '15%',
-    marginBottom: '10%',
-  },
-  profileContainer: {
-    marginBottom: 20,
-  },
-  profileHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginRight: 20,
-  },
-  profileInfo: {
+  loadingContainer: {
     flex: 1,
-  },
-  profileInfoText: {
-    fontSize: 18,
-    marginBottom: 5,
-  },
-  buttonsContainer: {
-    flex: 1,
-    paddingTop: 20,
-  },
-  button: {
-    backgroundColor: '#6495ED',
-    padding: 20,
-    borderRadius: 5,
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginBottom: 10,
-  },
-  redButton: {
-    backgroundColor: 'red',
-    padding: 7,
-    width: '50%',
-    borderRadius: 5,
-    alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 10,
+    alignItems: 'center',
+    backgroundColor: '#F8F9FA',
+    gap: 16,
   },
-  buttonText: {
-    color: '#fff',
+  loadingText: {
+    fontSize: 18,
+    color: '#4A90E2',
+  },
+  header: {
+    padding: 24,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E9ECEF',
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: 16,
+  },
+  welcomeText: {
+    fontSize: 24,
     fontWeight: 'bold',
-    marginLeft: 10,
+    color: '#2C3E50',
+    textAlign: 'center',
   },
-  buttonIcon: {
-    marginRight: 10,
+  infoContainer: {
+    padding: 16,
+  },
+  infoCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
+  },
+  infoTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#2C3E50',
+    marginBottom: 16,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E9ECEF',
+  },
+  label: {
+    fontSize: 16,
+    color: '#7F8C8D',
+  },
+  value: {
+    fontSize: 16,
+    color: '#2C3E50',
+    fontWeight: '500',
+  },
+  actionContainer: {
+    padding: 16,
+    gap: 12,
+  },
+  actionButton: {
+    backgroundColor: '#4A90E2',
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  logoutButton: {
+    backgroundColor: '#E74C3C',
+    marginTop: 24,
+  },
+  actionButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
 

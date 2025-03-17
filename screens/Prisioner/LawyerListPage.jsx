@@ -5,6 +5,7 @@ import axios from 'axios'
 import { useLawyer } from '../../Context/LawyerContext';
 import { useAuth } from '../../Context/AuthContext';
 import { lawyerListPage } from '../../utils';
+import baseUrl from '../../config';
 
 const LawyerListPage = ({ navigation }) => {
 
@@ -16,7 +17,7 @@ const LawyerListPage = ({ navigation }) => {
   const profilePic = 'https://cdn3.vectorstock.com/i/1000x1000/50/27/lawyer-icon-male-user-person-profile-avatar-vector-20905027.jpg'
   const fetchLawyers = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/v1/lawyer/getAllLawyers`);
+      const response = await axios.get(`${baseUrl}/lawyer/getAllLawyers`);
 
       if (response.status === 200) {
         setLawyers(response.data.Lawyer)

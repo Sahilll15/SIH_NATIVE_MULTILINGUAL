@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useLawyer } from '../../Context/LawyerContext';
 import { useAuth } from '../../Context/AuthContext';
 import { newClientRequest } from '../../utils';
+import baseUrl from '../../config';
 
 const NewClientRequest = ({ navigation }) => {
 
@@ -24,7 +25,7 @@ const NewClientRequest = ({ navigation }) => {
   const fetchCaseFightBylawyer = async () => {
     try {
 
-      const response = await axios.get('http://localhost:8000/api/v1/caseFight/fetchByLawyer', {
+      const response = await axios.get(`${baseUrl}/caseFight/fetchByLawyer`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
