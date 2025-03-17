@@ -93,7 +93,7 @@ const Rehab = ({ navigation }) => {
       <View style={styles.categoryContent}>
         <FontAwesome5 
           name={category.icon} 
-          size={20} 
+          size={22} 
           color={selectedCategory === category.id ? '#FFFFFF' : category.color} 
         />
         <Text 
@@ -110,13 +110,14 @@ const Rehab = ({ navigation }) => {
 
   const ProgramCard = ({ program }) => (
     <TouchableOpacity 
-      style={[styles.programCard, { borderLeftWidth: 4, borderLeftColor: program.color }]}
+      style={styles.programCard}
       onPress={() => navigation.navigate('ProgramDetail', { programId: program.id })}
     >
       <Image
         source={program.imageUrl}
         style={styles.programImage}
       />
+      <View style={[styles.programImageOverlay, { backgroundColor: `${program.color}80` }]} />
       <View style={styles.programContent}>
         <View style={styles.programHeader}>
           <Text style={styles.programTitle}>
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4A90E2',
   },
   title: {
-    fontSize: 32,
+    fontSize: 34,
     fontWeight: 'bold',
     color: '#FFFFFF',
     marginBottom: 8,
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   },
   categoriesContainer: {
     backgroundColor: '#FFFFFF',
-    paddingVertical: 12,
+    paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#E9ECEF',
   },
@@ -217,7 +218,8 @@ const styles = StyleSheet.create({
   },
   categoryButton: {
     marginRight: 12,
-    borderRadius: 20,
+    borderRadius: 25,
+    overflow: 'hidden',
     backgroundColor: '#F8F9FA',
     ...Platform.select({
       ios: {
@@ -227,19 +229,19 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
       },
       android: {
-        elevation: 2,
+        elevation: 3,
       },
     }),
   },
   categoryContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
   },
   categoryText: {
-    marginLeft: 8,
-    fontSize: 15,
+    marginLeft: 10,
+    fontSize: 16,
     fontWeight: '600',
   },
   programsContainer: {
@@ -250,46 +252,54 @@ const styles = StyleSheet.create({
   },
   programCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    marginBottom: 16,
+    borderRadius: 16,
+    marginBottom: 20,
     overflow: 'hidden',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.15,
+        shadowRadius: 12,
       },
       android: {
-        elevation: 3,
+        elevation: 4,
       },
     }),
   },
   programImage: {
     width: '100%',
-    height: 160,
+    height: 180,
     backgroundColor: '#E9ECEF',
   },
+  programImageOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 100,
+    opacity: 0.3,
+  },
   programContent: {
-    padding: 16,
+    padding: 20,
   },
   programHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
   },
   programTitle: {
     flex: 1,
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
     color: '#2C3E50',
     marginRight: 12,
   },
   programBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
   },
   programBadgeText: {
     color: '#FFFFFF',
@@ -297,9 +307,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   programDescription: {
-    fontSize: 14,
+    fontSize: 15,
     color: '#7F8C8D',
-    lineHeight: 20,
+    lineHeight: 22,
     marginBottom: 16,
   },
   programFooter: {
@@ -307,15 +317,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderTopWidth: 1,
     borderTopColor: '#E9ECEF',
-    paddingTop: 12,
+    paddingTop: 16,
   },
   programStat: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   programStatText: {
-    marginLeft: 6,
-    fontSize: 13,
+    marginLeft: 8,
+    fontSize: 14,
     fontWeight: '500',
   },
 });
