@@ -6,8 +6,7 @@ import { useEffect } from 'react';
 import { useLawyer } from '../../Context/LawyerContext';
 import { useAuth } from '../../Context/AuthContext';
 import { lawyerSelect } from '../../utils';
-import axios from 'axios';
-import baseUrl from '../../config';
+import axios from 'axios'
 
 const LawyerDetailsPage = () => {
 
@@ -51,7 +50,7 @@ const LawyerDetailsPage = () => {
   const caseFightSubmit = async () => {
     try {
       const response = await axios.post(
-        `${baseUrl}/caseFight/createCaseFight/${currentLawyer?._id}`,
+        `http://localhost:8000/api/v1/caseFight/createCaseFight/${currentLawyer?._id}`,
         { FirNumber: formatedCaseNumber() },
         {
           headers: {
@@ -108,14 +107,14 @@ const LawyerDetailsPage = () => {
           <Text>{
             selectedLang === 'Hindi' ? lawyerSelect[0].Hindi : lawyerSelect[0].English
 
-          }: {currentLawyer.phone}</Text>
+          }: {currentLawyer?.phone}</Text>
           <Text>{
             selectedLang === 'Hindi' ? lawyerSelect[1].Hindi : lawyerSelect[1].English
-          }: {currentLawyer.LicenseNumber}</Text>
+          }: {currentLawyer?.LicenseNumber}</Text>
           {/* <Text>Approx. Charge: {currentLawyer.approxCharge}</Text> */}
           <Text>{
             selectedLang === 'Hindi' ? lawyerSelect[2].Hindi : lawyerSelect[2].English
-          } : {currentLawyer.address}</Text>
+          } : {currentLawyer?.address}</Text>
         </View>
       </View>
 
@@ -150,7 +149,7 @@ const LawyerDetailsPage = () => {
                     setModalVisible(false);
                   }}
                 >
-                  <Text>Fir - {item.FirNumber}</Text>
+                  <Text>Fir - {item?.FirNumber}</Text>
                 </TouchableOpacity>
               )}
             />

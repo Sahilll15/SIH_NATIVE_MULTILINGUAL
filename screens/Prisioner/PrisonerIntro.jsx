@@ -51,8 +51,8 @@ const PrisonerIntroScreen = ({ navigation }) => {
         />
         <Text style={styles.welcomeText}>
           {selectedLang === 'Hindi'
-            ? `नमस्ते, ${userDetails.name}`
-            : `Welcome, ${userDetails.name}`}
+            ? `नमस्ते, ${userDetails?.name}`
+            : `Welcome, ${userDetails?.name}`}
         </Text>
       </View>
 
@@ -66,25 +66,25 @@ const PrisonerIntroScreen = ({ navigation }) => {
             <Text style={styles.label}>
               {selectedLang === 'Hindi' ? 'नाम:' : 'Name:'}
             </Text>
-            <Text style={styles.value}>{userDetails.name}</Text>
+            <Text style={styles.value}>{userDetails?.name}</Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.label}>
               {selectedLang === 'Hindi' ? 'ईमेल:' : 'Email:'}
             </Text>
-            <Text style={styles.value}>{userDetails.email}</Text>
+            <Text style={styles.value}>{userDetails?.email}</Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.label}>
               {selectedLang === 'Hindi' ? 'फोन:' : 'Phone:'}
             </Text>
-            <Text style={styles.value}>{userDetails.phoneNumber || 'N/A'}</Text>
+            <Text style={styles.value}>{userDetails?.phoneNumber || 'N/A'}</Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.label}>
               {selectedLang === 'Hindi' ? 'आधार:' : 'Aadhar:'}
             </Text>
-            <Text style={styles.value}>{userDetails.addharCard || 'N/A'}</Text>
+            <Text style={styles.value}>{userDetails?.addharCard || 'N/A'}</Text>
           </View>
         </View>
       </View>
@@ -93,7 +93,7 @@ const PrisonerIntroScreen = ({ navigation }) => {
       <View style={styles.actionContainer}>
         <TouchableOpacity
           style={styles.actionButton}
-          onPress={() => navigation.navigate('FindLawyer')}
+          onPress={() => navigation.navigate('LawyerListPage')}
         >
           <Text style={styles.actionButtonText}>
             {selectedLang === 'Hindi'

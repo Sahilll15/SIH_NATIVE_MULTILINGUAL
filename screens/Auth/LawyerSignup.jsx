@@ -60,7 +60,7 @@ const LawyerSignupScreen = ({ navigation }) => {
         throw new Error('Bar Council ID is required');
       }
 
-      const response = await axiosInstance.post('/lawyer/signup', formData);
+      const response = await axiosInstance.post('/lawyer/signupLawyer', formData);
 
       if (response.status === 200) {
         const { token, user } = response.data;

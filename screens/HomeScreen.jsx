@@ -1,44 +1,78 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'; // Assuming you have a library for icons
 
 const HomeScreen = ({ navigation }) => {
-  const handleViewPdf = () => {
-    const pdfUrl = 'https://drive.google.com/file/d/1HatoP0RbhW9pOLLTudZ2omee-Y3WAuyl/view';
-    navigation.navigate('PdfViewer', { pdfUrl });
-  };
+  const cards = [
 
-  const apps = [
-    { title: 'Lawyer', iconName: 'md-person', onPress: () => navigation.navigate('LawyerHomePage') },
-    { title: 'Prisoner', iconName: 'md-person', onPress: () => navigation.navigate('PrisonerIntro') },
-    { title: 'Guard', iconName: 'md-person', onPress: () => navigation.navigate('GuardHomePage') },
-    { title: 'Court', iconName: 'md-person', onPress: () => navigation.navigate('CourtHome') },
-    { title: 'Police', iconName: 'md-person', onPress: () => navigation.navigate('PoliceLand') },
-    { title: 'Chat Screen', iconName: 'md-chatbubbles', onPress: () => navigation.navigate('ChatBot') },
-    { title: 'PDF', iconName: 'md-document', onPress: handleViewPdf },
-    { title: 'Chat Bot', iconName: 'md-chatbubbles', onPress: () => navigation.navigate('Bot') },
-    { title: 'Market Upload', iconName: '', onPress: () => navigation.navigate('ProductUpload') },
+    {
+      id: 'rights',
+      title: 'Know Your Rights',
+      icon: 'https://cdn-icons-png.flaticon.com/512/1642/1642097.png',
+      onPress: () => console.log('Know Your Rights')
+    },
+    {
+      id: 'legal',
+      title: 'Legal Assistance',
+      icon: 'https://cdn-icons-png.flaticon.com/512/3063/3063176.png',
+      onPress: () => console.log('Legal Assistance')
+    },
+    {
+      id: 'market',
+      title: 'Market Place',
+      icon: 'https://cdn-icons-png.flaticon.com/512/3144/3144456.png',
+      onPress: () => console.log('Market Place')
+    },
+    {
+      id: 'rehab',
+      title: 'Rehabilitation',
+      icon: 'https://cdn-icons-png.flaticon.com/512/4207/4207247.png',
+      onPress: () => navigation.navigate('Rehab')
+    },
   ];
 
-  const renderAppButtons = () => {
-    return apps.map((app, index) => (
-      <TouchableOpacity key={index} style={styles.appButton} onPress={app.onPress}>
-        <Icon name={app.iconName} size={30} color="#fff" style={styles.icon} />
-        <Text style={styles.appText}>{app.title}</Text>
-      </TouchableOpacity>
-    ));
+  const renderCards = () => {
+    return (
+      <View style={styles.cardsContainerWrapper}>
+        <View style={styles.headingContainer}>
+          <TouchableOpacity>
+            <Text style={styles.heading}>
+              <Text>
+                +
+              </Text>
+                <Text>
+                  Add Case
+                </Text>
+            </Text>
+          </TouchableOpacity>
+          
+        </View>
+        <View style={styles.cardsContainer}>
+
+        {cards.map((card) => (
+          <TouchableOpacity
+            key={card.id}
+            style={styles.card}
+            onPress={card.onPress}
+          >
+            <Image
+              source={{ uri: card.icon }}
+              style={styles.cardIcon}
+              resizeMode="contain"
+            />
+            <Text style={styles.cardTitle}>{card.title}</Text>
+          </TouchableOpacity>
+        ))}
+        </View>
+       
+      </View>
+    );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Welcome To Home Page</Text>
-      <Text style={{
-        marginBottom: 20,
-        fontSize: 18,
-        textAlign: 'center',
-      }} >This page is just for devlopment</Text>
       <ScrollView style={styles.scrollView}>
-        {renderAppButtons()}
+        {renderCards()}
       </ScrollView>
     </View>
   );
@@ -47,34 +81,65 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f0f0f0',
-    padding: 20,
-  },
-  heading: {
-    marginBottom: 20,
-    fontSize: 18,
-    textAlign: 'center',
+    backgroundColor: '#f5f5f5',
   },
   scrollView: {
-    width: '100%',
+    flex: 1,
   },
-  appButton: {
+  cardsContainer: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 16,
+    justifyContent: 'space-between',
+    display: 'flex',
+  },
+  cardsContainerWrapper: {
+    flex: 1,
+    display: 'flex',
+  },
+  headingContainer:{
+    width:'100%',
+    height:'100%',
+    margin:"10px",
+    padding:"10px",
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'#4A90E2',
+    borderRadius:12
+  },
+  heading:{
+    color:'#ffffff',
+    fontSize:60,
+    fontWeight:'600',
+    textAlign:'center'
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    width: '48%',
     alignItems: 'center',
-    backgroundColor: '#3498db',
-    borderRadius: 8,
-    marginBottom: 20,
-    width: '100%',
-    padding: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  icon: {
-    marginRight: 15,
+  cardIcon: {
+    width: 60,
+    height: 60,
+    marginBottom: 12,
   },
-  appText: {
-    color: '#fff',
-    fontSize: 16,
+  cardTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: '#333',
   },
 });
 

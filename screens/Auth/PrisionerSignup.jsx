@@ -58,7 +58,7 @@ const PrisonerSignupScreen = ({ navigation }) => {
         throw new Error('Invalid Aadhar card number');
       }
 
-      const response = await axiosInstance.post('/prisioners/signup', formData);
+      const response = await axiosInstance.post('/priosioner/signup', formData);
 
       if (response.status === 200) {
         const { token, user } = response.data;

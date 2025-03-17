@@ -18,6 +18,7 @@ const LawyerListPage = ({ navigation }) => {
   const fetchLawyers = async () => {
     try {
       const response = await axios.get(`${baseUrl}/lawyer/getAllLawyers`);
+      console.log(response.data)
 
       if (response.status === 200) {
         setLawyers(response.data.Lawyer)
