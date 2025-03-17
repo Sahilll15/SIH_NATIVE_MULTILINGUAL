@@ -57,118 +57,48 @@ import TestClient from './screens/Lawyer/TestClient';
 import CaseDetails from './screens/Case/CaseDetails';
 import ProfileScreen from './screens/Profile/ProfileScreen';
 import AIChatScreen from './screens/AI/AIChatScreen';
-import LegalDocuments from './screens/Documents/LegalDocuments';
-import DocumentViewer from './screens/Documents/DocumentViewer';
-import MyDocuments from './screens/Documents/MyDocuments';
 
 import PrisonerLawyer from './screens/Guard/PrisonerLawyer';
+import MyDocuments from './screens/Documents/MyDocuments';
+import LegalDocuments from './screens/Documents/LegalDocuments';
 // import ChatBot from './screens/ChatBot/ChatBot';
 const Stack = createNativeStackNavigator();
+// new@gmail.com
+// new
+
+
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <AuthProvider>
-        <FirProvider>
-          <LawyerProvider>
-            <Stack.Navigator
-              initialRouteName="Land"
-              screenOptions={{
-                headerStyle: {
-                  backgroundColor: '#fff',
-                },
-                headerTintColor: '#333',
-                headerTitleStyle: {
-                  fontWeight: 'bold',
-                },
-              }}
-            >
-              {/* Auth Screens */}
-              <Stack.Screen 
-                name="Land" 
-                component={Land}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen 
-                name="Login" 
-                component={LoginScreen}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen 
-                name="LawyerSignup" 
-                component={LawyerSignup}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen 
-                name="SignUpSelection" 
-                component={SignUpSelection}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen 
-                name="PrisionerSignup" 
-                component={PrisionerSignup}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen 
-                name="ClientDocument" 
-                component={ClientDocument}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen 
-                name="LawyerSignupSelection" 
-                component={LawyerSignupSelection}
-                options={{ headerShown: false }}
-              />
+    <AuthProvider>
+      <FirProvider>
+        <LawyerProvider>
 
-              {/* Main App Screens */}
-              <Stack.Screen 
-                name="MainApp" 
-                component={Bottom}
-                options={{ headerShown: false }}
-              />
 
-              {/* Other Screens */}
-              <Stack.Screen name="VideoCall" component={VideoCall} />
-              <Stack.Screen name="CaseDetails" component={CaseDetails} />
-              <Stack.Screen name="CaseDashboard" component={CaseDashboard} />
-              <Stack.Screen name="PrisonerIntro" component={PrisonerIntro} />
-              <Stack.Screen name="LegalAssistance" component={LegalAssistance} />
-              <Stack.Screen name="LawyerListPage" component={LawyerListPage} />
-              <Stack.Screen name="LawyerSelect" component={LawyerDetailsPage} />
-              <Stack.Screen 
-                name="LegalDocuments" 
-                component={LegalDocuments}
-                options={{ 
-                  title: 'Legal Documents',
-                  headerTitleStyle: {
-                    color: '#333',
-                  }
-                }}
-              />
-              <Stack.Screen 
-                name="DocumentViewer" 
-                component={DocumentViewer}
-                options={{ 
-                  title: 'Document Preview',
-                  headerTitleStyle: {
-                    color: '#333',
-                  }
-                }}
-              />
-              <Stack.Screen 
-                name="AddDoc" 
-                component={MyDocuments}
-                options={{ 
-                  title: 'My Documents',
-                  headerTitleStyle: {
-                    color: '#333',
-                  }
-                }}
-              />
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Login">
+              <Stack.Screen name='Land' component={Land} />
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="Rights" component={Rights} />
+              <Stack.Screen name="Bot" component={Bot} />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="LawyerSignup" component={LawyerSignup} />
+              <Stack.Screen name="SignUpSelection" component={SignUpSelection} />
+              {/* <Stack.Screen name="Signup" component={SignupScreen} /> */}
+              <Stack.Screen name="PrisionerSignup" component={PrisionerSignup} />
+              <Stack.Screen name="ClientDocument" component={ClientDocument} />
+              <Stack.Screen name="LawyerSignupSelection" component={LawyerSignupSelection} />
               <Stack.Screen name="LawyerHomePage" component={LawyerHomePage} />
               <Stack.Screen name="NewClientRequest" component={NewClientRequest} />
               <Stack.Screen name="ClientCaseDetail" component={ClientCaseDetail} />
               <Stack.Screen name="CaseDetail" component={CaseDetail} />
+              <Stack.Screen name="CaseDashboard" component={CaseDashboard} />
+              <Stack.Screen name="PrisonerIntro" component={PrisonerIntro} />
+              <Stack.Screen name="LegalAssistance" component={LegalAssistance} />
+              <Stack.Screen name="LegalDocuments" component={LegalDocuments} />
+              <Stack.Screen name="AddDoc" component={MyDocuments} />
+              <Stack.Screen name="LawyerListPage" component={LawyerListPage} />
+              <Stack.Screen name="LawyerSelect" component={LawyerDetailsPage} />
               <Stack.Screen name="LandingPage" component={LandingPage} />
               <Stack.Screen name="ExistingClient" component={ExistingClient} />
               <Stack.Screen name="GuardHomePage" component={GuardHomePage} />
@@ -191,13 +121,36 @@ export default function App() {
               <Stack.Screen name="LawyerConnect" component={LawyerConnect} />
               <Stack.Screen name="BailList" component={BailList} />
               <Stack.Screen name="BailDetail" component={BailDetail} />
-              <Stack.Screen name="AIChatScreen" component={AIChatScreen} />
-              <Stack.Screen name="Profile" component={ProfileScreen} />
+              <Stack.Screen name="VideoCall" component={VideoCall} />
+              <Stack.Screen name="CaseDetails" component={CaseDetails} />
+              <Stack.Screen 
+                name="AIChatScreen" 
+                component={AIChatScreen}
+                options={{ 
+                  title: 'AI Legal Assistant',
+                  headerStyle: {
+                    backgroundColor: '#4A90E2',
+                  },
+                  headerTintColor: '#fff',
+                }}
+              />
+              <Stack.Screen 
+                name="Profile" 
+                component={ProfileScreen}
+                options={{ 
+                  title: 'My Profile',
+                  headerStyle: {
+                    backgroundColor: '#f4511e',
+                  },
+                  headerTintColor: '#fff',
+                }}
+              />
             </Stack.Navigator>
+            <Bottom />
             <Toast ref={(ref) => Toast.setRef(ref)} />
-          </LawyerProvider>
-        </FirProvider>
-      </AuthProvider>
-    </NavigationContainer>
+          </NavigationContainer>
+        </LawyerProvider>
+      </FirProvider>
+    </AuthProvider>
   );
 }

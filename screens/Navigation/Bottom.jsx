@@ -1,121 +1,151 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import HomeScreen from '../HomeScreen';
-import ProfileScreen from '../Profile/ProfileScreen';
-import AIChatScreen from '../AI/AIChatScreen';
-import MyDocuments from '../Documents/MyDocuments';
+import { useNavigation } from '@react-navigation/native';
 import { BlurView } from 'expo-blur';
 
-const Tab = createBottomTabNavigator();
+const { width } = Dimensions.get('window');
 
-const CustomTabBar = ({ state, descriptors, navigation }) => {
+const Bottom = () => {
+  const [selectedTab, setSelectedTab] = useState('home');
+  const navigation = useNavigation();
+
+  const handleTabPress = (tabName, screenName) => {
+    setSelectedTab(tabName);
+    navigation.navigate(screenName);
+  };
+
   return (
-    <BlurView intensity={100} style={styles.tabBarContainer}>
-      {state.routes.map((route, index) => {
-        const { options } = descriptors[route.key];
-        const isFocused = state.index === index;
+    <BlurView intensity={80} tint="light" style={styles.container}>
+      <View style={styles.bottomContainer}>
+        <TouchableOpacity
+          style={[styles.tab, selectedTab === 'home' && styles.selectedTab]}
+          onPress={() => handleTabPress('home', 'Home')}
+        >
+          <View style={styles.tabContent}>
+            <Icon 
+              name="home-variant" 
+              size={24} 
+              color={selectedTab === 'home' ? '#4A90E2' : '#8E8E93'} 
+            />
+            <Text style={[
+              styles.tabText, 
+              selectedTab === 'home' && styles.selectedTabText
+            ]}>Home</Text>
+            {selectedTab === 'home' && <View style={styles.indicator} />}
+          </View>
+        </TouchableOpacity>
 
-        const getIcon = () => {
-          switch (route.name) {
-            case 'Home':
-              return 'home-variant';
-            case 'Documents':
-              return 'file-document-multiple';
-            case 'Chat':
-              return 'chat-processing';
-            case 'Profile':
-              return 'account-circle';
-            default:
-              return 'circle';
-          }
-        };
+        <TouchableOpacity
+          style={[styles.tab, selectedTab === 'documents' && styles.selectedTab]}
+          onPress={() => handleTabPress('documents', 'AddDoc')}
+        >
+          <View style={styles.tabContent}>
+            <Icon 
+              name="file-document-multiple" 
+              size={24} 
+              color={selectedTab === 'documents' ? '#4A90E2' : '#8E8E93'} 
+            />
+            <Text style={[
+              styles.tabText, 
+              selectedTab === 'documents' && styles.selectedTabText
+            ]}>Docs</Text>
+            {selectedTab === 'documents' && <View style={styles.indicator} />}
+          </View>
+        </TouchableOpacity>
 
-        return (
-          <TouchableOpacity
-            key={index}
-            style={[styles.tabItem, isFocused && styles.tabItemFocused]}
-            onPress={() => navigation.navigate(route.name)}
-          >
-            <View style={styles.tabContent}>
-              <Icon
-                name={getIcon()}
-                size={24}
-                color={isFocused ? '#4A90E2' : '#8E8E93'}
-                style={styles.tabIcon}
-              />
-              <Text style={[
-                styles.tabLabel,
-                { color: isFocused ? '#4A90E2' : '#8E8E93' }
-              ]}>
-                {route.name}
-              </Text>
-              {isFocused && <View style={styles.activeDot} />}
-            </View>
-          </TouchableOpacity>
-        );
-      })}
+        <TouchableOpacity
+          style={[styles.tab, selectedTab === 'chat' && styles.selectedTab]}
+          onPress={() => handleTabPress('chat', 'AIChatScreen')}
+        >
+          <View style={styles.tabContent}>
+            <Icon 
+              name="chat-processing" 
+              size={24} 
+              color={selectedTab === 'chat' ? '#4A90E2' : '#8E8E93'} 
+            />
+            <Text style={[
+              styles.tabText, 
+              selectedTab === 'chat' && styles.selectedTabText
+            ]}>Chat</Text>
+            {selectedTab === 'chat' && <View style={styles.indicator} />}
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.tab, selectedTab === 'profile' && styles.selectedTab]}
+          onPress={() => handleTabPress('profile', 'Profile')}
+        >
+          <View style={styles.tabContent}>
+            <Icon 
+              name="account-circle" 
+              size={24} 
+              color={selectedTab === 'profile' ? '#4A90E2' : '#8E8E93'} 
+            />
+            <Text style={[
+              styles.tabText, 
+              selectedTab === 'profile' && styles.selectedTabText
+            ]}>Profile</Text>
+            {selectedTab === 'profile' && <View style={styles.indicator} />}
+          </View>
+        </TouchableOpacity>
+      </View>
     </BlurView>
   );
 };
 
-const Bottom = () => {
-  return (
-    <Tab.Navigator
-      tabBar={props => <CustomTabBar {...props} />}
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Documents" component={MyDocuments} />
-      <Tab.Screen name="Chat" component={AIChatScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-    </Tab.Navigator>
-  );
-};
-
 const styles = StyleSheet.create({
-  tabBarContainer: {
+  container: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  bottomContainer: {
     flexDirection: 'row',
-    height: Platform.OS === 'ios' ? 84 : 60,
-    paddingBottom: Platform.OS === 'ios' ? 20 : 0,
-    backgroundColor: Platform.OS === 'ios' ? 'rgba(255, 255, 255, 0.9)' : '#fff',
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0, 0, 0, 0.1)',
-    elevation: 8,
+    backgroundColor: Platform.OS === 'ios' ? 'transparent' : 'rgba(255, 255, 255, 0.95)',
+    paddingBottom: Platform.OS === 'ios' ? 24 : 12,
+    paddingTop: 12,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: -2,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 3,
+    shadowRadius: 8,
+    elevation: 8,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 0, 0, 0.05)',
   },
-  tabItem: {
+  tab: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 8,
   },
-  tabItemFocused: {
+  selectedTab: {
     backgroundColor: 'rgba(74, 144, 226, 0.1)',
     borderRadius: 16,
-    margin: 4,
+    marginHorizontal: 4,
   },
   tabContent: {
     alignItems: 'center',
+    justifyContent: 'center',
     position: 'relative',
   },
-  tabIcon: {
-    marginBottom: 4,
-  },
-  tabLabel: {
+  tabText: {
     fontSize: 12,
+    marginTop: 4,
+    color: '#8E8E93',
+    fontWeight: '500',
+  },
+  selectedTabText: {
+    color: '#4A90E2',
     fontWeight: '600',
   },
-  activeDot: {
+  indicator: {
     position: 'absolute',
     bottom: -12,
     width: 4,
