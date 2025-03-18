@@ -64,6 +64,8 @@ import LegalDocuments from './screens/Documents/LegalDocuments';
 import MyCases from './screens/Case/MyCasesScreen';
 // import ChatBot from './screens/ChatBot/ChatBot';
 import DocumentViewer from './screens/Documents/DocumentViewer';
+import LawyerList from './screens/Lawyer/LawyerList';
+import LawyerChat from './screens/Lawyer/LawyerChat';
 const Stack = createNativeStackNavigator();
 // new@gmail.com
 // new
@@ -122,6 +124,8 @@ export default function App() {
               <Stack.Screen name="YourCaseDescription" component={YourCaseDescription} />
               <Stack.Screen name="Rehab" component={Rehab} />
               <Stack.Screen name="DocumentViewer" component={DocumentViewer} />
+              <Stack.Screen name="LawyerList" component={LawyerList} options={{ title: 'Lawyer Directory' }} />
+              <Stack.Screen name="LawyerChat" component={LawyerChat} options={{ title: 'Lawyer Chat' }} />
               {/* <Stack.Screen name="YourApplication" component={YourApplication} /> */}
               {/* <Stack.Screen name="LawyerConnect" component={LawyerConnect} /> */}
               {/* <Stack.Screen name="BailList" component={BailList} />

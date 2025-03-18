@@ -202,7 +202,7 @@ const MyDocuments = ({ navigation }) => {
   const renderDocumentItem = ({ item }) => (
     <TouchableOpacity
       style={styles.documentCard}
-      onPress={() => navigation.navigate('DocumentViewer', { document: item })}
+      onPress={() => navigation.navigate('DocumentViewer', { document: item, documentURL: item.document })}
     >
       <View style={styles.cardHeader}>
         <View style={styles.iconContainer}>
