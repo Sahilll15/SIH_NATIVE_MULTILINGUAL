@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
 import Toast from 'react-native-toast-message';
 import LoginScreen from './screens/Auth/LoginScreen';
@@ -64,28 +65,54 @@ import LegalDocuments from './screens/Documents/LegalDocuments';
 import MyCases from './screens/Case/MyCasesScreen';
 // import ChatBot from './screens/ChatBot/ChatBot';
 import DocumentViewer from './screens/Documents/DocumentViewer';
+
 const Stack = createNativeStackNavigator();
-// new@gmail.com
-// new
 
+const NavigationStateWrapper = ({ children }) => {
+  const navigation = useNavigation();
+  const [state, setState] = React.useState(navigation.getState());
 
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('state', (e) => {
+      setState(e.data.state);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  return children(state);
+};
 
 export default function App() {
   return (
     <AuthProvider>
       <FirProvider>
         <LawyerProvider>
-
-
           <NavigationContainer>
-            <Stack.Navigator initialRouteName="Login">
+            <Stack.Navigator 
+              initialRouteName="Login"
+              screenOptions={({ route }) => ({
+                headerShown: true
+              })}
+            >
+              <Stack.Screen 
+                name="Home" 
+                component={HomeScreen}
+                options={{
+                  headerShown: true
+                }}
+              />
               <Stack.Screen name="MyCases" component={MyCases} />
-              {/* <Stack.Screen name="CaseDetails" component={CaseDetails} /> */}
               <Stack.Screen name='Land' component={Land} />
-              <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Rights" component={Rights} />
               <Stack.Screen name="Bot" component={Bot} />
-              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen 
+                name="Login" 
+                component={LoginScreen}
+                options={{
+                  headerShown: false
+                }}
+              />
               <Stack.Screen name="LawyerSignup" component={LawyerSignup} />
               <Stack.Screen name="SignUpSelection" component={SignUpSelection} />
               {/* <Stack.Screen name="Signup" component={SignupScreen} /> */}
@@ -151,7 +178,13 @@ export default function App() {
                 }}
               />
             </Stack.Navigator>
-            <Bottom />
+            <NavigationStateWrapper>
+              {state => {
+                const routeName = state?.routes[state.index]?.name;
+                const showBottomBar = ['Home', 'AddDoc', 'Profile'].includes(routeName);
+                return showBottomBar ? <Bottom /> : null;
+              }}
+            </NavigationStateWrapper>
             <Toast ref={(ref) => Toast.setRef(ref)} />
           </NavigationContainer>
         </LawyerProvider>

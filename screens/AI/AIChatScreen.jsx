@@ -283,7 +283,7 @@ Remember: Your responses should be concise, accurate, and focused on helping use
   );
 
   return (
-    <KeyboardAvoidingView
+    <KeyboardAvoidingView 
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
@@ -302,17 +302,17 @@ Remember: Your responses should be concise, accurate, and focused on helping use
 
       <FlatList
         ref={flatListRef}
+        style={styles.messagesList}
         data={messages}
+        keyExtractor={(item) => item.id}
         renderItem={renderMessage}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.messagesList}
         onContentSizeChange={() => flatListRef.current?.scrollToEnd()}
         onLayout={() => flatListRef.current?.scrollToEnd()}
       />
 
       {isLoading && (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color="#4A90E2" />
+          <ActivityIndicator color="#4A90E2" />
           <Text style={styles.loadingText}>{uiText[selectedLanguage].thinking}</Text>
         </View>
       )}
@@ -320,64 +320,60 @@ Remember: Your responses should be concise, accurate, and focused on helping use
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
+          placeholder={uiText[selectedLanguage].placeholder}
           value={inputText}
           onChangeText={setInputText}
-          placeholder={uiText[selectedLanguage].placeholder}
           multiline
-          maxLength={500}
-          editable={!isLoading}
+          maxLength={1000}
         />
         <TouchableOpacity
-          style={[
-            styles.sendButton,
-            (!inputText.trim() || isLoading) && styles.sendButtonDisabled
-          ]}
+          style={[styles.sendButton, !inputText.trim() && styles.sendButtonDisabled]}
           onPress={handleSend}
           disabled={!inputText.trim() || isLoading}
         >
-          <Icon 
-            name="paper-plane" 
-            size={20} 
-            color={(!inputText.trim() || isLoading) ? '#A0A0A0' : '#fff'} 
-          />
+          <Icon name="paper-plane" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
 
       <Modal
         visible={showLanguageModal}
-        transparent={true}
+        transparent
         animationType="slide"
         onRequestClose={() => setShowLanguageModal(false)}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{uiText[selectedLanguage].selectLanguage}</Text>
+              <Text style={styles.modalTitle}>
+                {uiText[selectedLanguage].selectLanguage}
+              </Text>
               <TouchableOpacity
                 style={styles.closeButton}
                 onPress={() => setShowLanguageModal(false)}
               >
-                <Icon name="times" size={20} color="#666" />
+                <Icon name="times" size={20} color="#333" />
               </TouchableOpacity>
             </View>
             <ScrollView>
-              {languages.map((language) => (
+              {languages.map((lang) => (
                 <TouchableOpacity
-                  key={language.code}
+                  key={lang.code}
                   style={[
                     styles.languageItem,
-                    selectedLanguage === language.code && styles.selectedLanguageItem
+                    selectedLanguage === lang.code && styles.selectedLanguageItem,
                   ]}
                   onPress={() => {
-                    setSelectedLanguage(language.code);
+                    setSelectedLanguage(lang.code);
                     setShowLanguageModal(false);
                   }}
                 >
-                  <Text style={[
-                    styles.languageText,
-                    selectedLanguage === language.code && styles.selectedLanguageText
-                  ]}>
-                    {language.native} ({language.name})
+                  <Text
+                    style={[
+                      styles.languageText,
+                      selectedLanguage === lang.code && styles.selectedLanguageText,
+                    ]}
+                  >
+                    {`${lang.native} (${lang.name})`}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -393,6 +389,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
+    paddingBottom: Platform.OS === 'ios' ? 34 : 16, 
   },
   header: {
     padding: 10,
@@ -467,6 +464,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#E0E0E0',
     alignItems: 'flex-end',
+    paddingBottom: Platform.OS === 'ios' ? 25 : 15, 
+    marginBottom: Platform.OS === 'android' ? 10 : 0, 
   },
   input: {
     flex: 1,

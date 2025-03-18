@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, Platform } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const CustomButton = ({ 
   onPress, 
@@ -59,6 +60,9 @@ const CustomButton = ({
       case 'outline':
         textStyleArray.push(styles.textOutline);
         break;
+      case 'secondary':
+        textStyleArray.push(styles.textSecondary);
+        break;
       default:
         textStyleArray.push(styles.textPrimary);
     }
@@ -88,6 +92,30 @@ const CustomButton = ({
     return textStyleArray;
   };
 
+  if (variant === 'primary' && !disabled) {
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        disabled={disabled || loading}
+        activeOpacity={0.8}
+        style={[styles.buttonWrapper, style]}
+      >
+        <LinearGradient
+          colors={['#4A90E2', '#5C9EE6']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={getButtonStyle()}
+        >
+          {loading ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <Text style={getTextStyle()}>{title}</Text>
+          )}
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  }
+
   return (
     <TouchableOpacity
       style={getButtonStyle()}
@@ -105,10 +133,9 @@ const CustomButton = ({
 };
 
 const styles = StyleSheet.create({
-  button: {
+  buttonWrapper: {
     borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
+    overflow: 'hidden',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -121,39 +148,53 @@ const styles = StyleSheet.create({
       },
     }),
   },
+  button: {
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 48,
+    overflow: 'hidden',
+  },
   buttonPrimary: {
     backgroundColor: '#4A90E2',
   },
   buttonSecondary: {
-    backgroundColor: '#34495E',
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
   buttonOutline: {
     backgroundColor: 'transparent',
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#4A90E2',
   },
   buttonSmall: {
-    paddingVertical: 8,
     paddingHorizontal: 16,
+    height: 40,
   },
   buttonMedium: {
-    paddingVertical: 12,
     paddingHorizontal: 24,
+    height: 48,
   },
   buttonLarge: {
-    paddingVertical: 16,
     paddingHorizontal: 32,
+    height: 56,
   },
   buttonDisabled: {
-    backgroundColor: '#B8C5D0',
-    borderColor: '#B8C5D0',
+    backgroundColor: '#E2E8F0',
+    borderColor: 'transparent',
   },
   text: {
+    fontSize: 16,
     fontWeight: '600',
     textAlign: 'center',
+    includeFontPadding: false,
   },
   textPrimary: {
     color: '#FFFFFF',
+  },
+  textSecondary: {
+    color: '#2C3E50',
   },
   textOutline: {
     color: '#4A90E2',
@@ -168,7 +209,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   textDisabled: {
-    color: '#FFFFFF',
+    color: '#95A5A6',
   },
 });
 

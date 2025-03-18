@@ -21,8 +21,8 @@ const CustomInput = ({
       {iconName && (
         <Icon 
           name={iconName} 
-          size={20} 
-          color={editable ? '#7F8C8D' : '#B8C5D0'} 
+          size={22} 
+          color={editable ? '#4A90E2' : '#B8C5D0'} 
           style={styles.icon} 
         />
       )}
@@ -31,17 +31,18 @@ const CustomInput = ({
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
-        placeholderTextColor={editable ? '#7F8C8D' : '#B8C5D0'}
+        placeholderTextColor={editable ? '#95A5A6' : '#B8C5D0'}
         secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}
         autoCapitalize={autoCapitalize}
         editable={editable}
+        selectionColor="#4A90E2"
       />
       {rightIcon && (
         <Icon
           name={rightIcon}
-          size={20}
-          color={editable ? '#7F8C8D' : '#B8C5D0'}
+          size={22}
+          color={editable ? '#4A90E2' : '#B8C5D0'}
           style={styles.rightIcon}
           onPress={onRightIconPress}
         />
@@ -54,24 +55,28 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F8FAFC',
     borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
     paddingHorizontal: 16,
     marginBottom: 16,
+    height: 56,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
+        shadowOpacity: 0.05,
+        shadowRadius: 3,
       },
       android: {
-        elevation: 3,
+        elevation: 2,
       },
     }),
   },
   disabled: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#F1F5F9',
+    borderColor: '#E2E8F0',
   },
   icon: {
     marginRight: 12,
@@ -79,8 +84,12 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    paddingVertical: 12,
     color: '#2C3E50',
+    includeFontPadding: false,
+    padding: 0,
+    margin: 0,
+    height: '100%',
+    textAlignVertical: 'center',
   },
   rightIcon: {
     marginLeft: 12,
