@@ -1,10 +1,41 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, SafeAreaView, StatusBar, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, SafeAreaView, StatusBar, Platform, ActivityIndicator, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import AddCaseModal from './Case/AddCaseModal';
+import { useAuth } from '../Context/AuthContext';
+import axiosInstance from '../utils/axiosInstance';
 
 const HomeScreen = ({ navigation }) => {
+  const { userDetails, logout } = useAuth();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [caseCount, setCaseCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
+  // Fetch user's case count
+  useEffect(() => {
+    const fetchCaseCount = async () => {
+      if (!userDetails?._id) return;
+      
+      try {
+        setLoading(true);
+        
+        // Use the existing API endpoint
+        const response = await axiosInstance.get(`/priosioner/cases/${userDetails._id}`);
+        
+        if (response.data.success) {
+          setCaseCount(response.data.cases.length);
+        }
+      } catch (err) {
+        console.error('Error fetching case count:', err);
+        // Don't set error state to avoid showing error UI
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchCaseCount();
+  }, [userDetails]);
 
   const cards = [
     {
@@ -42,7 +73,6 @@ const HomeScreen = ({ navigation }) => {
       color: '#45B7D1',
       onPress: () => navigation.navigate('LawyerList')
     },
-    
     {
       id: 'My Documents',
       title: 'My Documents',
@@ -50,40 +80,89 @@ const HomeScreen = ({ navigation }) => {
       color: '#FF6B6B',
       onPress: () => navigation.navigate('AddDoc')
     },
-    {
-      id: 'myCases',
-      title: 'My Cases',
-      icon: 'https://cdn-icons-png.flaticon.com/512/3063/3063711.png',
-      color: '#96CEB4',
-      onPress: () => navigation.navigate('MyCases')
-    },
   ];
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigation.replace('Login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      Alert.alert('Error', 'Failed to logout. Please try again.');
+    }
+  };
 
   const renderHeader = () => (
     <View style={styles.header}>
-      <Text style={styles.headerText}>Welcome Back!</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-        <Icon name="user-circle" size={30} color="#333" />
-      </TouchableOpacity>
+      <View>
+        <Text style={styles.welcomeText}>
+          Welcome {userDetails?.name ? `${userDetails.name.split(' ')[0]}` : 'Back'}!
+        </Text>
+        <Text style={styles.headerText}>Access Legal Help, Anytime, Anywhere</Text>
+      </View>
+      <View style={styles.headerButtons}>
+        <TouchableOpacity 
+          style={styles.logoutButton}
+          onPress={handleLogout}
+        >
+          <Icon name="sign-out-alt" size={20} color="#fff" />
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.profileButton}
+          onPress={() => navigation.navigate('Profile')}
+        >
+          {userDetails?.profileImage ? (
+            <Image 
+              source={{ uri: userDetails.profileImage }} 
+              style={styles.profileImage} 
+              defaultSource={{ uri: 'https://ui-avatars.com/api/?name=User&background=4A90E2&color=fff' }}
+            />
+          ) : (
+            <Icon name="user-circle" size={30} color="#fff" />
+          )}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
-  const renderAddCase = () => (
-    <TouchableOpacity 
-      style={styles.addCaseContainer} 
-      onPress={() => setIsModalVisible(true)}
-    >
-      <View style={styles.addCaseContent}>
-        <View style={styles.addCaseIconContainer}>
-          <Icon name="plus-circle" size={32} color="#FFFFFF" />
+  const renderCaseButtons = () => (
+    <View style={styles.caseButtonsRow}>
+      <TouchableOpacity 
+        style={[styles.caseButton, styles.addCaseButton]} 
+        onPress={() => setIsModalVisible(true)}
+      >
+        <View style={styles.caseButtonContent}>
+          <View style={styles.caseIconContainer}>
+            <Icon name="plus-circle" size={25} color="#FFFFFF" />
+          </View>
+          <View style={styles.caseTextContainer}>
+            <Text style={styles.caseButtonTitle}>Add Case</Text>
+            <Text style={styles.caseButtonSubtitle}>New proceeding</Text>
+          </View>
         </View>
-        <View style={styles.addCaseTextContainer}>
-          <Text style={styles.addCaseTitle}>Add Case</Text>
-          <Text style={styles.addCaseSubtitle}>Start a new legal proceeding</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity 
+        style={[styles.caseButton, styles.myCasesButton]}
+        onPress={() => navigation.navigate('MyCases')}
+      >
+        <View style={styles.caseButtonContent}>
+          <View style={[styles.caseIconContainer, styles.myCasesIcon]}>
+            <Icon name="briefcase" size={25} color="#FFFFFF" />
+          </View>
+          <View style={styles.caseTextContainer}>
+            <Text style={styles.caseButtonTitle}>My Cases</Text>
+            {loading ? (
+              <ActivityIndicator size="small" color="#FFFFFF" style={{marginTop: 2}} />
+            ) : (
+              <Text style={styles.caseButtonSubtitle}>
+                {caseCount > 0 ? `${caseCount} active case${caseCount !== 1 ? 's' : ''}` : 'View all cases'}
+              </Text>
+            )}
+          </View>
         </View>
-        <Icon name="chevron-right" size={24} color="#FFFFFF" style={styles.addCaseArrow} />
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
   );
 
   const renderCards = () => (
@@ -114,7 +193,9 @@ const HomeScreen = ({ navigation }) => {
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           {renderHeader()}
-          {renderAddCase()}
+          {renderCaseButtons()}
+          
+          <Text style={styles.sectionTitle}>Legal Resources</Text>
           {renderCards()}
         </View>
       </ScrollView>
@@ -145,52 +226,113 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 24,
     marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-  },
-  headerText: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 4,
-  },
-  addCaseContainer: {
     backgroundColor: '#4A90E2',
-    borderRadius: 16,
-    marginBottom: 24,
-    shadowColor: '#4A90E2',
+    marginHorizontal: -16,
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 3,
     },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
     elevation: 6,
   },
-  addCaseContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-  },
-  addCaseIconContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 12,
-    padding: 12,
-  },
-  addCaseTextContainer: {
-    flex: 1,
-    marginLeft: 16,
-  },
-  addCaseTitle: {
+  welcomeText: {
+    fontSize: 22,
+    fontWeight: 'bold',
     color: '#FFFFFF',
-    fontSize: 20,
+    marginBottom: 6,
+  },
+  headerText: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.9)',
+  },
+  profileButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  logoutButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  profileImage: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+  },
+  caseButtonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 24,
+    marginTop: 8,
+  },
+  caseButton: {
+    flex: 0.48,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 3.84,
+    elevation: 5,
+    overflow: 'hidden',
+  },
+  addCaseButton: {
+    backgroundColor: '#4A90E2',
+  },
+  myCasesButton: {
+    backgroundColor: '#6C63FF',
+  },
+  caseButtonContent: {
+    padding: 16,
+  },
+  caseIconContainer: {
+    width: 45,
+    height: 45,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  myCasesIcon: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  caseTextContainer: {
+    marginTop: 4,
+  },
+  caseButtonTitle: {
+    color: '#FFFFFF',
+    fontSize: 18,
     fontWeight: '700',
     marginBottom: 4,
   },
-  addCaseSubtitle: {
-    color: '#FFFFFF',
-    opacity: 0.9,
-    fontSize: 14,
+  caseButtonSubtitle: {
+    color: 'rgba(255, 255, 255, 0.85)',
+    fontSize: 13,
   },
-  addCaseArrow: {
-    marginLeft: 12,
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#2D3748',
+    marginBottom: 16,
+    marginTop: 8,
   },
   cardsContainer: {
     flexDirection: 'row',
