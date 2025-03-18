@@ -10,136 +10,164 @@ import {
   Platform,
   Image,
   Dimensions,
+  Linking,
+  Alert,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useAuth } from '../../Context/AuthContext';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const { width } = Dimensions.get('window');
 
+const openYoutubeVideo = async (url) => {
+  try {
+    const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(
+        "Error",
+        "Cannot open this video"
+      );
+    }
+  } catch (error) {
+    Alert.alert(
+      "Error",
+      "Failed to open video"
+    );
+  }
+};
+
 const Rehab = ({ navigation }) => {
   const { selectedLang } = useAuth();
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState(0);
+
+  const rehab = [
+    { English: 'Meditation', Hindi: 'ध्यान', icon: 'peace', color: '#FF6B6B' },
+    { English: 'Skills', Hindi: 'कौशल', icon: 'tools', color: '#4ECDC4' },
+    { English: 'Motivation', Hindi: 'प्रेरणा', icon: 'fire', color: '#FFD93D' },
+    { English: 'Education', Hindi: 'शिक्षा', icon: 'graduation-cap', color: '#6C5CE7' },
+  ];
 
   const categories = [
-    { id: 'all', icon: 'th-large', nameEn: 'All', nameHi: 'सभी', color: '#4A90E2' },
-    { id: 'education', icon: 'graduation-cap', nameEn: 'Education', nameHi: 'शिक्षा', color: '#2ECC71' },
-    { id: 'skills', icon: 'tools', nameEn: 'Skills', nameHi: 'कौशल', color: '#E74C3C' },
-    { id: 'wellness', icon: 'heart', nameEn: 'Wellness', nameHi: 'कल्याण', color: '#9B59B6' },
+    {
+      name: selectedLang === 'Hindi' ? rehab[0].Hindi : rehab[0].English,
+      icon: rehab[0].icon,
+      color: rehab[0].color,
+      videos: [
+        {
+          videoUrl: 'https://www.youtube.com/watch?v=nsGbtrl1WkU&ab_channel=Headspace',
+          imageSource: require('../../assets/Meditation.jpeg'),
+          title: selectedLang === 'Hindi' ? 'ध्यान का परिचय' : 'Introduction to Meditation',
+          duration: '10:00',
+        },
+        {
+          videoUrl: 'https://www.youtube.com/watch?v=nsGbtrl1WkU&list=PLW8o3_GFoCBOexWd8WK-hAjReSYifh1nx',
+          imageSource: require('../../assets/Meditation.jpeg'),
+          title: selectedLang === 'Hindi' ? 'शांति ध्यान' : 'Peace Meditation',
+          duration: '15:00',
+        },
+      ],
+    },
+    {
+      name: selectedLang === 'Hindi' ? rehab[1].Hindi : rehab[1].English,
+      icon: rehab[1].icon,
+      color: rehab[1].color,
+      videos: [
+        {
+          videoUrl: 'https://www.youtube.com/watch?v=zUNrUqMwUkY&ab_channel=JoshO%27Caoimh',
+          imageSource: require('../../assets/skills.jpeg'),
+          title: selectedLang === 'Hindi' ? 'बढ़ई कौशल' : 'Carpentry Skills',
+          duration: '20:00',
+        },
+        {
+          videoUrl: 'https://www.youtube.com/watch?v=zUNrUqMwUkY',
+          imageSource: require('../../assets/skills.jpeg'),
+          title: selectedLang === 'Hindi' ? 'बुनियादी कौशल' : 'Basic Skills',
+          duration: '25:00',
+        },
+      ],
+    },
+    {
+      name: selectedLang === 'Hindi' ? rehab[2].Hindi : rehab[2].English,
+      icon: rehab[2].icon,
+      color: rehab[2].color,
+      videos: [
+        {
+          videoUrl: 'https://www.youtube.com/watch?v=domCDwp5u3I&ab_channel=EsyID',
+          imageSource: require('../../assets/motivation.jpeg'),
+          title: selectedLang === 'Hindi' ? 'प्रेरक कहानी' : 'Motivational Story',
+          duration: '12:00',
+        },
+        {
+          videoUrl: 'https://www.youtube.com/watch?v=domCDwp5u3I',
+          imageSource: require('../../assets/motivation.jpeg'),
+          title: selectedLang === 'Hindi' ? 'सफलता की कहानी' : 'Success Story',
+          duration: '18:00',
+        },
+      ],
+    },
+    {
+      name: selectedLang === 'Hindi' ? rehab[3].Hindi : rehab[3].English,
+      icon: rehab[3].icon,
+      color: rehab[3].color,
+      videos: [
+        {
+          videoUrl: 'https://youtu.be/zUNrUqMwUkY?si=r0T8zE5w1zSGGGm2',
+          imageSource: require('../../assets/education.jpeg'),
+          title: selectedLang === 'Hindi' ? 'शिक्षा का महत्व' : 'Importance of Education',
+          duration: '15:00',
+        },
+      ],
+    },
   ];
 
-  const programs = [
-    {
-      id: 1,
-      category: 'education',
-      imageUrl: require('../../assets/education.jpeg'),
-      titleEn: 'Basic Education Program',
-      titleHi: 'बुनियादी शिक्षा कार्यक्रम',
-      descEn: 'Complete your basic education with our certified teachers',
-      descHi: 'हमारे प्रमाणित शिक्षकों के साथ अपनी बुनियादी शिक्षा पूरी करें',
-      duration: '6 months',
-      enrolled: 45,
-      color: '#2ECC71',
-    },
-    {
-      id: 2,
-      category: 'skills',
-      imageUrl: require('../../assets/skills.jpeg'),
-      titleEn: 'Carpentry Workshop',
-      titleHi: 'बढ़ई कार्यशाला',
-      descEn: 'Learn professional carpentry skills from experts',
-      descHi: 'विशेषज्ञों से पेशेवर बढ़ई कौशल सीखें',
-      duration: '3 months',
-      enrolled: 30,
-      color: '#E74C3C',
-    },
-    {
-      id: 3,
-      category: 'wellness',
-      imageUrl: require('../../assets/Meditation.jpeg'),
-      titleEn: 'Yoga & Meditation',
-      titleHi: 'योग और ध्यान',
-      descEn: 'Improve mental and physical well-being through yoga',
-      descHi: 'योग के माध्यम से मानसिक और शारीरिक स्वास्थ्य में सुधार करें',
-      duration: 'Ongoing',
-      enrolled: 60,
-      color: '#9B59B6',
-    },
-    {
-      id: 4,
-      category: 'skills',
-      imageUrl: require('../../assets/skills.jpeg'),
-      titleEn: 'Computer Skills',
-      titleHi: 'कंप्यूटर कौशल',
-      descEn: 'Learn basic computer operations and typing',
-      descHi: 'बुनियादी कंप्यूटर संचालन और टाइपिंग सीखें',
-      duration: '2 months',
-      enrolled: 50,
-      color: '#E74C3C',
-    },
-  ];
-
-  const filteredPrograms = selectedCategory === 'all' 
-    ? programs 
-    : programs.filter(program => program.category === selectedCategory);
-
-  const CategoryButton = ({ category }) => (
+  const CategoryButton = ({ category, index }) => (
     <TouchableOpacity
       style={[
         styles.categoryButton,
-        selectedCategory === category.id && { backgroundColor: category.color },
+        selectedCategory === index && { backgroundColor: category.color },
       ]}
-      onPress={() => setSelectedCategory(category.id)}
+      onPress={() => setSelectedCategory(index)}
     >
       <View style={styles.categoryContent}>
         <FontAwesome5 
           name={category.icon} 
-          size={22} 
-          color={selectedCategory === category.id ? '#FFFFFF' : category.color} 
+          size={24} 
+          color={selectedCategory === index ? '#FFFFFF' : category.color} 
         />
-        <Text 
-          style={[
-            styles.categoryText,
-            selectedCategory === category.id ? { color: '#FFFFFF' } : { color: category.color },
-          ]}
-        >
-          {selectedLang === 'Hindi' ? category.nameHi : category.nameEn}
+        <Text style={[
+          styles.categoryText,
+          selectedCategory === index ? { color: '#FFFFFF' } : { color: category.color },
+        ]}>
+          {category.name}
         </Text>
       </View>
     </TouchableOpacity>
   );
 
-  const ProgramCard = ({ program }) => (
+  const VideoCard = ({ video, color }) => (
     <TouchableOpacity 
-      style={styles.programCard}
-      onPress={() => navigation.navigate('ProgramDetail', { programId: program.id })}
+      style={styles.videoCard}
+      onPress={() => openYoutubeVideo(video.videoUrl)}
     >
       <Image
-        source={program.imageUrl}
-        style={styles.programImage}
+        source={video.imageSource}
+        style={styles.videoImage}
       />
-      <View style={[styles.programImageOverlay, { backgroundColor: `${program.color}80` }]} />
-      <View style={styles.programContent}>
-        <View style={styles.programHeader}>
-          <Text style={styles.programTitle}>
-            {selectedLang === 'Hindi' ? program.titleHi : program.titleEn}
-          </Text>
-          <View style={[styles.programBadge, { backgroundColor: program.color }]}>
-            <Text style={styles.programBadgeText}>
-              {program.category.toUpperCase()}
-            </Text>
-          </View>
+      <LinearGradient
+        colors={['transparent', 'rgba(0,0,0,0.8)']}
+        style={styles.videoGradient}
+      />
+      <View style={styles.videoContent}>
+        <View style={[styles.playButton, { backgroundColor: color }]}>
+          <FontAwesome5 name="play" size={20} color="#FFFFFF" />
         </View>
-        <Text style={styles.programDescription}>
-          {selectedLang === 'Hindi' ? program.descHi : program.descEn}
-        </Text>
-        <View style={styles.programFooter}>
-          <View style={styles.programStat}>
-            <FontAwesome5 name="clock" size={14} color={program.color} />
-            <Text style={[styles.programStatText, { color: program.color }]}>{program.duration}</Text>
-          </View>
-          <View style={styles.programStat}>
-            <FontAwesome5 name="users" size={14} color={program.color} />
-            <Text style={[styles.programStatText, { color: program.color }]}>{program.enrolled} enrolled</Text>
+        <View style={styles.videoInfo}>
+          <Text style={styles.videoTitle}>{video.title}</Text>
+          <View style={styles.videoDuration}>
+            <FontAwesome5 name="clock" size={12} color={color} />
+            <Text style={[styles.durationText, { color: color }]}>{video.duration}</Text>
           </View>
         </View>
       </View>
@@ -148,15 +176,16 @@ const Rehab = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#4A90E2" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      
       <View style={styles.header}>
-        <Text style={styles.title}>
-          {selectedLang === 'Hindi' ? 'पुनर्वास कार्यक्रम' : 'Rehabilitation Programs'}
+        <Text style={styles.headerTitle}>
+          {selectedLang === 'Hindi' ? 'पुनर्वास वीडियो' : 'Rehabilitation Videos'}
         </Text>
-        <Text style={styles.subtitle}>
+        <Text style={styles.headerSubtitle}>
           {selectedLang === 'Hindi' 
-            ? 'अपने कौशल को बढ़ाएं और एक बेहतर भविष्य के लिए तैयार हों'
-            : 'Enhance your skills and prepare for a better future'}
+            ? 'अपने विकास के लिए शिक्षाप्रद वीडियो देखें'
+            : 'Watch educational videos for your development'}
         </Text>
       </View>
 
@@ -166,19 +195,23 @@ const Rehab = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.categoriesScroll}
         >
-          {categories.map((category) => (
-            <CategoryButton key={category.id} category={category} />
+          {categories.map((category, index) => (
+            <CategoryButton key={index} category={category} index={index} />
           ))}
         </ScrollView>
       </View>
 
       <ScrollView 
-        style={styles.programsContainer}
+        style={styles.videosContainer}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.programsContent}
+        contentContainerStyle={styles.videosContent}
       >
-        {filteredPrograms.map((program) => (
-          <ProgramCard key={program.id} program={program} />
+        {categories[selectedCategory].videos.map((video, index) => (
+          <VideoCard 
+            key={index} 
+            video={video} 
+            color={categories[selectedCategory].color}
+          />
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -188,146 +221,122 @@ const Rehab = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#FFFFFF',
   },
   header: {
-    padding: 24,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 24 : 24,
-    backgroundColor: '#4A90E2',
+    padding: 20,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 20 : 20,
+    backgroundColor: '#FFFFFF',
   },
-  title: {
-    fontSize: 34,
+  headerTitle: {
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#2D3436',
     marginBottom: 8,
   },
-  subtitle: {
+  headerSubtitle: {
     fontSize: 16,
-    color: '#FFFFFF',
-    opacity: 0.9,
+    color: '#636E72',
     lineHeight: 24,
   },
   categoriesContainer: {
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E9ECEF',
+    marginVertical: 16,
+    paddingLeft: 20,
   },
   categoriesScroll: {
-    paddingHorizontal: 16,
+    paddingRight: 20,
   },
   categoryButton: {
     marginRight: 12,
-    borderRadius: 25,
-    overflow: 'hidden',
-    backgroundColor: '#F8F9FA',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 16,
+    backgroundColor: '#F0F3F4',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   categoryContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+    gap: 8,
   },
   categoryText: {
-    marginLeft: 10,
     fontSize: 16,
     fontWeight: '600',
   },
-  programsContainer: {
+  videosContainer: {
     flex: 1,
   },
-  programsContent: {
-    padding: 16,
+  videosContent: {
+    padding: 20,
+    gap: 20,
   },
-  programCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    marginBottom: 20,
+  videoCard: {
+    height: 220,
+    borderRadius: 20,
     overflow: 'hidden',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
-        shadowRadius: 12,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
+    backgroundColor: '#FFFFFF',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
   },
-  programImage: {
+  videoImage: {
     width: '100%',
-    height: 180,
-    backgroundColor: '#E9ECEF',
+    height: '100%',
+    resizeMode: 'cover',
   },
-  programImageOverlay: {
+  videoGradient: {
     position: 'absolute',
-    bottom: 0,
     left: 0,
     right: 0,
-    height: 100,
-    opacity: 0.3,
+    bottom: 0,
+    height: '70%',
   },
-  programContent: {
+  videoContent: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
     padding: 20,
   },
-  programHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  playButton: {
+    position: 'absolute',
+    top: -25,
+    right: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
-  programTitle: {
-    flex: 1,
-    fontSize: 20,
+  videoInfo: {
+    marginTop: 10,
+  },
+  videoTitle: {
+    fontSize: 18,
     fontWeight: '700',
-    color: '#2C3E50',
-    marginRight: 12,
-  },
-  programBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  programBadgeText: {
     color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '600',
+    marginBottom: 8,
   },
-  programDescription: {
-    fontSize: 15,
-    color: '#7F8C8D',
-    lineHeight: 22,
-    marginBottom: 16,
-  },
-  programFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderTopWidth: 1,
-    borderTopColor: '#E9ECEF',
-    paddingTop: 16,
-  },
-  programStat: {
+  videoDuration: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 6,
   },
-  programStatText: {
-    marginLeft: 8,
+  durationText: {
     fontSize: 14,
     fontWeight: '500',
-  },
+ },
 });
 
 export default Rehab;

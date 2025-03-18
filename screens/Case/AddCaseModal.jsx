@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../Context/AuthContext';
+import axiosInstance from '../../utils/axiosInstance';
 import {
   View,
   Text,
@@ -7,42 +9,15 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
+  ToastAndroid,
+  Platform,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-const mockCaseData = {
-  cnr_number: "DEMO123456",
-  cnr_details: {
-    case_details: {
-      case_type: "Criminal",
-      filing_number: "F123/2024",
-      filing_date: "2024-01-15",
-      registration_number: "REG789",
-      registration_date: "2024-01-20"
-    },
-    case_status: {
-      first_hearing_date: "2024-02-01",
-      next_hearing_date: "2024-04-15",
-      case_stage: "Under Trial",
-      court_number_and_judge: "Court 5, Judge Smith",
-      decision_date: null,
-      nature_of_disposal: null
-    },
-    petitioner_and_advocate_details: {
-      petitioner: "John Doe",
-      advocate: "Adv. Jane Smith"
-    },
-    respondent_and_advocate_details: ["State of Maharashtra"],
-    act_details: [
-      {
-        under_act: "IPC",
-        under_section: "Section 302"
-      }
-    ]
-  }
-};
 
 const AddCaseModal = ({ visible, onClose, navigation }) => {
+  const { userDetails } = useAuth();
   const [cnrNumber, setCnrNumber] = useState('');
   const [registrationNumber, setRegistrationNumber] = useState('');
   const [loading, setLoading] = useState(false);
@@ -54,22 +29,40 @@ const AddCaseModal = ({ visible, onClose, navigation }) => {
       return;
     }
 
+    if (!userDetails?._id) {
+      setError('User not authenticated');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
-      // TODO: Replace with actual API call
-      // Simulating API call with timeout
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await axiosInstance.post(`/case/addToPrisioner/${userDetails._id}`, {
+        cnr_number: cnrNumber,
+        registration_number: registrationNumber
+      });
       
-      // For now, using mock data
-      const caseData = mockCaseData;
+      // Extract the case data from the response
+      const caseData = response.data.case;
       
-      // Navigate to case details screen with the data
+      // Show success message
+      const successMessage = response.data.message || 'Case successfully added';
+      console.log(successMessage);
+      
+      // Show toast/alert based on platform
+      if (Platform.OS === 'android') {
+        ToastAndroid.show(successMessage, ToastAndroid.SHORT);
+      } else {
+        // For iOS
+        Alert.alert('Success', successMessage);
+      }
+      
+      // Navigate to case details screen with the case data
       navigation.navigate('CaseDetails', { caseData });
       onClose();
     } catch (err) {
-      setError('Failed to fetch case details. Please try again.');
+      setError(err.response?.data?.message || 'Failed to fetch case details. Please try again.');
     } finally {
       setLoading(false);
     }

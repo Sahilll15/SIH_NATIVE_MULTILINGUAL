@@ -26,6 +26,7 @@ const DocumentViewer = ({ route, navigation }) => {
       
       if (Platform.OS === 'web') {
         // For web, open in new tab
+        console.log('Opening document in new tab:', document.url);
         window.open(document.url, '_blank');
         setIsDownloading(false);
         return;

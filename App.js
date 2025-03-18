@@ -61,7 +61,9 @@ import AIChatScreen from './screens/AI/AIChatScreen';
 import PrisonerLawyer from './screens/Guard/PrisonerLawyer';
 import MyDocuments from './screens/Documents/MyDocuments';
 import LegalDocuments from './screens/Documents/LegalDocuments';
+import MyCases from './screens/Case/MyCasesScreen';
 // import ChatBot from './screens/ChatBot/ChatBot';
+import DocumentViewer from './screens/Documents/DocumentViewer';
 const Stack = createNativeStackNavigator();
 // new@gmail.com
 // new
@@ -77,6 +79,8 @@ export default function App() {
 
           <NavigationContainer>
             <Stack.Navigator initialRouteName="Login">
+              <Stack.Screen name="MyCases" component={MyCases} />
+              {/* <Stack.Screen name="CaseDetails" component={CaseDetails} /> */}
               <Stack.Screen name='Land' component={Land} />
               <Stack.Screen name="Home" component={HomeScreen} />
               <Stack.Screen name="Rights" component={Rights} />
@@ -117,11 +121,12 @@ export default function App() {
               <Stack.Screen name="YourCase" component={YourCase} />
               <Stack.Screen name="YourCaseDescription" component={YourCaseDescription} />
               <Stack.Screen name="Rehab" component={Rehab} />
-              <Stack.Screen name="YourApplication" component={YourApplication} />
-              <Stack.Screen name="LawyerConnect" component={LawyerConnect} />
-              <Stack.Screen name="BailList" component={BailList} />
+              <Stack.Screen name="DocumentViewer" component={DocumentViewer} />
+              {/* <Stack.Screen name="YourApplication" component={YourApplication} /> */}
+              {/* <Stack.Screen name="LawyerConnect" component={LawyerConnect} /> */}
+              {/* <Stack.Screen name="BailList" component={BailList} />
               <Stack.Screen name="BailDetail" component={BailDetail} />
-              <Stack.Screen name="VideoCall" component={VideoCall} />
+              <Stack.Screen name="VideoCall" component={VideoCall} /> */}
               <Stack.Screen name="CaseDetails" component={CaseDetails} />
               <Stack.Screen 
                 name="AIChatScreen" 

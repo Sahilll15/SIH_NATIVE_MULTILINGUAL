@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,40 +14,67 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import axiosInstance from '../../utils/axiosInstance';
+import { useAuth } from '../../Context/AuthContext';
 
 const MyDocuments = ({ navigation }) => {
-  const [documents, setDocuments] = useState([
-    {
-      id: '1',
-      title: 'Bail Application',
-      type: 'Legal',
-      date: '2025-03-15',
-      size: '1.2 MB',
-      status: 'Pending',
-      description: 'Application for bail submitted to court',
-      tags: ['urgent', 'legal'],
-    },
-    {
-      id: '2',
-      title: 'Medical Certificate',
-      type: 'Medical',
-      date: '2025-03-10',
-      size: '850 KB',
-      status: 'Approved',
-      description: 'Medical certificate for health condition',
-      tags: ['medical', 'important'],
-    },
-    {
-      id: '3',
-      title: 'Character Certificate',
-      type: 'Personal',
-      date: '2025-03-05',
-      size: '500 KB',
-      status: 'Verified',
-      description: 'Character certificate from previous employer',
-      tags: ['personal'],
-    },
-  ]);
+  const { userDetails } = useAuth();
+  const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Fetch user documents when component mounts or userDetails changes
+  useEffect(() => {
+    fetchUserDocuments();
+  }, [userDetails]);
+  
+  // Function to fetch user documents from API
+  const fetchUserDocuments = async () => {
+    if (!userDetails || !userDetails._id) {
+      setError('User information not available. Please log in again.');
+      setLoading(false);
+      return;
+    }
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Use the prisoner ID from user details
+      const prisonerId = userDetails._id;
+      console.log('Fetching documents for prisoner:', prisonerId);
+      
+      // Make the API call using axiosInstance
+      const response = await axiosInstance.get(`/document/getDocuments/${prisonerId}`);
+      
+      if (response.data && response.data.documents) {
+        // Map API response to document format
+        const formattedDocs = response.data.documents.map((doc, index) => ({
+          id: doc._id || `local-doc-${index}-${Date.now()}`,
+          title: doc.title || 'Untitled Document',
+          type: doc.type || 'Other',
+          date: doc.createdAt ? new Date(doc.createdAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+          size: doc.size || 'Unknown size',
+          status: doc.status || 'Pending',
+          description: doc.description || 'No description provided',
+          tags: doc.tags || [],
+          uri: doc.fileUrl || '',
+          apiDocument: doc, // Store the full API document for reference
+        }));
+        
+        setDocuments(formattedDocs);
+        console.log('Documents fetched successfully:', formattedDocs.length);
+      } else {
+        setDocuments([]);
+        console.log('No documents found or invalid response format');
+      }
+    } catch (err) {
+      console.error('Error fetching documents:', err);
+      setError(`Failed to fetch documents: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [newDocument, setNewDocument] = useState({
@@ -58,34 +85,98 @@ const MyDocuments = ({ navigation }) => {
   });
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Function to handle document refresh
+  const handleRefresh = () => {
+    fetchUserDocuments();
+  };
+
   const handleAddDocument = async () => {
     try {
+      if (!userDetails || !userDetails._id) {
+        Alert.alert('Error', 'User information not available. Please log in again.');
+        return;
+      }
+
       const result = await DocumentPicker.getDocumentAsync({
         type: '*/*',
         copyToCacheDirectory: true,
       });
 
       if (result.type === 'success') {
+        // Create a new FormData object
+        const formData = new FormData();
+        
+        // Get file info
+        const fileUri = result.uri;
+        const fileName = result.name;
+        const fileType = result.mimeType;
+        
+        // Create file object for FormData
+        const fileToUpload = {
+          uri: fileUri,
+          name: fileName,
+          type: fileType,
+        };
+        
+        // Append all required fields to FormData
+        formData.append('docs', fileToUpload, "1ef087be-3ecc-47c0-85b9-bca686342b1d");
+        formData.append('title', newDocument.title || fileName);
+        formData.append('description', newDocument.description || 'No description provided');
+        formData.append('tags', newDocument.tags || '');
+        formData.append('type', newDocument.type || 'Other');
+        
+        // Show loading indicator
+        Alert.alert('Uploading', 'Please wait while your document is being uploaded...');
+        
+        // Configure axiosInstance for file upload
+        const config = {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        };
+        
+        // Use the prisoner ID from user details
+        const prisonerId = userDetails._id;
+        console.log('Uploading document for prisoner:', prisonerId);
+        
+        // Make the API call using axiosInstance with the prisoner ID
+        const response = await axiosInstance.post(
+          `/document/upload/${prisonerId}`, 
+          formData,
+          config
+        );
+        
+        const responseData = response.data;
+        
+        // Create document object for local state
         const newDoc = {
           id: Date.now().toString(),
-          title: newDocument.title || result.name,
+          title: newDocument.title || fileName,
           type: newDocument.type || 'Other',
           date: new Date().toISOString().split('T')[0],
           size: (result.size / 1024).toFixed(2) + ' KB',
           status: 'Pending',
-          description: newDocument.description,
-          tags: newDocument.tags.split(',').map(tag => tag.trim()),
-          uri: result.uri,
+          description: newDocument.description || 'No description provided',
+          tags: newDocument.tags ? newDocument.tags.split(',').map(tag => tag.trim()) : [],
+          uri: fileUri,
+          // Store API response data if needed
+          apiResponse: responseData,
         };
 
+        // Update local state
         setDocuments(prev => [newDoc, ...prev]);
         setIsAddModalVisible(false);
         setNewDocument({ title: '', type: '', description: '', tags: '' });
-        Alert.alert('Success', 'Document added successfully');
+        Alert.alert('Success', 'Document uploaded successfully');
+        
+        // Refresh documents from server
+        fetchUserDocuments();
+        
+        console.log('API Response:', responseData);
       }
     } catch (error) {
-      console.error('Error picking document:', error);
-      Alert.alert('Error', 'Failed to add document. Please try again.');
+      console.error('Error uploading document:', error);
+      Alert.alert('Error', `Failed to upload document: ${error.message}`);
     }
   };
 
@@ -103,9 +194,9 @@ const MyDocuments = ({ navigation }) => {
   };
 
   const filteredDocuments = documents.filter(doc =>
-    doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    doc.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    doc.description.toLowerCase().includes(searchQuery.toLowerCase())
+    (doc.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (doc.type || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (doc.description || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const renderDocumentItem = ({ item }) => (
@@ -136,11 +227,19 @@ const MyDocuments = ({ navigation }) => {
           {item.description}
         </Text>
         <View style={styles.tagsContainer}>
-          {item.tags.map((tag, index) => (
-            <View key={index} style={styles.tag}>
-              <Text style={styles.tagText}>#{tag}</Text>
+          {Array.isArray(item.tags) && item.tags.length > 0 ? (
+            item.tags.map((tag, index) => (
+              <View key={index} style={styles.tag}>
+                <Text style={styles.tagText}>#{tag}</Text>
+              </View>
+            ))
+          ) : typeof item.tags === 'string' ? (
+            <View style={styles.tag}>
+              <Text style={styles.tagText}>{item.tags}</Text>
             </View>
-          ))}
+          ) : (
+            <Text style={styles.noTagsText}>No tags</Text>
+          )}
         </View>
       </View>
 
@@ -153,35 +252,60 @@ const MyDocuments = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <Icon name="search" size={20} color="#666" style={styles.searchIcon} />
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search documents..."
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
+      <View style={styles.header}>
+        <View style={styles.searchContainer}>
+          <Icon name="search" size={20} color="#666" style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search documents..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => setIsAddModalVisible(true)}
+        >
+          <Icon name="plus" size={18} color="#fff" />
+        </TouchableOpacity>
       </View>
 
-      <FlatList
-        data={filteredDocuments}
-        renderItem={renderDocumentItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.listContainer}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Icon name="folder-open" size={50} color="#ccc" />
-            <Text style={styles.emptyText}>No documents found</Text>
-          </View>
-        }
-      />
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>Loading documents...</Text>
+        </View>
+      ) : error ? (
+        <View style={styles.errorContainer}>
+          <Icon name="exclamation-circle" size={50} color="#e74c3c" />
+          <Text style={styles.errorText}>{error}</Text>
+          <TouchableOpacity style={styles.retryButton} onPress={fetchUserDocuments}>
+            <Text style={styles.retryButtonText}>Retry</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredDocuments}
+          renderItem={renderDocumentItem}
+          keyExtractor={item => String(item.id)}
+          contentContainerStyle={styles.listContainer}
+          refreshing={loading}
+          onRefresh={fetchUserDocuments}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Icon name="folder-open" size={50} color="#ccc" />
+              <Text style={styles.emptyText}>No documents found</Text>
+              <TouchableOpacity 
+                style={styles.addFirstButton} 
+                onPress={() => setIsAddModalVisible(true)}
+              >
+                <Text style={styles.addFirstButtonText}>Add Your First Document</Text>
+              </TouchableOpacity>
+            </View>
+          }
+        />
+      )}
 
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => setIsAddModalVisible(true)}
-      >
-        <Icon name="plus" size={24} color="#fff" />
-      </TouchableOpacity>
+
 
       <Modal
         visible={isAddModalVisible}
@@ -249,11 +373,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
   searchContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
-    margin: 16,
     paddingHorizontal: 16,
     borderRadius: 8,
     elevation: 2,
@@ -261,6 +391,20 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
+    marginRight: 12,
+  },
+  addButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#4A90E2',
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
   searchIcon: {
     marginRight: 10,
@@ -339,6 +483,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#4A90E2',
   },
+  noTagsText: {
+    fontSize: 12,
+    color: '#999',
+    fontStyle: 'italic',
+  },
   cardFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -350,22 +499,66 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#888',
   },
-  fab: {
-    position: 'absolute',
-    right: 16,
-    bottom: 16,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: '#4A90E2',
+  emptyContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+    padding: 32,
   },
+  emptyText: {
+    fontSize: 16,
+    color: '#888',
+    marginTop: 16,
+    marginBottom: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#666',
+    marginTop: 16,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32,
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#e74c3c',
+    marginTop: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  retryButton: {
+    backgroundColor: '#3498db',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  addFirstButton: {
+    backgroundColor: '#4A90E2',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  addFirstButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
   modalContainer: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',

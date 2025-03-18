@@ -50,6 +50,13 @@ const HomeScreen = ({ navigation }) => {
       color: '#FF6B6B',
       onPress: () => navigation.navigate('AddDoc')
     },
+    {
+      id: 'myCases',
+      title: 'My Cases',
+      icon: 'https://cdn-icons-png.flaticon.com/512/3063/3063711.png',
+      color: '#96CEB4',
+      onPress: () => navigation.navigate('MyCases')
+    },
   ];
 
   const renderHeader = () => (

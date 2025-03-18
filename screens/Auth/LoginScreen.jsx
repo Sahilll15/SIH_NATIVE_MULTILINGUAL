@@ -77,8 +77,8 @@ const LOGO_IMAGE = 'https://img.icons8.com/color/96/000000/scales-of-justice.png
 
 const LoginScreenContent = ({ navigation }) => {
   const { selectedLang, setTokenFunction, setUserDetailsFunctions, selectedType, setSelectedLangFunction } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('sahilchalke1011@gmail.com');
+  const [password, setPassword] = useState('Sahil@123');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);
