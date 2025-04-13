@@ -130,49 +130,49 @@ const HomeScreen = ({ navigation }) => {
     {
       id: 'rights',
       title: 'Know Your Rights',
-      icon: 'https://cdn-icons-png.flaticon.com/512/1642/1642097.png',
+      iconName: 'balance-scale',
       color: '#FF6B6B',
       onPress: () => navigation.navigate('Rights')
     },
     {
       id: 'ai',
       title: 'AI Assistant',
-      icon: 'https://cdn-icons-png.flaticon.com/512/3063/3063176.png',
+      iconName: 'robot',
       color: '#4ECDC4',
       onPress: () => navigation.navigate('AIChatScreen')
     },
     {
       id: 'lawyer',
       title: 'Find a Lawyer',
-      icon: 'https://cdn-icons-png.flaticon.com/512/3116/3116416.png',
+      iconName: 'user-tie',
       color: '#45B7D1',
       onPress: () => navigation.navigate('LawyerList')
     },
     {
       id: 'documents',
       title: 'My Documents',
-      icon: 'https://cdn-icons-png.flaticon.com/512/3117/3117712.png',
+      iconName: 'file-alt',
       color: '#FF6B6B',
       onPress: () => navigation.navigate('AddDoc')
     },
     {
       id: 'chat',
       title: 'Legal Chat',
-      icon: 'https://cdn-icons-png.flaticon.com/512/724/724715.png',
+      iconName: 'comments',
       color: '#4A90E2',
       onPress: () => navigation.navigate('Chat')
     },
     {
       id: 'cases',
       title: 'My Cases',
-      icon: 'https://cdn-icons-png.flaticon.com/512/3063/3063822.png',
+      iconName: 'gavel',
       color: '#96CEB4',
       onPress: () => navigation.navigate('MyCases')
     },
     {
       id: 'notifications',
       title: 'Notifications',
-      icon: 'https://cdn-icons-png.flaticon.com/512/2645/2645883.png',
+      iconName: 'bell',
       color: '#FFB347',
       onPress: () => navigation.navigate('Notifications'),
       badge: unreadNotifications > 0 ? unreadNotifications : null
@@ -184,45 +184,45 @@ const HomeScreen = ({ navigation }) => {
     {
       id: 'manage-cases',
       title: 'Manage Cases',
-      icon: 'https://cdn-icons-png.flaticon.com/512/3281/3281289.png',
+      iconName: 'tasks',
       color: '#FF6B6B',
       onPress: () => navigation.navigate('GovernorCases', { cases: allCases })
     },
-    // {
-    //   id: 'analytics',
-    //   title: 'Case Analytics',
-    //   icon: 'https://cdn-icons-png.flaticon.com/512/2910/2910791.png',
-    //   color: '#4ECDC4',
-    //   onPress: () => navigation.navigate('GovernorAnalytics')
-    // },
-    // {
-    //   id: 'reports',
-    //   title: 'Generate Reports',
-    //   icon: 'https://cdn-icons-png.flaticon.com/512/1195/1195562.png',
-    //   color: '#45B7D1',
-    //   onPress: () => navigation.navigate('GovernorReports')
-    // },
-    // {
-    //   id: 'approvals',
-    //   title: 'Case Approvals',
-    //   icon: 'https://cdn-icons-png.flaticon.com/512/1478/1478873.png',
-    //   color: '#96CEB4',
-    //   onPress: () => navigation.navigate('GovernorApprovals')
-    // },
-    // {
-    //   id: 'notifications',
-    //   title: 'Notifications',
-    //   icon: 'https://cdn-icons-png.flaticon.com/512/2645/2645883.png',
-    //   color: '#45B7D1',
-    //   onPress: () => navigation.navigate('GovernorNotifications')
-    // },
-    // {
-    //   id: 'modifications',
-    //   title: 'My Modifications',
-    //   icon: 'https://cdn-icons-png.flaticon.com/512/2921/2921222.png',
-    //   color: '#FF6B6B',
-    //   onPress: () => navigation.navigate('GovernorModifications')
-    // },
+    {
+      id: 'analytics',
+      title: 'Case Analytics',
+      iconName: 'chart-bar',
+      color: '#4ECDC4',
+      onPress: () => navigation.navigate('GovernorAnalytics')
+    },
+    {
+      id: 'reports',
+      title: 'Generate Reports',
+      iconName: 'file-export',
+      color: '#45B7D1',
+      onPress: () => navigation.navigate('GovernorReports')
+    },
+    {
+      id: 'approvals',
+      title: 'Case Approvals',
+      iconName: 'check-circle',
+      color: '#96CEB4',
+      onPress: () => navigation.navigate('GovernorApprovals')
+    },
+    {
+      id: 'notifications',
+      title: 'Notifications',
+      iconName: 'bell',
+      color: '#45B7D1',
+      onPress: () => navigation.navigate('GovernorNotifications')
+    },
+    {
+      id: 'modifications',
+      title: 'My Modifications',
+      iconName: 'edit',
+      color: '#FF6B6B',
+      onPress: () => navigation.navigate('GovernorModifications')
+    },
   ];
 
   // Cards for lawyers
@@ -231,28 +231,28 @@ const HomeScreen = ({ navigation }) => {
     {
       id: 'clients',
       title: 'My Clients',
-      icon: 'https://cdn-icons-png.flaticon.com/512/3126/3126647.png',
+      iconName: 'users',
       color: '#FF6B6B',
       onPress: () => navigation.navigate('MyClients')
     },
     {
       id: 'cases',
       title: 'My Cases',
-      icon: 'https://cdn-icons-png.flaticon.com/512/3063/3063822.png',
+      iconName: 'gavel',
       color: '#4ECDC4',
       onPress: () => navigation.navigate('MyCases')
     },
     {
       id: 'chat',
       title: 'Client Chat',
-      icon: 'https://cdn-icons-png.flaticon.com/512/724/724715.png',
+      iconName: 'comments',
       color: '#4A90E2',
       onPress: () => navigation.navigate('Chat')
     },
     {
       id: 'profile',
       title: 'My Profile',
-      icon: 'https://cdn-icons-png.flaticon.com/512/747/747376.png',
+      iconName: 'user-circle',
       color: '#45B7D1',
       onPress: () => navigation.navigate('Profile')
     },
@@ -401,10 +401,11 @@ const HomeScreen = ({ navigation }) => {
       onPress={card.onPress}
     >
       <View style={[styles.iconContainer, { backgroundColor: `${card.color}15` }]}>
-        <Image
-          source={{ uri: card.icon }}
-          style={styles.icon}
-          resizeMode="contain"
+        <Icon 
+          name={card.iconName} 
+          size={26} 
+          color={card.color} 
+          solid
         />
         {card.badge && (
           <View style={styles.badgeContainer}>
