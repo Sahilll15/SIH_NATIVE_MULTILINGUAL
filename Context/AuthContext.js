@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchLoggedInUser = async () => {
     try {
-      const response = await axiosInstance.post('/prisioners/getLoggedInUser');
+      const response = await axiosInstance.post('/priosioner/getLoggedInUser');
       if (response.status === 200) {
         console.log('User data fetched:', response.data);
         setUserDetails(response.data.user);

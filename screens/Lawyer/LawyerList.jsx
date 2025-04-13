@@ -38,140 +38,13 @@ const LawyerList = ({ navigation }) => {
       setLoading(true);
       setError(null);
       
-      const mockData = {
-        success: true,
-        lawyers: [
-          {
-            id: "1",
-            name: "Rahul Sharma",
-            specialization: "Criminal",
-            experience: 12,
-            location: "Delhi",
-            description: "Experienced criminal lawyer with expertise in serious criminal cases and bail applications.",
-            image: "https://randomuser.me/api/portraits/men/32.jpg",
-            rating: 4.8,
-            fees: 2500,
-            phone: "9876543210",
-            email: "rahul.lawyer@example.com",
-            languages: ["English", "Hindi"],
-            type: "paid"
-          },
-          {
-            id: "2",
-            name: "Priya Patel",
-            specialization: "Family",
-            experience: 8,
-            location: "Mumbai",
-            description: "Specializing in divorce, child custody, and matrimonial disputes with a compassionate approach.",
-            image: "https://randomuser.me/api/portraits/women/44.jpg",
-            rating: 4.6,
-            fees: 2000,
-            phone: "9876543211",
-            email: "priya.lawyer@example.com",
-            languages: ["English", "Hindi", "Gujarati"],
-            type: "paid"
-          },
-          {
-            id: "3",
-            name: "Vikram Singh",
-            specialization: "Civil",
-            experience: 15,
-            location: "Bangalore",
-            description: "Expert in civil litigation, property disputes, and contract law with a strong track record.",
-            image: "https://randomuser.me/api/portraits/men/45.jpg",
-            rating: 4.9,
-            fees: 3000,
-            phone: "9876543212",
-            email: "vikram.lawyer@example.com",
-            languages: ["English", "Hindi", "Kannada"],
-            type: "paid"
-          },
-          {
-            id: "4",
-            name: "Aisha Khan",
-            specialization: "Corporate",
-            experience: 10,
-            location: "Chennai",
-            description: "Corporate lawyer with expertise in mergers, acquisitions, and business law compliance.",
-            image: "https://randomuser.me/api/portraits/women/47.jpg",
-            rating: 4.7,
-            fees: 3500,
-            phone: "9876543213",
-            email: "aisha.lawyer@example.com",
-            languages: ["English", "Hindi", "Tamil"],
-            type: "pro-bono"
-          },
-          {
-            id: "5",
-            name: "Rajiv Verma",
-            specialization: "Criminal",
-            experience: 20,
-            location: "Kolkata",
-            description: "Senior criminal lawyer with extensive experience in high-profile criminal cases and appeals.",
-            image: "https://randomuser.me/api/portraits/men/52.jpg",
-            rating: 4.9,
-            fees: 4000,
-            phone: "9876543214",
-            email: "rajiv.lawyer@example.com",
-            languages: ["English", "Hindi", "Bengali"],
-            type: "paid"
-          },
-          {
-            id: "6",
-            name: "Meera Reddy",
-            specialization: "Family",
-            experience: 6,
-            location: "Hyderabad",
-            description: "Family law specialist with a focus on adoption, guardianship, and domestic relations.",
-            image: "https://randomuser.me/api/portraits/women/29.jpg",
-            rating: 4.5,
-            fees: 0,
-            phone: "9876543215",
-            email: "meera.lawyer@example.com",
-            languages: ["English", "Hindi", "Telugu"],
-            type: "pro-bono"
-          },
-          {
-            id: "7",
-            name: "Ankit Joshi",
-            specialization: "Civil",
-            experience: 9,
-            location: "Pune",
-            description: "Civil law practitioner specializing in property law, tenant disputes, and civil remedies.",
-            image: "https://randomuser.me/api/portraits/men/65.jpg",
-            rating: 4.4,
-            fees: 2200,
-            phone: "9876543216",
-            email: "ankit.lawyer@example.com",
-            languages: ["English", "Hindi", "Marathi"],
-            type: "paid"
-          },
-          {
-            id: "8",
-            name: "Neha Gupta",
-            specialization: "Corporate",
-            experience: 11,
-            location: "Ahmedabad",
-            description: "Corporate law expert with specialization in startups, venture capital, and intellectual property.",
-            image: "https://randomuser.me/api/portraits/women/63.jpg",
-            rating: 4.8,
-            fees: 0,
-            phone: "9876543217",
-            email: "neha.lawyer@example.com",
-            languages: ["English", "Hindi", "Gujarati"],
-            type: "pro-bono"
-          }
-        ]
-      };
+      const response=await axiosInstance.get('/lawyer/getAllLawyers');
       
-      // Simulate an API call with local data
-      const response = { data: mockData };
+      console.log('Lawyers data fetched:', response.data.Lawyer.length);
       
-      console.log('Lawyers data fetched:', response.data.lawyers.length);
-      
-      if (response.data && response.data.lawyers) {
-        setLawyers(response.data.lawyers);
-        setFilteredLawyers(response.data.lawyers);
+      if (response.data && response.data.Lawyer) {
+        setLawyers(response.data.Lawyer);
+        setFilteredLawyers(response.data.Lawyer);
       } else {
         setError('No lawyers found');
       }
@@ -254,7 +127,29 @@ const LawyerList = ({ navigation }) => {
   
   // Navigate to chat with lawyer
   const handleChatWithLawyer = (lawyer) => {
-    navigation.navigate('LawyerChat', { lawyer });
+    // Show contact modal with options
+    Alert.alert(
+      selectedLang === 'Hindi' ? 'वकील से संवाद करें' : 'Chat with Lawyer',
+      selectedLang === 'Hindi' 
+        ? `${lawyer.name} के साथ कानूनी सहायता के लिए संवाद शुरू करें?` 
+        : `Start a legal assistance conversation with ${lawyer.name}?`,
+      [
+        {
+          text: selectedLang === 'Hindi' ? 'रद्द करें' : 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: selectedLang === 'Hindi' ? 'चैट शुरू करें' : 'Start Chat',
+          onPress: () => {
+            // Navigate to the new chat feature
+            navigation.navigate('Chat', { 
+              screen: 'FindLawyer',
+              params: { preselectedLawyer: lawyer }
+            });
+          },
+        },
+      ],
+    );
   };
 
 
@@ -466,7 +361,7 @@ const LawyerList = ({ navigation }) => {
         <FlatList
           data={filteredLawyers}
           renderItem={renderLawyerItem}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item._id.toString()}
           contentContainerStyle={styles.lawyersList}
           showsVerticalScrollIndicator={false}
           refreshControl={

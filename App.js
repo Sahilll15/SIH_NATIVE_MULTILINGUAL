@@ -57,6 +57,7 @@ import TestClient from './screens/Lawyer/TestClient';
 import CaseDetails from './screens/Case/CaseDetails';
 import ProfileScreen from './screens/Profile/ProfileScreen';
 import AIChatScreen from './screens/AI/AIChatScreen';
+import { TranslationProvider } from './Context/TranslationContext';
 
 import PrisonerLawyer from './screens/Guard/PrisonerLawyer';
 import MyDocuments from './screens/Documents/MyDocuments';
@@ -65,7 +66,18 @@ import MyCases from './screens/Case/MyCasesScreen';
 import DocumentViewer from './screens/Documents/DocumentViewer';
 import LawyerList from './screens/Lawyer/LawyerList';
 import LawyerChat from './screens/Lawyer/LawyerChat';
+
+// Governor Screens
+import GovernorCases from './screens/Governor/GovernorCases';
+import GovernorAnalytics from './screens/Governor/GovernorAnalytics';
+import GovernorReports from './screens/Governor/GovernorReports';
+import GovernorApprovals from './screens/Governor/GovernorApprovals';
+import GovernorNotifications from './screens/Governor/GovernorNotifications';
+import GovernorModifications from './screens/Governor/GovernorModifications';
 import { useNavigation } from '@react-navigation/native';
+import ChatNavigator from './navigation/ChatNavigator';
+import MyClientsScreen from './screens/Lawyer/MyClientsScreen';
+import NotificationsScreen from './screens/Prisoner/NotificationsScreen';
 const Stack = createNativeStackNavigator();
 
 
@@ -89,6 +101,7 @@ export default function App() {
     <AuthProvider>
       <FirProvider>
         <LawyerProvider>
+          <TranslationProvider>
 
 
           <NavigationContainer>
@@ -146,6 +159,19 @@ export default function App() {
               <Stack.Screen name="CaseDetails" component={CaseDetails} />
               <Stack.Screen name="AIChatScreen" component={AIChatScreen} />
               <Stack.Screen name="Profile" component={ProfileScreen} />
+              
+              {/* Governor Screens */}
+              <Stack.Screen name="GovernorCases" component={GovernorCases} />
+              <Stack.Screen name="GovernorAnalytics" component={GovernorAnalytics} />
+              <Stack.Screen name="GovernorReports" component={GovernorReports} />
+              <Stack.Screen name="GovernorApprovals" component={GovernorApprovals} />
+              <Stack.Screen name="GovernorNotifications" component={GovernorNotifications} />
+              <Stack.Screen name="GovernorModifications" component={GovernorModifications} />
+              
+              {/* Chat, Client, and Notifications Navigator */}
+              <Stack.Screen name="Chat" component={ChatNavigator} />
+              <Stack.Screen name="MyClients" component={MyClientsScreen} />
+              <Stack.Screen name="Notifications" component={NotificationsScreen} />
             </Stack.Navigator>
             <NavigationStateWrapper>
               {state => {
@@ -156,6 +182,7 @@ export default function App() {
             </NavigationStateWrapper>
             <Toast ref={(ref) => Toast.setRef(ref)} />
           </NavigationContainer>
+          </TranslationProvider>
         </LawyerProvider>
       </FirProvider>
     </AuthProvider>

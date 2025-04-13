@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -23,6 +23,7 @@ import { BlurView } from 'expo-blur';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import { LinearGradient } from 'expo-linear-gradient';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const translations = {
   Hindi: {
@@ -78,12 +79,27 @@ const BACKGROUND_IMAGE = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wC
 const LOGO_IMAGE = 'https://i.imgur.com/KS9XVpL.png';
 
 const LoginScreenContent = ({ navigation }) => {
-  const { selectedLang, setTokenFunction, setUserDetailsFunctions, selectedType, setSelectedLangFunction } = useAuth();
-  const [email, setEmail] = useState('sahilchalke1011@gmail.com');
-  const [password, setPassword] = useState('Sahil@123');
+  const { selectedLang, setTokenFunction, setUserDetailsFunctions, selectedType,setSelectedTypeFunction ,setSelectedLangFunction } = useAuth();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);
+  const [showTypeSelector, setShowTypeSelector] = useState(false);
+
+
+  useEffect(()=>{
+    if(selectedType==='Prisioner'){
+      setEmail('sahilchalke1011@gmail.com')
+      setPassword('Sahil@123')
+    } else if(selectedType==='Lawyer') {
+      setEmail('lawyer@gmail.com')
+      setPassword('lawyer@123')
+    } else if(selectedType==='Governor') {
+      setEmail('governor@gov.in')
+      setPassword('governor@123')
+    }
+  },[selectedType])
 
   const t = translations[selectedLang] || translations.English;
 
@@ -91,6 +107,12 @@ const LoginScreenContent = ({ navigation }) => {
     { code: 'English', name: 'English', flag: '🇬🇧' },
     { code: 'Hindi', name: 'हिंदी', flag: '🇮🇳' },
     { code: 'Marathi', name: 'मराठी', flag: '🇮🇳' }
+  ];
+
+  const userTypes = [
+    { code: 'Prisioner', name: t.prisoner },
+    { code: 'Lawyer', name: t.lawyer },
+    { code: 'Governor', name: t.governor || 'Governor' }
   ];
 
   const handleLogin = async () => {
@@ -101,7 +123,15 @@ const LoginScreenContent = ({ navigation }) => {
 
     setLoading(true);
     try {
-      const endpoint = selectedType === "Lawyer" ? '/lawyer/loginLawyer' : '/priosioner/login';
+      let endpoint;
+      if (selectedType === "Lawyer") {
+        endpoint = '/lawyer/loginLawyer';
+      } else if (selectedType === "Governor") {
+        endpoint = '/goverenr/login';
+      } else {
+        endpoint = '/priosioner/login';
+      }
+      
       const response = await axiosInstance.post(endpoint, {
         email: email.toLowerCase(),
         password,
@@ -155,6 +185,41 @@ const LoginScreenContent = ({ navigation }) => {
     </BlurView>
   );
 
+  const TypeSelector = () => (
+    <View style={styles.selector}>
+      <View style={styles.selectorContent}>
+        <View style={styles.selectorHeader}>
+          <Text style={styles.selectorTitle}>Select User Type</Text>
+        </View>
+        {userTypes.map((type) => (
+          <TouchableOpacity
+            key={type.code}
+            style={[
+              styles.selectorOption,
+              selectedType === type.code && styles.selectedOption
+            ]}
+            onPress={() => {
+              setSelectedTypeFunction(type.code);
+              setShowTypeSelector(false);
+            }}
+          >
+            <MaterialIcons
+              name={type.code === 'Prisioner' ? 'person' : 'gavel'}
+              size={22}
+              color={selectedType === type.code ? '#FFFFFF' : '#4A90E2'}
+            />
+            <Text style={[
+              styles.optionName,
+              selectedType === type.code && styles.selectedOptionName
+            ]}>
+              {type.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
+  );
+
   return (
     <ImageBackground
       source={{ uri: BACKGROUND_IMAGE }}
@@ -162,24 +227,29 @@ const LoginScreenContent = ({ navigation }) => {
     >
       <LinearGradient
         colors={['rgba(25,80,150,0.85)', 'rgba(10,30,80,0.95)']}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 1}}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
         style={styles.gradient}
       >
         <SafeAreaView style={styles.container}>
           <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-          
-          <TouchableOpacity
-            style={styles.languageButton}
-            onPress={() => setShowLanguageSelector(!showLanguageSelector)}
-          >
-            <Text style={styles.languageButtonText}>
-              {languages.find(l => l.code === selectedLang)?.flag} {selectedLang}
-            </Text>
-            <Icon name="chevron-down" size={20} color="#4A90E2" />
-          </TouchableOpacity>
+
+          <View style={styles.topButtonsContainer}>
+            <TouchableOpacity style={styles.selectButton} onPress={() => setShowTypeSelector(!showTypeSelector)}>
+              <Text style={styles.selectButtonText}>{selectedType}</Text>
+              <MaterialIcons name="people" size={20} color="#FFFFFF" />
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.selectButton} onPress={() => setShowLanguageSelector(!showLanguageSelector)}>
+              <Text style={styles.selectButtonText}>
+                {languages.find(l => l.code === selectedLang)?.flag} {selectedLang}
+              </Text>
+              <MaterialIcons name="arrow-drop-down" size={20} color="#FFFFFF" />
+            </TouchableOpacity>
+          </View>
 
           {showLanguageSelector && <LanguageSelector />}
+          {showTypeSelector && <TypeSelector />}
 
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -190,7 +260,7 @@ const LoginScreenContent = ({ navigation }) => {
               showsVerticalScrollIndicator={false}
             >
               <View style={styles.logoContainer}>
-            
+
                 <Text style={styles.legalAidTitle}>{t.legalAidTitle}</Text>
                 <Text style={styles.legalAidSubtitle}>{t.legalAidSubtitle}</Text>
                 <View style={styles.dividerContainer}>
@@ -241,7 +311,7 @@ const LoginScreenContent = ({ navigation }) => {
                   style={styles.loginButton}
                   textStyle={styles.loginButtonText}
                 />
-                
+
                 <View style={styles.formBottomBars}>
                   {[...Array(5)].map((_, i) => (
                     <View key={i} style={styles.formBar} />
@@ -337,14 +407,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   legalAidTitle: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: 'bold',
     color: '#FFFFFF',
     marginBottom: 10,
     textAlign: 'center',
-    textShadowColor: 'rgba(0, 0, 0, 0.4)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 3,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
+    letterSpacing: 1,
   },
   legalAidSubtitle: {
     fontSize: 16,
@@ -353,16 +424,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 32,
     letterSpacing: 0.5,
   },
-  languageButton: {
+  topButtonsContainer: {
     flexDirection: 'row',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    alignSelf: 'flex-end',
-    padding: 10,
-    paddingHorizontal: 16,
+    marginBottom: 16,
     marginTop: Platform.OS === 'ios' ? 10 : StatusBar.currentHeight + 8,
     marginRight: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+  },
+  selectButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    paddingHorizontal: 16,
     borderRadius: 20,
+    marginLeft: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.3)',
     ...Platform.select({
@@ -377,11 +454,56 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  languageButtonText: {
-    fontSize: 16,
-    marginRight: 6,
+  selectButtonText: {
     color: '#FFFFFF',
+    marginRight: 8,
+    fontWeight: '600',
+  },
+  selector: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 50 : StatusBar.currentHeight + 45,
+    right: 16,
+    width: 160,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: 12,
+    padding: 10,
+    zIndex: 1000,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+  },
+  selectorContent: {
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  selectorOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    marginVertical: 2,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.05)',
+  },
+  selectedOption: {
+    backgroundColor: '#4A90E2',
+  },
+  languageFlag: {
+    fontSize: 16,
+    marginRight: 10,
+  },
+  optionName: {
+    fontSize: 15,
+    color: '#000',
+    marginLeft: 8,
     fontWeight: '500',
+  },
+  selectedOptionName: {
+    color: '#000',
+    fontWeight: '600',
   },
   languageSelector: {
     position: 'absolute',
@@ -413,10 +535,6 @@ const styles = StyleSheet.create({
   selectedLanguage: {
     backgroundColor: 'rgba(74, 144, 226, 0.1)',
   },
-  languageFlag: {
-    fontSize: 20,
-    marginRight: 8,
-  },
   languageText: {
     fontSize: 16,
     color: '#E0E0E0',
@@ -428,6 +546,34 @@ const styles = StyleSheet.create({
   },
   checkIcon: {
     marginLeft: 8,
+  },
+  selectorHeader: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0,0,0,0.1)',
+    paddingBottom: 10,
+    marginBottom: 5,
+  },
+  selectorTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#4A90E2',
+    textAlign: 'center',
+  },
+  loginContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.97)',
+    borderRadius: 24,
+    paddingHorizontal: 24,
+    paddingTop: 30,
+    paddingBottom: 38,
+    width: '100%',
+    marginTop: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.5)',
   },
   formContainer: {
     marginHorizontal: 24,
@@ -491,6 +637,15 @@ const styles = StyleSheet.create({
     height: 20,
     paddingHorizontal: 40,
   },
+  inputContainer: {
+    marginBottom: 20,
+    backgroundColor: 'rgba(245, 247, 250, 0.8)',
+    borderRadius: 12,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.05)',
+  },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -515,20 +670,22 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   loginButton: {
-    height: 54,
-    backgroundColor: '#2563EB',
-    borderRadius: 12,
-    marginTop: 24,
-    shadowColor: '#1E40AF',
-    shadowOffset: { width: 0, height: 4 },
+    width: '100%',
+    marginTop: 30,
+    height: 58,
+    borderRadius: 16,
+    backgroundColor: '#4A90E2',
+    shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowRadius: 6,
     elevation: 4,
+    overflow: 'hidden',
   },
   loginButtonText: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#FFFFFF',
+    letterSpacing: 0.5,
   },
   signupButton: {
     marginTop: 20,

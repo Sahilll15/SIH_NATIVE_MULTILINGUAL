@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,27 +8,105 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { useTranslation } from '../../Context/TranslationContext';
 
 const CaseDetails = ({ route, navigation }) => {
-  const { caseData } = route.params;
+  const { caseData: initialCaseData } = route.params;
+  const [caseData, setCaseData] = useState(initialCaseData);
+  const { translate, currentLanguage } = useTranslation();
+  
+  // Check if a string is likely a date
+  const isDateString = (str) => {
+    if (!str || typeof str !== 'string') return false;
+    
+    // Check for ISO date format
+    if (str.includes('T') && str.includes(':')) return true;
+    
+    // Check for date patterns like 2023-03-20 or 2023/03/20
+    const dateRegex = /^\d{4}[-/]\d{1,2}[-/]\d{1,2}/;
+    if (dateRegex.test(str)) return true;
+    
+    return false;
+  };
+  
+  const formatDate = (dateString) => {
+    if (!dateString) return translate('Not scheduled');
+    try {
+      // For debugging
+      console.log('Formatting date:', dateString);
+      
+      return new Date(dateString).toLocaleDateString(currentLanguage === 'en' ? 'en-IN' : 
+                                                    currentLanguage === 'hi' ? 'hi-IN' : 'mr-IN', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return dateString;
+    }
+  };
+  
+  // Process the data to format all dates
+  useEffect(() => {
+    const processData = (data) => {
+      if (!data) return data;
+      
+      if (typeof data !== 'object') return data;
+      
+      const newData = Array.isArray(data) ? [...data] : {...data};
+      
+      Object.keys(newData).forEach(key => {
+        if (isDateString(newData[key])) {
+          // Store both formatted and raw date
+          newData[`${key}_formatted`] = formatDate(newData[key]);
+        } else if (typeof newData[key] === 'object' && newData[key] !== null) {
+          // Recursively process nested objects
+          newData[key] = processData(newData[key]);
+        }
+      });
+      
+      return newData;
+    };
+    
+    setCaseData(processData(initialCaseData));
+  }, [initialCaseData, currentLanguage]);
 
-  const renderSection = (title, content) => (
-    <View style={styles.section}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      <View style={styles.sectionContent}>
-        {Object.entries(content).map(([key, value]) => (
-          <View key={key} style={styles.row}>
-            <Text style={styles.rowLabel}>
-              {key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}:
-            </Text>
-            <Text style={styles.rowValue}>
-              {value instanceof Date ? value.toLocaleDateString() : value || 'N/A'}
-            </Text>
-          </View>
-        ))}
+  const renderSection = (title, content) => {
+    // Filter out keys ending with _formatted or _raw for cleaner display
+    const filteredEntries = Object.entries(content).filter(([key]) => 
+      !key.endsWith('_formatted') && !key.endsWith('_raw')
+    );
+    
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{translate(title)}</Text>
+        <View style={styles.sectionContent}>
+          {filteredEntries.map(([key, value]) => {
+            // Check if we have a formatted version of this value
+            const formattedKey = `${key}_formatted`;
+            const hasFormattedValue = content[formattedKey] !== undefined;
+            
+            // Use the formatted value if available
+            const displayValue = hasFormattedValue ? content[formattedKey] : 
+                               isDateString(value) ? formatDate(value) : 
+                               value || translate('N/A');
+            
+            return (
+              <View key={key} style={styles.row}>
+                <Text style={styles.rowLabel}>
+                  {translate(key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))}:
+                </Text>
+                <Text style={styles.rowValue}>
+                  {displayValue}
+                </Text>
+              </View>
+            );
+          })}
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -39,7 +117,7 @@ const CaseDetails = ({ route, navigation }) => {
         >
           <Icon name="arrow-left" size={20} color="#FFF" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Case Details</Text>
+        <Text style={styles.headerTitle}>{translate('Case Details')}</Text>
       </View>
 
       <ScrollView style={styles.content}>

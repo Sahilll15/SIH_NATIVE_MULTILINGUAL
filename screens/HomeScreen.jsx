@@ -4,40 +4,129 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import AddCaseModal from './Case/AddCaseModal';
 import { useAuth } from '../Context/AuthContext';
 import axiosInstance from '../utils/axiosInstance';
+import { useTranslation } from '../Context/TranslationContext';
 
 const HomeScreen = ({ navigation }) => {
   const { userDetails, logout } = useAuth();
+  const { translate, currentLanguage } = useTranslation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [caseCount, setCaseCount] = useState(0);
+  const [allCases, setAllCases] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+
   
-  // Fetch user's case count
+  const isPrisoner = userDetails?.type === 'Prisioner';
+  const isLawyer = userDetails?.type === 'Lawyer';
+  const isGovernor = userDetails?.type === 'Governor';
+  
+  // Navigate directly to GovernorCases if user is a governor
   useEffect(() => {
-    const fetchCaseCount = async () => {
-      if (!userDetails?._id) return;
-      
+    console.log('isGovernor', isGovernor)
+    if (isGovernor) {
+      navigation.replace('GovernorCases', { cases: allCases });
+    }
+
+    console.log('userDetails.type', userDetails)
+  }, [isGovernor, userDetails, allCases]);
+  
+  // Fetch case data based on user type
+  useEffect(() => {
+    if (!userDetails?._id) return;
+    
+    const fetchCaseData = async () => {
       try {
         setLoading(true);
         
-        // Use the existing API endpoint
-        const response = await axiosInstance.get(`/priosioner/cases/${userDetails._id}`);
-        
-        if (response.data.success) {
-          setCaseCount(response.data.cases.length);
+        if (isPrisoner) {
+          // Fetch prisoner's cases
+          const response = await axiosInstance.get(`/priosioner/cases/${userDetails._id}`);
+          
+          if (response.data.success) {
+            setCaseCount(response.data.cases.length);
+          }
+        } else if (isGovernor) {
+          // Fetch all cases for governor
+          const response = await axiosInstance.get('/goverenr/cases');
+          
+          if (response.data.success) {
+            setAllCases(response.data.cases);
+            setCaseCount(response.data.count);
+          }
+        } else if (isLawyer) {
+          // Fetch lawyer's cases
+          const response = await axiosInstance.get(`/lawyer/cases/${userDetails._id}`);
+          
+          if (response.data.success) {
+            setCaseCount(response.data.cases?.length || 0);
+          }
         }
       } catch (err) {
-        console.error('Error fetching case count:', err);
+        console.error('Error fetching case data:', err);
         // Don't set error state to avoid showing error UI
       } finally {
         setLoading(false);
       }
     };
     
-    fetchCaseCount();
-  }, [userDetails]);
+    fetchCaseData();
+  }, [userDetails, isPrisoner, isLawyer, isGovernor]);
 
-  const cards = [
+  // Search cases function for Governor
+  const handleSearchCases = async () => {
+    if (!searchQuery.trim()) {
+      Alert.alert('Error', 'Please enter a search term');
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(`/goverenr/cases?search=${searchQuery.trim()}`);
+      
+      if (response.data.success) {
+        setAllCases(response.data.cases);
+        Alert.alert('Success', `Found ${response.data.cases.length} cases`);
+      }
+    } catch (error) {
+      console.error('Error searching cases:', error);
+      Alert.alert('Error', 'Failed to search cases');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Cards for prisoners
+  // State for unread notification count
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
+  
+  // Fetch notification count when the screen loads
+  useEffect(() => {
+    const fetchNotificationCount = async () => {
+      if (userDetails?.userType === 'prisoner') {
+        try {
+          // Make sure we're using the correct path for notifications
+          const response = await axiosInstance.get('/api/v1/notifications');
+          if (response.data.success) {
+            const unreadCount = response.data.notifications.filter(n => !n.isRead).length;
+            setUnreadNotifications(unreadCount);
+          }
+        } catch (error) {
+          console.error('Error fetching notifications:', error);
+        }
+      }
+    };
+    
+    fetchNotificationCount();
+    
+    // Set up navigation listener to refresh on focus
+    const unsubscribe = navigation.addListener('focus', fetchNotificationCount);
+    return unsubscribe;
+  }, [userDetails]);
+  
+  // Only include functional cards with working features
+  const prisonerCards = [
     {
       id: 'rights',
       title: 'Know Your Rights',
@@ -53,20 +142,6 @@ const HomeScreen = ({ navigation }) => {
       onPress: () => navigation.navigate('AIChatScreen')
     },
     {
-      id: 'market',
-      title: 'Legal Documents',
-      icon: 'https://cdn-icons-png.flaticon.com/512/3144/3144456.png',
-      color: '#45B7D1',
-      onPress: () => navigation.navigate('LegalDocuments')
-    },
-    {
-      id: 'rehab',
-      title: 'Rehabilitation',
-      icon: 'https://cdn-icons-png.flaticon.com/512/4207/4207247.png',
-      color: '#96CEB4',
-      onPress: () => navigation.navigate('Rehab')
-    },
-    {
       id: 'lawyer',
       title: 'Find a Lawyer',
       icon: 'https://cdn-icons-png.flaticon.com/512/3116/3116416.png',
@@ -74,11 +149,112 @@ const HomeScreen = ({ navigation }) => {
       onPress: () => navigation.navigate('LawyerList')
     },
     {
-      id: 'My Documents',
+      id: 'documents',
       title: 'My Documents',
       icon: 'https://cdn-icons-png.flaticon.com/512/3117/3117712.png',
       color: '#FF6B6B',
       onPress: () => navigation.navigate('AddDoc')
+    },
+    {
+      id: 'chat',
+      title: 'Legal Chat',
+      icon: 'https://cdn-icons-png.flaticon.com/512/724/724715.png',
+      color: '#4A90E2',
+      onPress: () => navigation.navigate('Chat')
+    },
+    {
+      id: 'cases',
+      title: 'My Cases',
+      icon: 'https://cdn-icons-png.flaticon.com/512/3063/3063822.png',
+      color: '#96CEB4',
+      onPress: () => navigation.navigate('MyCases')
+    },
+    {
+      id: 'notifications',
+      title: 'Notifications',
+      icon: 'https://cdn-icons-png.flaticon.com/512/2645/2645883.png',
+      color: '#FFB347',
+      onPress: () => navigation.navigate('Notifications'),
+      badge: unreadNotifications > 0 ? unreadNotifications : null
+    },
+  ];
+
+  // Cards for Governor
+  const governorCards = [
+    {
+      id: 'manage-cases',
+      title: 'Manage Cases',
+      icon: 'https://cdn-icons-png.flaticon.com/512/3281/3281289.png',
+      color: '#FF6B6B',
+      onPress: () => navigation.navigate('GovernorCases', { cases: allCases })
+    },
+    // {
+    //   id: 'analytics',
+    //   title: 'Case Analytics',
+    //   icon: 'https://cdn-icons-png.flaticon.com/512/2910/2910791.png',
+    //   color: '#4ECDC4',
+    //   onPress: () => navigation.navigate('GovernorAnalytics')
+    // },
+    // {
+    //   id: 'reports',
+    //   title: 'Generate Reports',
+    //   icon: 'https://cdn-icons-png.flaticon.com/512/1195/1195562.png',
+    //   color: '#45B7D1',
+    //   onPress: () => navigation.navigate('GovernorReports')
+    // },
+    // {
+    //   id: 'approvals',
+    //   title: 'Case Approvals',
+    //   icon: 'https://cdn-icons-png.flaticon.com/512/1478/1478873.png',
+    //   color: '#96CEB4',
+    //   onPress: () => navigation.navigate('GovernorApprovals')
+    // },
+    // {
+    //   id: 'notifications',
+    //   title: 'Notifications',
+    //   icon: 'https://cdn-icons-png.flaticon.com/512/2645/2645883.png',
+    //   color: '#45B7D1',
+    //   onPress: () => navigation.navigate('GovernorNotifications')
+    // },
+    // {
+    //   id: 'modifications',
+    //   title: 'My Modifications',
+    //   icon: 'https://cdn-icons-png.flaticon.com/512/2921/2921222.png',
+    //   color: '#FF6B6B',
+    //   onPress: () => navigation.navigate('GovernorModifications')
+    // },
+  ];
+
+  // Cards for lawyers
+  // Only include functional cards with working features
+  const lawyerCards = [
+    {
+      id: 'clients',
+      title: 'My Clients',
+      icon: 'https://cdn-icons-png.flaticon.com/512/3126/3126647.png',
+      color: '#FF6B6B',
+      onPress: () => navigation.navigate('MyClients')
+    },
+    {
+      id: 'cases',
+      title: 'My Cases',
+      icon: 'https://cdn-icons-png.flaticon.com/512/3063/3063822.png',
+      color: '#4ECDC4',
+      onPress: () => navigation.navigate('MyCases')
+    },
+    {
+      id: 'chat',
+      title: 'Client Chat',
+      icon: 'https://cdn-icons-png.flaticon.com/512/724/724715.png',
+      color: '#4A90E2',
+      onPress: () => navigation.navigate('Chat')
+    },
+    {
+      id: 'profile',
+      title: 'My Profile',
+      icon: 'https://cdn-icons-png.flaticon.com/512/747/747376.png',
+      color: '#45B7D1',
+      onPress: () => navigation.navigate('Profile')
     },
   ];
 
@@ -125,7 +301,26 @@ const HomeScreen = ({ navigation }) => {
     </View>
   );
 
-  const renderCaseButtons = () => (
+  const renderGovernorCaseButtons = () => (
+    <View style={styles.caseButtonsRow}>
+      <TouchableOpacity 
+        style={[styles.caseButton, styles.addCaseButton, { flex: 1 }]} 
+        onPress={() => navigation.navigate('SearchCases')}
+      >
+        <View style={styles.caseButtonContent}>
+          <View style={styles.caseIconContainer}>
+            <Icon name="search" size={25} color="#FFFFFF" />
+          </View>
+          <View style={styles.caseTextContainer}>
+            <Text style={styles.caseButtonTitle}>Search Cases</Text>
+            <Text style={styles.caseButtonSubtitle}>Find by case number, name, etc.</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderPrisonerCaseButtons = () => (
     <View style={styles.caseButtonsRow}>
       <TouchableOpacity 
         style={[styles.caseButton, styles.addCaseButton]} 
@@ -165,27 +360,79 @@ const HomeScreen = ({ navigation }) => {
     </View>
   );
 
-  const renderCards = () => (
-    <View style={styles.cardsContainer}>
-      {cards.map((card) => (
-        <TouchableOpacity
-          key={card.id}
-          style={[styles.card, { borderLeftColor: card.color }]}
-          onPress={card.onPress}
-        >
-          <View style={[styles.cardIconContainer, { backgroundColor: `${card.color}15` }]}>
-            <Image
-              source={{ uri: card.icon }}
-              style={styles.cardIcon}
-              resizeMode="contain"
-            />
+  const renderLawyerCaseButtons = () => (
+    <View style={styles.caseButtonsRow}>
+      <TouchableOpacity 
+        style={[styles.caseButton, styles.addCaseButton]} 
+        onPress={() => navigation.navigate('NewCase')}
+      >
+        <View style={styles.caseButtonContent}>
+          <View style={styles.caseIconContainer}>
+            <Icon name="plus-circle" size={25} color="#FFFFFF" />
           </View>
-          <Text style={styles.cardTitle}>{card.title}</Text>
-          <Icon name="arrow-right" size={16} color={card.color} style={styles.cardArrow} />
-        </TouchableOpacity>
-      ))}
+          <View style={styles.caseTextContainer}>
+            <Text style={styles.caseButtonTitle}>New Case</Text>
+            <Text style={styles.caseButtonSubtitle}>Start representation</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity 
+        style={[styles.caseButton, styles.myCasesButton]}
+        onPress={() => navigation.navigate('MyCases')}
+      >
+        <View style={styles.caseButtonContent}>
+          <View style={[styles.caseIconContainer, styles.myCasesIcon]}>
+            <Icon name="briefcase" size={25} color="#FFFFFF" />
+          </View>
+          <View style={styles.caseTextContainer}>
+            <Text style={styles.caseButtonTitle}>Case Dashboard</Text>
+            <Text style={styles.caseButtonSubtitle}>Manage your cases</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
     </View>
   );
+
+  const renderCard = (card) => (
+    <TouchableOpacity
+      key={card.id}
+      style={[styles.card, { borderLeftColor: card.color }]}
+      onPress={card.onPress}
+    >
+      <View style={[styles.iconContainer, { backgroundColor: `${card.color}15` }]}>
+        <Image
+          source={{ uri: card.icon }}
+          style={styles.icon}
+          resizeMode="contain"
+        />
+        {card.badge && (
+          <View style={styles.badgeContainer}>
+            <Text style={styles.badgeText}>{card.badge > 9 ? '9+' : card.badge}</Text>
+          </View>
+        )}
+      </View>
+      <View style={styles.cardTextContainer}>
+        <Text style={styles.cardTitle}>{translate(card.title)}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+
+  const renderCards = () => (
+    <View style={styles.cardsContainer}>
+      {(isPrisoner ? prisonerCards : isLawyer ? lawyerCards : governorCards).map(renderCard)}
+    </View>
+  );
+  
+  // If the user is a governor, we render a loading state while we redirect
+  if (isGovernor) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#4A90E2" />
+        <Text style={styles.loadingText}>{translate('Loading case management...')}</Text>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -193,18 +440,22 @@ const HomeScreen = ({ navigation }) => {
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
           {renderHeader()}
-          {renderCaseButtons()}
+          {isPrisoner ? renderPrisonerCaseButtons() : renderLawyerCaseButtons()}
           
-          <Text style={styles.sectionTitle}>Legal Resources</Text>
+          <Text style={styles.sectionTitle}>
+            {isPrisoner ? translate('Legal Resources') : translate('Lawyer Resources')}
+          </Text>
           {renderCards()}
         </View>
       </ScrollView>
 
-      <AddCaseModal
-        visible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
-        navigation={navigation}
-      />
+      {isPrisoner && (
+        <AddCaseModal
+          visible={isModalVisible}
+          onClose={() => setIsModalVisible(false)}
+          navigation={navigation}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -220,60 +471,33 @@ const styles = StyleSheet.create({
   content: {
     padding: 16,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  iconContainer: {
+    height: 50,
+    width: 50,
+    borderRadius: 12,
+    justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 24,
-    marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-    backgroundColor: '#4A90E2',
-    marginHorizontal: -16,
-    paddingHorizontal: 24,
-    paddingVertical: 20,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-    elevation: 6,
+    marginRight: 16,
+    position: 'relative',
   },
-  welcomeText: {
-    fontSize: 22,
-    fontWeight: 'bold',
+  badgeContainer: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: '#FF4B55',
+    borderRadius: 12,
+    minWidth: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+  },
+  badgeText: {
     color: '#FFFFFF',
-    marginBottom: 6,
+    fontSize: 10,
+    fontWeight: 'bold',
   },
-  headerText: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.9)',
-  },
-  profileButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden',
-  },
-  logoutButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  profileImage: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-  },
+  // ...
   caseButtonsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -377,3 +601,12 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+
+
+// lawyer@gmail.com
+// lawyer@123
+// lawyer
+// 1234567890
+// 9012011
+// 4
+// crime

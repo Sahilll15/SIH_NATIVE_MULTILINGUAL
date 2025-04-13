@@ -1,16 +1,19 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { useTranslation } from '../../Context/TranslationContext';
+import { formatDate, formatDateTime } from '../../utils/dateUtils';
 
 export const CaseDetailsScreen = ({ route, navigation }) => {
   const { caseData } = route.params;
+  const { translate, currentLanguage } = useTranslation();
 
   const renderHeader = () => (
     <View style={styles.header}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Icon name="arrow-left" size={24} color="#333" />
       </TouchableOpacity>
-      <Text style={styles.headerTitle}>Case Details</Text>
+      <Text style={styles.headerTitle}>{translate('Case Details')}</Text>
       <View style={{ width: 24 }} />
     </View>
   );
@@ -36,16 +39,17 @@ export const CaseDetailsScreen = ({ route, navigation }) => {
             </View>
           </View>
 
-          {renderSection('Court', caseData.court)}
-          {renderSection('Filing Date', caseData.date)}
-          {renderSection('Case Type', 'Civil Case')}
-          {renderSection('Case Description', 'This is a detailed description of the case that provides more information about the nature of the legal proceedings.')}
-          {renderSection('Next Hearing', '2024-04-15')}
-          {renderSection('Lawyer', 'Adv. Rajesh Kumar')}
+          {renderSection(translate('Court'), caseData.court_name || caseData.cnr_details?.case_status?.court_number_and_judge || '-')}
+          {renderSection(translate('Filing Date'), formatDate(caseData.filing_date, currentLanguage))}
+          {renderSection(translate('Case Type'), caseData.cnr_details?.case_details?.case_type || 'Civil Case')}
+          {renderSection(translate('Case Description'), caseData.cnr_details?.case_details?.description || 'No description available')}
+          {renderSection(translate('Next Hearing'), formatDate(caseData.next_hearing_date || caseData.cnr_details?.case_status?.next_hearing_date, currentLanguage))}
+          {renderSection(translate('Case Status'), caseData.status || caseData.cnr_details?.case_status?.case_stage || '-')}
+          {renderSection(translate('Registration Number'), caseData.registration_number || '-')}
           
           <TouchableOpacity style={styles.documentsButton}>
             <Icon name="file-alt" size={20} color="#FFFFFF" />
-            <Text style={styles.documentsButtonText}>View Case Documents</Text>
+            <Text style={styles.documentsButtonText}>{translate('View Case Documents')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
