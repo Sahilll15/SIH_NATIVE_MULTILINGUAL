@@ -24,6 +24,7 @@ import CaseDetail from './screens/Prisioner/CaseDetail';
 import { AuthProvider } from './Context/AuthContext';
 import { FirProvider } from './Context/FirContext';
 import ExistingClient from './screens/Lawyer/ExistingClient';
+import CreateCase from './screens/Governor/CreateCase';
 import ChatBot from './screens/ChatBot/ChatBot';
 import Bottom from './screens/Navigation/Bottom';
 import PoliceLand from './screens/Police/PoliceLand';
@@ -161,6 +162,7 @@ export default function App() {
               <Stack.Screen name="Profile" component={ProfileScreen} />
               
               {/* Governor Screens */}
+              <Stack.Screen name="CreateCase" component={CreateCase} />
               <Stack.Screen name="GovernorCases" component={GovernorCases} />
               <Stack.Screen name="GovernorAnalytics" component={GovernorAnalytics} />
               <Stack.Screen name="GovernorReports" component={GovernorReports} />

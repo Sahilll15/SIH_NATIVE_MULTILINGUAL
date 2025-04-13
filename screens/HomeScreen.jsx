@@ -169,18 +169,18 @@ const HomeScreen = ({ navigation }) => {
       color: '#96CEB4',
       onPress: () => navigation.navigate('MyCases')
     },
-    {
-      id: 'notifications',
-      title: 'Notifications',
-      iconName: 'bell',
-      color: '#FFB347',
-      onPress: () => navigation.navigate('Notifications'),
-      badge: unreadNotifications > 0 ? unreadNotifications : null
-    },
+
   ];
 
   // Cards for Governor
   const governorCards = [
+    {
+      id: 'create-case',
+      title: 'Create Case',
+      iconName: 'plus-circle',
+      color: '#4A90E2',
+      onPress: () => navigation.navigate('CreateCase')
+    },
     {
       id: 'manage-cases',
       title: 'Manage Cases',
@@ -188,41 +188,41 @@ const HomeScreen = ({ navigation }) => {
       color: '#FF6B6B',
       onPress: () => navigation.navigate('GovernorCases', { cases: allCases })
     },
-    {
-      id: 'analytics',
-      title: 'Case Analytics',
-      iconName: 'chart-bar',
-      color: '#4ECDC4',
-      onPress: () => navigation.navigate('GovernorAnalytics')
-    },
-    {
-      id: 'reports',
-      title: 'Generate Reports',
-      iconName: 'file-export',
-      color: '#45B7D1',
-      onPress: () => navigation.navigate('GovernorReports')
-    },
-    {
-      id: 'approvals',
-      title: 'Case Approvals',
-      iconName: 'check-circle',
-      color: '#96CEB4',
-      onPress: () => navigation.navigate('GovernorApprovals')
-    },
-    {
-      id: 'notifications',
-      title: 'Notifications',
-      iconName: 'bell',
-      color: '#45B7D1',
-      onPress: () => navigation.navigate('GovernorNotifications')
-    },
-    {
-      id: 'modifications',
-      title: 'My Modifications',
-      iconName: 'edit',
-      color: '#FF6B6B',
-      onPress: () => navigation.navigate('GovernorModifications')
-    },
+    // {
+    //   id: 'analytics',
+    //   title: 'Case Analytics',
+    //   iconName: 'chart-bar',
+    //   color: '#4ECDC4',
+    //   onPress: () => navigation.navigate('GovernorAnalytics')
+    // },
+    // {
+    //   id: 'reports',
+    //   title: 'Generate Reports',
+    //   iconName: 'file-export',
+    //   color: '#45B7D1',
+    //   onPress: () => navigation.navigate('GovernorReports')
+    // },
+    // {
+    //   id: 'approvals',
+    //   title: 'Case Approvals',
+    //   iconName: 'check-circle',
+    //   color: '#96CEB4',
+    //   onPress: () => navigation.navigate('GovernorApprovals')
+    // },
+    // {
+    //   id: 'notifications',
+    //   title: 'Notifications',
+    //   iconName: 'bell',
+    //   color: '#45B7D1',
+    //   onPress: () => navigation.navigate('GovernorNotifications')
+    // },
+    // {
+    //   id: 'modifications',
+    //   title: 'My Modifications',
+    //   iconName: 'edit',
+    //   color: '#FF6B6B',
+    //   onPress: () => navigation.navigate('GovernorModifications')
+    // },
   ];
 
   // Cards for lawyers
