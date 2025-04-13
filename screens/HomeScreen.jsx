@@ -269,34 +269,37 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const renderHeader = () => (
-    <View style={styles.header}>
-      <View>
-        <Text style={styles.welcomeText}>
-          Welcome {userDetails?.name ? `${userDetails.name.split(' ')[0]}` : 'Back'}!
-        </Text>
-        <Text style={styles.headerText}>Access Legal Help, Anytime, Anywhere</Text>
-      </View>
-      <View style={styles.headerButtons}>
-        <TouchableOpacity 
-          style={styles.logoutButton}
-          onPress={handleLogout}
-        >
-          <Icon name="sign-out-alt" size={20} color="#fff" />
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.profileButton}
-          onPress={() => navigation.navigate('Profile')}
-        >
-          {userDetails?.profileImage ? (
-            <Image 
-              source={{ uri: userDetails.profileImage }} 
-              style={styles.profileImage} 
-              defaultSource={{ uri: 'https://ui-avatars.com/api/?name=User&background=4A90E2&color=fff' }}
-            />
-          ) : (
-            <Icon name="user-circle" size={30} color="#fff" />
-          )}
-        </TouchableOpacity>
+    <View style={styles.headerContainer}>
+      <View style={styles.header}>
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.welcomeText} numberOfLines={1} ellipsizeMode="tail">
+            {translate('Welcome')} {userDetails?.name ? userDetails.name.split(' ')[0] : translate('Back')}!
+          </Text>
+          <Text style={styles.headerText}>{translate('Access Legal Help, Anytime, Anywhere')}</Text>
+        </View>
+        <View style={styles.headerButtons}>
+          <TouchableOpacity 
+            style={styles.headerButton}
+            onPress={() => navigation.navigate('Profile')}
+          >
+            <View style={styles.profileImageWrapper}>
+              {userDetails?.profileImage ? (
+                <Image 
+                  source={{ uri: userDetails.profileImage }} 
+                  style={styles.profileImage}
+                />
+              ) : (
+                <Icon name="user-circle" size={24} color="#4A90E2" />
+              )}
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.headerButton}
+            onPress={handleLogout}
+          >
+            <Icon name="sign-out-alt" size={22} color="#FF6B6B" />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -471,6 +474,61 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
+  },
+  headerContainer: {
+    marginBottom: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+    paddingVertical: 8,
+  },
+  headerTextContainer: {
+    flex: 1,
+    marginRight: 12,
+  },
+  welcomeText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2D3748',
+    marginBottom: 2,
+  },
+  headerText: {
+    fontSize: 13,
+    color: '#718096',
+  },
+  headerButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  headerButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 8,
+    borderRadius: 8,
+    backgroundColor: '#F8F9FA',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  profileImageWrapper: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  profileImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
   },
   iconContainer: {
     height: 50,
