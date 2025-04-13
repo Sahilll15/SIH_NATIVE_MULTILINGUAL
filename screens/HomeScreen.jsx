@@ -106,8 +106,8 @@ const HomeScreen = ({ navigation }) => {
     const fetchNotificationCount = async () => {
       if (userDetails?.userType === 'prisoner') {
         try {
-          // Make sure we're using the correct path for notifications
-          const response = await axiosInstance.get('/api/v1/notifications');
+          // Use correct path without duplicate prefix
+          const response = await axiosInstance.get('/notifications');
           if (response.data.success) {
             const unreadCount = response.data.notifications.filter(n => !n.isRead).length;
             setUnreadNotifications(unreadCount);

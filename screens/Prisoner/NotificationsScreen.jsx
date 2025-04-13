@@ -27,7 +27,7 @@ const NotificationsScreen = ({ navigation }) => {
   const fetchNotifications = async () => {
     try {
       setRefreshing(true);
-      const response = await axiosInstance.get('/api/v1/notifications');
+      const response = await axiosInstance.get('/notifications');
       
       if (response.data.success) {
         setNotifications(response.data.notifications);
@@ -35,8 +35,8 @@ const NotificationsScreen = ({ navigation }) => {
         setError(translate('Failed to fetch notifications'));
       }
     } catch (error) {
-      console.error('Error fetching notifications:', error);
-      setError(translate('An unexpected error occurred'));
+      // console.error('Error fetching notifications:', error);
+      // setError(translate('An unexpected error occurred'));
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -56,7 +56,7 @@ const NotificationsScreen = ({ navigation }) => {
 
   const markAsRead = async (id) => {
     try {
-      const response = await axiosInstance.patch(`/api/v1/notifications/${id}/read`);
+      const response = await axiosInstance.patch(`/notifications/${id}/read`);
       
       if (response.data.success) {
         // Update the notification in the state
@@ -74,7 +74,7 @@ const NotificationsScreen = ({ navigation }) => {
 
   const markAllAsRead = async () => {
     try {
-      const response = await axiosInstance.patch('/api/v1/notifications/mark-all-read');
+      const response = await axiosInstance.patch('/notifications/mark-all-read');
       
       if (response.data.success) {
         // Update all notifications in the state
